@@ -1,5 +1,10 @@
-# Pokémon Polished Crystal
+# Pokémon Polished Kanto Crystal
 
+The biggest change in this fork in having the Kanto Starters instead of the Johto starter for your choice of partner. Other than that, nothing else really changed.
+
+This Rest of the Readme is basically unedited for the original repo.
+
+## Original Starts here
 This is a custom Pokémon game based on [the Pokémon Crystal disassembly](https://github.com/pret/pokecrystal).
 
 My goal is to create what the title says: an improved, polished version of Pokémon Crystal. It fixes bugs, takes into account the official game changes since 2001, and adds some new ideas of my own. Many features restore what was removed from R/B/Y, or original to HG/SS.
