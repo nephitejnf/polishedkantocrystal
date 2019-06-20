@@ -1139,7 +1139,7 @@ Rival0Group:
 	db TRAINERTYPE_ITEM
 	; party
 	db 4, RATTATA, NO_ITEM
-	db 5, CHIKORITA, ORAN_BERRY
+	db 5, BULBASAUR, ORAN_BERRY
 	db -1 ; end
 
 ; ================
@@ -1149,7 +1149,7 @@ Rival0Group:
 	db TRAINERTYPE_ITEM
 	; party
 	db 4, RATTATA, NO_ITEM
-	db 5, CYNDAQUIL, ORAN_BERRY
+	db 5, CHARMANDER, ORAN_BERRY
 	db -1 ; end
 
 ; ================
@@ -1159,7 +1159,7 @@ Rival0Group:
 	db TRAINERTYPE_ITEM
 	; party
 	db 4, RATTATA, NO_ITEM
-	db 5, TOTODILE, ORAN_BERRY
+	db 5, SQUIRTLE, ORAN_BERRY
 	db -1 ; end
 
 ; ================
@@ -1177,7 +1177,7 @@ Rival1Group:
 	db 14, GASTLY, NO_ITEM, 36
 	db 16, ZUBAT, NO_ITEM, 36
 	db 15, GEODUDE, NO_ITEM, 36
-	db 18, BAYLEEF, ORAN_BERRY, 36
+	db 18, IVYSAUR, ORAN_BERRY, 36
 	db -1 ; end
 
 ; ================
@@ -1189,7 +1189,7 @@ Rival1Group:
 	db 14, GASTLY, NO_ITEM, 36
 	db 16, ZUBAT, NO_ITEM, 36
 	db 15, GEODUDE, NO_ITEM, 36
-	db 18, QUILAVA, ORAN_BERRY, 36
+	db 18, CHARMELEON, ORAN_BERRY, 36
 	db -1 ; end
 
 ; ================
@@ -1201,7 +1201,7 @@ Rival1Group:
 	db 14, GASTLY, NO_ITEM, 36
 	db 16, ZUBAT, NO_ITEM, 36
 	db 15, GEODUDE, NO_ITEM, 36
-	db 18, CROCONAW, ORAN_BERRY, 36
+	db 18, WARTORTLE, ORAN_BERRY, 36
 	db -1 ; end
 
 ; ================
@@ -1218,8 +1218,8 @@ Rival1Group:
 		db HYPNOSIS, CONFUSION, HEADBUTT, LOW_KICK
 	db 20, ZUBAT, NO_ITEM, 52
 		db LEECH_LIFE, SUPERSONIC, BITE, CONFUSE_RAY
-	db 22, BAYLEEF, ORAN_BERRY, 52
-		db REFLECT, RAZOR_LEAF, POISONPOWDER, DISARM_VOICE
+	db 22, IVYSAUR, ORAN_BERRY, 52
+		db SAFEGUARD, RAZOR_LEAF, POISONPOWDER, VINE_WHIP
 	db -1 ; end
 
 ; ================
@@ -1236,7 +1236,7 @@ Rival1Group:
 		db HYPNOSIS, CONFUSION, HEADBUTT, LOW_KICK
 	db 20, ZUBAT, NO_ITEM, 52
 		db LEECH_LIFE, SUPERSONIC, BITE, CONFUSE_RAY
-	db 22, QUILAVA, ORAN_BERRY, 52
+	db 22, CHARMELEON, ORAN_BERRY, 52
 		db LEER, SMOKESCREEN, EMBER, QUICK_ATTACK
 	db -1 ; end
 
@@ -1254,8 +1254,8 @@ Rival1Group:
 		db HYPNOSIS, CONFUSION, HEADBUTT, LOW_KICK
 	db 20, ZUBAT, NO_ITEM, 52
 		db LEECH_LIFE, SUPERSONIC, BITE, CONFUSE_RAY
-	db 22, CROCONAW, ORAN_BERRY, 52
-		db LEER, RAGE, WATER_GUN, BITE
+	db 22, WARTORTLE, ORAN_BERRY, 52
+		db LEER, TACKLE, WATER_GUN, BITE
 	db -1 ; end
 
 ; ================
@@ -1272,8 +1272,8 @@ Rival1Group:
 		db PAIN_SPLIT, MEAN_LOOK, CONFUSE_RAY, SHADOW_BALL
 	db 41, SNEASEL, NO_ITEM, 116
 		db SLASH, ICE_PUNCH, HONE_CLAWS, FEINT_ATTACK
-	db 43, MEGANIUM, SITRUS_BERRY, 116
-		db REFLECT, LIGHT_SCREEN, PETAL_DANCE, ANCIENTPOWER
+	db 43, VENUSAUR, SITRUS_BERRY, 116
+		db SAFEGUARD, LIGHT_SCREEN, PETAL_DANCE, ANCIENTPOWER
 	db -1 ; end
 
 ; ================
@@ -1290,8 +1290,8 @@ Rival1Group:
 		db PAIN_SPLIT, MEAN_LOOK, CONFUSE_RAY, SHADOW_BALL
 	db 41, SNEASEL, NO_ITEM, 116
 		db SLASH, ICE_PUNCH, HONE_CLAWS, FEINT_ATTACK
-	db 43, TYPHLOSION, SITRUS_BERRY, 116
-		db SMOKESCREEN, FLAME_WHEEL, DIG, SWIFT
+	db 43, CHARIZARD, SITRUS_BERRY, 116
+		db SMOKESCREEN, FLAME_WHEEL, FLY, SLASH
 	db -1 ; end
 
 ; ================
@@ -1308,8 +1308,8 @@ Rival1Group:
 		db PAIN_SPLIT, MEAN_LOOK, CONFUSE_RAY, SHADOW_BALL
 	db 41, SNEASEL, NO_ITEM, 116
 		db SLASH, ICE_PUNCH, HONE_CLAWS, FEINT_ATTACK
-	db 43, FERALIGATR, SITRUS_BERRY, 116
-		db SLASH, SURF, CRUNCH, NIGHT_SLASH
+	db 43, BLASTOISE, SITRUS_BERRY, 116
+		db RAPID_SPIN, SURF, DIG, SCALD
 	db -1 ; end
 
 ; ================
@@ -1328,8 +1328,8 @@ Rival1Group:
 		db MEAN_LOOK, DARK_PULSE, SHADOW_BALL, CONFUSE_RAY
 	db 46, ALAKAZAM, BRIGHTPOWDER, 144
 		db DISABLE, PSYCHIC_M, RECOVER, CONFUSE_RAY
-	db 49, MEGANIUM, SITRUS_BERRY, 144
-		db REFLECT, LIGHT_SCREEN, ENERGY_BALL, ANCIENTPOWER
+	db 49, VENUSAUR, SITRUS_BERRY, 144
+		db SAFEGUARD, LIGHT_SCREEN, ENERGY_BALL, ANCIENTPOWER
 	db -1 ; end
 
 ; ================
@@ -1348,8 +1348,8 @@ Rival1Group:
 		db MEAN_LOOK, DARK_PULSE, SHADOW_BALL, CONFUSE_RAY
 	db 46, ALAKAZAM, BRIGHTPOWDER, 144
 		db DISABLE, PSYCHIC_M, RECOVER, CONFUSE_RAY
-	db 49, TYPHLOSION, SITRUS_BERRY, 144
-		db SMOKESCREEN, QUICK_ATTACK, DIG, FLAMETHROWER
+	db 49, CHARIZARD, SITRUS_BERRY, 144
+		db SMOKESCREEN, SLASH, FLY, FLAMETHROWER
 	db -1 ; end
 
 ; ================
@@ -1368,8 +1368,8 @@ Rival1Group:
 		db MEAN_LOOK, DARK_PULSE, SHADOW_BALL, CONFUSE_RAY
 	db 46, ALAKAZAM, BRIGHTPOWDER, 144
 		db DISABLE, PSYCHIC_M, RECOVER, CONFUSE_RAY
-	db 49, FERALIGATR, SITRUS_BERRY, 144
-		db CRUNCH, SURF, SLASH, SCARY_FACE
+	db 49, BLASTOISE, SITRUS_BERRY, 144
+		db CRUNCH, SURF, RAPID_SPIN, PROTECT
 	db -1 ; end
 
 ; ================
@@ -1394,7 +1394,7 @@ Rival2Group:
 		db MEAN_LOOK, CURSE, SHADOW_BALL, CONFUSE_RAY
 	db 63, ALAKAZAM, BRIGHTPOWDER, 228
 		db DISABLE, RECOVER, FUTURE_SIGHT, PSYCHIC_M
-	db 65, MEGANIUM, MIRACLE_SEED, 228
+	db 65, VENUSAUR, MIRACLE_SEED, 228
 		db SEED_BOMB, POISONPOWDER, BODY_SLAM, LIGHT_SCREEN
 	db -1 ; end
 
@@ -1414,8 +1414,8 @@ Rival2Group:
 		db MEAN_LOOK, CURSE, SHADOW_BALL, CONFUSE_RAY
 	db 63, ALAKAZAM, BRIGHTPOWDER, 228
 		db DISABLE, RECOVER, FUTURE_SIGHT, PSYCHIC_M
-	db 65, TYPHLOSION, CHARCOAL, 228
-		db FLAMETHROWER, EARTH_POWER, THUNDERPUNCH, SMOKESCREEN
+	db 65, CHARIZARD, CHARCOAL, 228
+		db FLAMETHROWER, EARTHQUAKE, WING_ATTACK, SMOKESCREEN
 	db -1 ; end
 
 ; ================
@@ -1434,8 +1434,8 @@ Rival2Group:
 		db MEAN_LOOK, CURSE, SHADOW_BALL, CONFUSE_RAY
 	db 63, ALAKAZAM, BRIGHTPOWDER, 228
 		db DISABLE, RECOVER, FUTURE_SIGHT, PSYCHIC_M
-	db 65, FERALIGATR, MYSTIC_WATER, 228
-		db WATERFALL, CRUNCH, SLASH, SCARY_FACE
+	db 65, BLASTOISE, MYSTIC_WATER, 228
+		db WATERFALL, CRUNCH, RAPID_SPIN, PROTECT
 	db -1 ; end
 
 ; ================
@@ -1454,8 +1454,8 @@ Rival2Group:
 		db THUNDERBOLT, FOCUS_BLAST, SHADOW_BALL, CONFUSE_RAY
 	db 70, ALAKAZAM, BRIGHTPOWDER
 		db RECOVER, TRI_ATTACK, PSYCHIC_M, REFLECT
-	db 72, MEGANIUM, LEFTOVERS
-		db PETAL_DANCE, MOONBLAST, LIGHT_SCREEN, ANCIENTPOWER
+	db 72, VENUSUAR, LEFTOVERS
+		db PETAL_DANCE, SOLAR_BEAM, LIGHT_SCREEN, ANCIENTPOWER
 	db -1 ; end
 
 ; ================
@@ -1474,8 +1474,8 @@ Rival2Group:
 		db THUNDERBOLT, FOCUS_BLAST, SHADOW_BALL, CONFUSE_RAY
 	db 70, ALAKAZAM, BRIGHTPOWDER
 		db RECOVER, TRI_ATTACK, PSYCHIC_M, REFLECT
-	db 72, TYPHLOSION, LEFTOVERS
-		db FIRE_BLAST, FOCUS_BLAST, EARTH_POWER, SMOKESCREEN
+	db 72, CHARIZARD, LEFTOVERS
+		db FIRE_BLAST, FOCUS_BLAST, EARTHQUAKE, SMOKESCREEN
 	db -1 ; end
 
 ; ================
@@ -1494,8 +1494,8 @@ Rival2Group:
 		db THUNDERBOLT, FOCUS_BLAST, SHADOW_BALL, CONFUSE_RAY
 	db 70, ALAKAZAM, BRIGHTPOWDER
 		db RECOVER, TRI_ATTACK, PSYCHIC_M, REFLECT
-	db 72, FERALIGATR, LEFTOVERS
-		db SURF, CRUNCH, SLASH, OUTRAGE
+	db 72, BLASTOISE, LEFTOVERS
+		db SURF, CRUNCH, RAPID_SPIN, AQUA_TAIL
 	db -1 ; end
 
 ; ================
@@ -1511,7 +1511,7 @@ Lyra1Group:
 	db "Lyra@"
 	db TRAINERTYPE_NICKNAME
 	; party
-	db 5, CHIKORITA, "Chicory@"
+	db 5, BULBASAUR, "Bulby@"
 	db -1 ; end
 
 ; ================
@@ -1520,7 +1520,7 @@ Lyra1Group:
 	db "Lyra@"
 	db TRAINERTYPE_NICKNAME
 	; party
-	db 5, CYNDAQUIL, "Cinder@"
+	db 5, CHARMANDER, "Char@"
 	db -1 ; end
 
 ; ================
@@ -1529,7 +1529,7 @@ Lyra1Group:
 	db "Lyra@"
 	db TRAINERTYPE_NICKNAME
 	; party
-	db 5, TOTODILE, "Toto@"
+	db 5, SQUIRTLE, "Squirt@"
 	db -1 ; end
 
 ; ================
@@ -1541,7 +1541,7 @@ Lyra1Group:
 	db 16, PIDGEY, NO_ITEM, 36, "Pidgey@"
 	db 17, MARILL, NO_ITEM, 36, "Marill@"
 	db 15, MAREEP, NO_ITEM, 36, "Mareep@"
-	db 18, BAYLEEF, ORAN_BERRY, 36, "Chicory@"
+	db 18, IVYSAUR, ORAN_BERRY, 36, "Bulby@"
 	db -1 ; end
 
 ; ================
@@ -1553,7 +1553,7 @@ Lyra1Group:
 	db 16, PIDGEY, NO_ITEM, 36, "Pidgey@"
 	db 17, SUNKERN, NO_ITEM, 36, "Sunkern@"
 	db 15, MAREEP, NO_ITEM, 36, "Mareep@"
-	db 18, QUILAVA, ORAN_BERRY, 36, "Cinder@"
+	db 18, CHARMELEON, ORAN_BERRY, 36, "Char@"
 	db -1 ; end
 
 ; ================
@@ -1565,7 +1565,7 @@ Lyra1Group:
 	db 16, PIDGEY, NO_ITEM, 36, "Pidgey@"
 	db 17, GROWLITHE, NO_ITEM, 36, "Growlithe@"
 	db 15, MAREEP, NO_ITEM, 36, "Mareep@"
-	db 18, CROCONAW, ORAN_BERRY, 36, "Toto@"
+	db 18, WARTORTLE, ORAN_BERRY, 36, "Squirt@"
 	db -1 ; end
 
 ; ================
@@ -1578,7 +1578,7 @@ Lyra1Group:
 	db 34, GROWLITHE, NO_ITEM, 100, "Growlithe@"
 	db 34, AZUMARILL, NO_ITEM, 100, "Azumarill@"
 	db 32, FLAAFFY, NO_ITEM, 100, "Flaaffy@"
-	db 37, BAYLEEF, ORAN_BERRY, 100, "Chicory@"
+	db 37, VENUSAUR, ORAN_BERRY, 100, "Bulby@"
 	db -1 ; end
 
 ; ================
@@ -1591,7 +1591,7 @@ Lyra1Group:
 	db 34, SUNFLORA, NO_ITEM, 100, "Sunflora@"
 	db 34, AZUMARILL, NO_ITEM, 100, "Azumarill@"
 	db 32, FLAAFFY, NO_ITEM, 100, "Flaaffy@"
-	db 37, QUILAVA, ORAN_BERRY, 100, "Cinder@"
+	db 37, CHARIZARD, ORAN_BERRY, 100, "Char@"
 	db -1 ; end
 
 ; ================
@@ -1604,7 +1604,7 @@ Lyra1Group:
 	db 34, SUNFLORA, NO_ITEM, 100, "Sunflora@"
 	db 34, GROWLITHE, NO_ITEM, 100, "Growlithe@"
 	db 32, FLAAFFY, NO_ITEM, 100, "Flaaffy@"
-	db 37, CROCONAW, ORAN_BERRY, 100, "Toto@"
+	db 37, BLASTOISE, ORAN_BERRY, 100, "Squirt@"
 	db -1 ; end
 
 ; ================
@@ -1618,7 +1618,7 @@ Lyra1Group:
 	db 45, ARCANINE, NO_ITEM, 132, "Arcanine@"
 	db 45, AZUMARILL, NO_ITEM, 132, "Azumarill@"
 	db 46, AMPHAROS, NO_ITEM, 132, "Ampharos@"
-	db 47, MEGANIUM, SITRUS_BERRY, 132, "Chicory@"
+	db 47, VENUSAUR, SITRUS_BERRY, 132, "Bulby@"
 	db -1 ; end
 
 ; ================
@@ -1632,7 +1632,7 @@ Lyra1Group:
 	db 45, SUNFLORA, NO_ITEM, 132, "Sunflora@"
 	db 45, AZUMARILL, NO_ITEM, 132, "Azumarill@"
 	db 46, AMPHAROS, NO_ITEM, 132, "Ampharos@"
-	db 47, TYPHLOSION, SITRUS_BERRY, 132, "Cinder@"
+	db 47, CHARIZARD, SITRUS_BERRY, 132, "Char@"
 	db -1 ; end
 
 ; ================
@@ -1646,7 +1646,7 @@ Lyra1Group:
 	db 45, SUNFLORA, NO_ITEM, 132, "Sunflora@"
 	db 45, ARCANINE, NO_ITEM, 132, "Arcanine@"
 	db 46, AMPHAROS, NO_ITEM, 132, "Ampharos@"
-	db 47, FERALIGATR, SITRUS_BERRY, 132, "Toto@"
+	db 47, BLASTOISE, SITRUS_BERRY, 132, "Squirt@"
 	db -1 ; end
 
 ; ================
@@ -1666,7 +1666,7 @@ Lyra2Group:
 	db 70, AZUMARILL, NO_ITEM, "Azumarill@"
 	db 71, AMPHAROS, NO_ITEM, "Ampharos@"
 	db 68, GIRAFARIG, NO_ITEM, "Girafarig@"
-	db 72, MEGANIUM, SITRUS_BERRY, "Chicory@"
+	db 72, VENUSAUR, SITRUS_BERRY, "Bulby@"
 	db -1 ; end
 
 ; ================
@@ -1680,7 +1680,7 @@ Lyra2Group:
 	db 70, AZUMARILL, NO_ITEM, "Azumarill@"
 	db 71, AMPHAROS, NO_ITEM, "Ampharos@"
 	db 68, GIRAFARIG, NO_ITEM, "Girafarig@"
-	db 72, TYPHLOSION, SITRUS_BERRY, "Cinder@"
+	db 72, CHARIZARD, SITRUS_BERRY, "Char@"
 	db -1 ; end
 
 ; ================
@@ -1694,7 +1694,7 @@ Lyra2Group:
 	db 70, ARCANINE, NO_ITEM, "Arcanine@"
 	db 71, AMPHAROS, NO_ITEM, "Ampharos@"
 	db 68, GIRAFARIG, NO_ITEM, "Girafarig@"
-	db 72, FERALIGATR, SITRUS_BERRY, "Toto@"
+	db 72, BLASTOISE, SITRUS_BERRY, "Squirt@"
 	db -1 ; end
 
 ; ================
