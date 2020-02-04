@@ -32,7 +32,7 @@ WarehouseEntrance_MapScriptHeader:
 	object_event  4,  9, SPRITE_SUPER_NERD, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, PERSONTYPE_GENERICTRAINER, 2, GenericTrainerSupernerdTeru, -1
 	object_event  1, 27, SPRITE_POKEMANIAC, SPRITEMOVEDATA_SPINRANDOM_FAST, 0, 0, -1, -1, 0, PERSONTYPE_GENERICTRAINER, 2, GenericTrainerPokemaniacIssac, -1
 	object_event  0,  6, SPRITE_POKEMANIAC, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, PERSONTYPE_GENERICTRAINER, 3, GenericTrainerPokemaniacDonald, -1
-	itemball_event  4, 25, COIN_CASE, 1, EVENT_WAREHOUSE_ENTRANCE_COIN_CASE
+	keyitemball_event  4, 25, COIN_CASE, EVENT_WAREHOUSE_ENTRANCE_COIN_CASE
 	object_event  1, 18, SPRITE_COSPLAYER, SPRITEMOVEDATA_SPINRANDOM_FAST, 0, 0, -1, -1, 0, PERSONTYPE_GENERICTRAINER, 3, GenericTrainerCosplayerClara, -1
 
 	const_def 1 ; object constants
@@ -256,6 +256,7 @@ OlderHaircutBrotherScript:
 	waitbutton
 	closetext
 	special FadeOutPalettes
+	special LoadMapPalettes
 	playmusic MUSIC_HEAL
 	pause 60
 	special FadeInPalettes
@@ -328,6 +329,7 @@ YoungerHaircutBrotherScript:
 	waitbutton
 	closetext
 	special FadeOutPalettes
+	special LoadMapPalettes
 	playmusic MUSIC_HEAL
 	pause 60
 	special FadeInPalettes
@@ -368,7 +370,7 @@ UnknownScript_0x7c2cd:
 BasementDoorScript::
 	checkevent EVENT_USED_BASEMENT_KEY
 	iftrue_jumptext UnknownText_0x7c5c3
-	checkitem BASEMENT_KEY
+	checkkeyitem BASEMENT_KEY
 	iffalse_jumptext UnknownText_0x7c5b0
 	opentext
 	playsound SFX_TRANSACTION

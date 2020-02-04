@@ -26,11 +26,11 @@ CianwoodPharmacist:
 	opentext
 	writetext PharmacistGiveSecretpotionText
 	buttonsound
-	giveitem SECRETPOTION
+	givekeyitem SECRETPOTION
 	writetext ReceivedSecretpotionText
 	playsound SFX_KEY_ITEM
 	waitsfx
-	itemnotify
+	keyitemnotify
 	setevent EVENT_GOT_SECRETPOTION_FROM_PHARMACY
 	writetext PharmacistDescribeSecretpotionText
 	waitbutton

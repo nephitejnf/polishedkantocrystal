@@ -173,6 +173,7 @@ FramesPointers:
 	dw -1 ; see PichuFramesPointers
 	dw MunchlaxFrames
 	dw MagnezoneFrames
+	dw RhyperiorFrames
 	dw TangrowthFrames
 	dw NatuFrames
 	dw XatuFrames
@@ -180,7 +181,6 @@ FramesPointers:
 	dw FlaaffyFrames
 	dw AmpharosFrames
 	dw BellossomFrames
-	dw RhyperiorFrames
 	dw SudowoodoFrames
 	dw PolitoedFrames
 	dw SunkernFrames
@@ -191,8 +191,6 @@ FramesPointers:
 	dw QuagsireFrames
 	dw EspeonFrames
 	dw UmbreonFrames
-	dw LeafeonFrames
-	dw GlaceonFrames
 	dw MurkrowFrames
 	dw HonchkrowFrames
 	dw SlowkingFrames
@@ -211,6 +209,7 @@ FramesPointers:
 	dw GranbullFrames
 	dw QwilfishFrames
 	dw ScizorFrames
+	dw ShuckleFrames
 	dw HeracrossFrames
 	dw SneaselFrames
 	dw WeavileFrames
@@ -232,6 +231,7 @@ FramesPointers:
 	dw PhanpyFrames
 	dw DonphanFrames
 	dw Porygon2Frames
+	dw PorygonZFrames
 	dw SmeargleFrames
 	dw TyrogueFrames
 	dw HitmontopFrames
@@ -250,7 +250,7 @@ FramesPointers:
 	dw LugiaFrames
 	dw HoOhFrames
 	dw CelebiFrames
+	dw LeafeonFrames
+	dw GlaceonFrames
 	dw SylveonFrames
-	dw PorygonZFrames
 	dw EggFrames
-	dw -1 ; unused

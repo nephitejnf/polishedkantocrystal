@@ -228,12 +228,12 @@ LakeOfRageRedGyaradosScript:
 .Continue:
 	reloadmapafterbattle
 	opentext
-	giveitem RED_SCALE
+	givekeyitem RED_SCALE
 	waitsfx
 	writetext .RedScaleText
 	playsound SFX_ITEM
 	waitsfx
-	itemnotify
+	keyitemnotify
 	closetext
 	appear LAKEOFRAGE_LANCE
 	end

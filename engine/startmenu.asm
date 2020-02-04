@@ -491,19 +491,12 @@ HasNoItems: ; 129d5
 	ld a, [wNumBerries]
 	and a
 	ret nz
-	ld a, [wNumKeyItems]
-	and a
-	ret nz
 	scf
 	ret
 
 TossItemFromPC: ; 129f4
 	push de
 	call PartyMonItemName
-	farcall _CheckTossableItem
-	ld a, [wItemAttributeParamBuffer]
-	and a
-	jr nz, .key_item
 	ld hl, .TossHowMany
 	call MenuTextBox
 	farcall SelectQuantityToToss
@@ -529,8 +522,6 @@ TossItemFromPC: ; 129f4
 	and a
 	ret
 
-.key_item
-	call .CantToss
 .quit
 	pop hl
 	scf
@@ -550,16 +541,6 @@ TossItemFromPC: ; 129f4
 	; Discarded @ (S).
 	text_jump UnknownText_0x1c1aca
 	db "@"
-
-.CantToss:
-	ld hl, .TooImportantToToss
-	jp MenuTextBoxBackup
-
-.TooImportantToToss:
-	; That's too impor- tant to toss out!
-	text_jump UnknownText_0x1c1adf
-	db "@"
-; 0x12a60
 
 CantUseItem: ; 12a60
 	ld hl, CantUseItemText
@@ -619,8 +600,7 @@ PokemonActionSubmenu: ; 12a88
 	dbw MONMENU_WHIRLPOOL,  MonMenu_Whirlpool ; Whirlpool
 	dbw MONMENU_DIG,        MonMenu_Dig ; Dig
 	dbw MONMENU_TELEPORT,   MonMenu_Teleport ; Teleport
-	dbw MONMENU_SOFTBOILED, MonMenu_Softboiled_MilkDrink ; Softboiled
-	dbw MONMENU_MILKDRINK,  MonMenu_Softboiled_MilkDrink ; MilkDrink
+	dbw MONMENU_FRESHSNACK, MonMenu_FreshSnack ; FreshSnack
 	dbw MONMENU_HEADBUTT,   MonMenu_Headbutt ; Headbutt
 	dbw MONMENU_WATERFALL,  MonMenu_Waterfall ; Waterfall
 	dbw MONMENU_ROCKSMASH,  MonMenu_RockSmash ; RockSmash
@@ -752,18 +732,10 @@ GiveTakePartyMonItem: ; 12b60
 	and a
 	ret z
 
-	ld a, [wCurrPocket]
-	cp KEY_ITEM - 1
-	jr z, .next
-	cp TM_HM - 1
+	call CheckUniqueItemPocket
 	jr z, .next
 
-	call CheckTossableItem
-	ld a, [wItemAttributeParamBuffer]
-	and a
-	jr nz, .next
-
-	jp TryGiveItemToPartymon
+	jr TryGiveItemToPartymon
 
 .next
 	ld hl, CantBeHeldText
@@ -1203,10 +1175,10 @@ MonMenu_RockSmash: ; 12f3b
 	jr _MonMenu_StandardCheck
 ; 12f50
 
-MonMenu_Softboiled_MilkDrink: ; 12ee6
+MonMenu_FreshSnack: ; 12ee6
 	call .CheckMonHasEnoughHP
 	jr nc, .NotEnoughHP
-	farcall Softboiled_MilkDrinkFunction
+	farcall FreshSnackFunction
 	jr .finish
 
 .NotEnoughHP:
@@ -1303,11 +1275,11 @@ ChooseMoveToForget:
 	jr .done
 
 .tm_tutor
-	farcall LoadPartyMenuGFX
-	farcall InitPartyMenuWithCancel
-	farcall InitPartyMenuGFX
-	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	ld a, [wCurPartyMon]
+	push af
+	farcall InitPartyMenuLayout
+	pop af
+	ld [wCurPartyMon], a
 	call SpeechTextBox
 .done
 	call ApplyTilemapInVBlank
@@ -1333,11 +1305,7 @@ ChooseMoveToRelearn:
 	call ClearBGPalettes
 	ld a, [wCurPartyMon]
 	push af
-	farcall LoadPartyMenuGFX
-	farcall InitPartyMenuWithCancel
-	farcall InitPartyMenuGFX
-	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall InitPartyMenuLayout
 	pop af
 	ld [wCurPartyMon], a
 	pop af
@@ -1351,9 +1319,10 @@ ChooseMoveToRelearn:
 	ret
 
 ManagePokemonMoves: ; 12fba
-	ld a, [wCurPartySpecies]
-	cp EGG
-	jr z, .egg
+	ld a, MON_IS_EGG
+	call GetPartyParamLocation
+	bit MON_IS_EGG_F, [hl]
+	jr nz, .egg
 	ld hl, wOptions1
 	ld a, [hl]
 	push af
@@ -1440,13 +1409,7 @@ MoveScreenLoop:
 	farcall PlaySpriteAnimationsAndDelayFrame
 	call JoyTextDelay
 
-	; allow d-pad to be held, but not a/b/start/select
 	ld a, [hJoyPressed]
-	and BUTTONS
-	ld b, a
-	ld a, [hJoyDown]
-	and D_PAD
-	or b
 	rrca
 	jr c, .pressed_a
 	rrca

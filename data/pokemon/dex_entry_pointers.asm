@@ -174,6 +174,7 @@
 	dw PichuPokedexEntry
 	dw MunchlaxPokedexEntry
 	dw MagnezonePokedexEntry
+	dw RhyperiorPokedexEntry
 	dw TangrowthPokedexEntry
 	dw NatuPokedexEntry
 	dw XatuPokedexEntry
@@ -181,7 +182,6 @@
 	dw FlaaffyPokedexEntry
 	dw AmpharosPokedexEntry
 	dw BellossomPokedexEntry
-	dw RhyperiorPokedexEntry
 	dw SudowoodoPokedexEntry
 	dw PolitoedPokedexEntry
 	dw SunkernPokedexEntry
@@ -192,8 +192,6 @@
 	dw QuagsirePokedexEntry
 	dw EspeonPokedexEntry
 	dw UmbreonPokedexEntry
-	dw LeafeonPokedexEntry
-	dw GlaceonPokedexEntry
 	dw MurkrowPokedexEntry
 	dw HonchkrowPokedexEntry
 	dw SlowkingPokedexEntry
@@ -212,6 +210,7 @@
 	dw GranbullPokedexEntry
 	dw QwilfishPokedexEntry
 	dw ScizorPokedexEntry
+	dw ShucklePokedexEntry
 	dw HeracrossPokedexEntry
 	dw SneaselPokedexEntry
 	dw WeavilePokedexEntry
@@ -233,6 +232,7 @@
 	dw PhanpyPokedexEntry
 	dw DonphanPokedexEntry
 	dw Porygon2PokedexEntry
+	dw PorygonZPokedexEntry
 	dw SmearglePokedexEntry
 	dw TyroguePokedexEntry
 	dw HitmontopPokedexEntry
@@ -251,5 +251,6 @@
 	dw LugiaPokedexEntry
 	dw HoOhPokedexEntry
 	dw CelebiPokedexEntry
+	dw LeafeonPokedexEntry
+	dw GlaceonPokedexEntry
 	dw SylveonPokedexEntry
-	dw PorygonZPokedexEntry

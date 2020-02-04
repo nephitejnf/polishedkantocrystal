@@ -25,8 +25,6 @@ wChannel6:: channel_struct wChannel6
 wChannel7:: channel_struct wChannel7
 wChannel8:: channel_struct wChannel8
 
-	ds 1 ; unused
-
 wCurTrackDuty:: ds 1
 wCurTrackIntensity:: ds 1
 wCurTrackFrequency:: ds 2
@@ -346,16 +344,8 @@ wOTClassName:: ds TRAINER_CLASS_NAME_LENGTH
 
 wCurOTMon:: ds 1
 
-wBattleParticipantsNotFainted::
-; Bit array.  Bits 0 - 5 correspond to party members 1 - 6.
-; Bit set if the mon appears in battle.
-; Bit cleared if the mon faints.
-; Backed up if the enemy switches.
-; All bits cleared if the enemy faints.
-	ds 1
-
 wTypeModifier::
-; >10: super-effective
+; >10: super effective
 ;  10: normal
 ; <10: not very effective
 ; bit 7: stab
@@ -481,17 +471,15 @@ wEnemySelectedMove:: ds 1
 wPlayerMetronomeCount:: ds 1
 wEnemyMetronomeCount:: ds 1
 
-; Stores enemy struct data temporarily when checking non-current mons
-wAITempAbility:: ds 1
-wAITempItem:: ds 1
+wPartyParticipants:: ds PARTY_LENGTH
 
-	ds 16
+wDeferredSwitch:: ds 1
+
+wPlayerSwitchTarget:: ds 1
+wEnemySwitchTarget:: ds 1
 
 wBattleScriptBufferLoc:: ds 2
-
-wTurnEnded:: ds 1
-
-	ds 13
+wMoveState:: ds 1
 
 wPlayerStatLevels::
 ; 07 neutral
@@ -543,20 +531,6 @@ wPayDayMoney:: ds 3
 wSafariMonAngerCount:: ds 1
 wSafariMonEating:: ds 1
 
-	ds 1
-
-; used when enemy is transformed
-wEnemyBackupDVs:: ds 3
-wEnemyBackupPersonality:: ; assumed to be after DVs
-wEnemyBackupShiny::
-wEnemyBackupAbility::
-wEnemyBackupNature::
-	ds 1
-wEnemyBackupGender::
-wEnemyBackupFainted::
-wEnemyBackupForm::
-	ds 1
-
 wAlreadyDisobeyed:: ds 1
 
 wDisabledMove:: ds 1
@@ -565,14 +539,14 @@ wEnemyDisabledMove:: ds 1
 wWhichMonFaintedFirst:: ds 1
 
 ; exists so you can't counter on switch
-wLastEnemyCounterMove:: ds 1
 wLastPlayerCounterMove:: ds 1
+wLastEnemyCounterMove:: ds 1
 
 wEnemyMinimized:: ds 1
 
-wAlreadyFailed:: ds 1
+wAlreadyExecuted:: ds 1
 
-wBattleParticipantsIncludingFainted:: ds 1
+wTrickRoom:: ds 1
 
 wBattleLowHealthAlarm:: ds 1
 
@@ -605,20 +579,19 @@ wWeather::
 ; 02 sun
 ; 03 sandstorm
 ; 04 rain stopped
-; 05 sunliight faded
-; 06 sandstorm subsided
 	ds 1
 
 wWeatherCount:: ds 1 ; # turns remaining
 
-wLoweredStat:: ds 1
+wLoweredStat::
+; bit 4-7: how many stages to raise/lower + 1 (between +1 and +12)
+; bit 0-3: which stat to raise/lower
+	ds 1
+
 wEffectFailed:: ds 1
 wFailedMessage:: ds 1
 
 wEnemyGoesFirst:: ds 1
-
-wPlayerIsSwitching:: ds 1
-wEnemyIsSwitching::  ds 1
 
 wPlayerUsedMoves::
 ; add a move that has been used once by the player
@@ -637,9 +610,6 @@ wLastPlayerMove:: ds 1
 wLastEnemyMove:: ds 1
 
 wEnemyUsingItem:: ds 1
-wEnemySwitchItemCheck:: ds 1
-
-	ds 7
 
 wPlayerFutureSightCount:: ds 1
 wEnemyFutureSightCount:: ds 1
@@ -658,15 +628,9 @@ wAnimationsDisabled:: ds 1 ; used to temporarily disable animations for abilitie
 
 wBattleEnded:: ds 1
 
-wWildMonMoves:: ds NUM_MOVES
-wWildMonPP:: ds NUM_MOVES
-
 wAmuletCoin:: ds 1
 
 wSomeoneIsRampaging:: ds 1
-
-wPlayerEndturnSwitched:: ds 1
-wEnemyEndturnSwitched:: ds 1
 
 wDVAndPersonalityBuffer:: ds 5
 wBattleEnd::
@@ -867,9 +831,9 @@ ENDU
 
 SECTION "Video", WRAM0
 
-wBGMapBuffer:: ds 40
-wBGMapPalBuffer:: ds 40
-wBGMapBufferPtrs:: ds 40 ; 20 bg map addresses (16x8 tiles)
+wBGMapBuffer:: ds 48
+wBGMapPalBuffer:: ds 48
+wBGMapBufferPtrs:: ds 48 ; 24 bg map addresses (16x8 tiles)
 
 wCreditsPos:: ds 2
 wCreditsTimer:: ds 1
@@ -884,7 +848,7 @@ wHPPalIndex:: ds 1
 
 wCopyingSGBTileData:: ds 1
 
-	ds 50
+	ds 26
 
 wAttrMap::
 ; 20x18 grid of palettes for 8x8 tiles
@@ -971,7 +935,7 @@ wPalFadeMode::
 
 wCurForm:: ds 1
 
-	ds 8 ; unused
+wJustGotGSBall:: ds 1
 
 wWindowStackPointer:: ds 2
 wMenuJoypad:: ds 1
@@ -1004,7 +968,7 @@ wMenuData2Flags::
 ; bit 5: ????
 ; bit 4: ????
 ; bit 3: ????
-; bit 2: ????
+; bit 2: Enable Start button
 ; bit 1: Enable Select button
 ; bit 0: Disable B button
 	ds 1
@@ -1056,12 +1020,10 @@ wTrainerCardBadgePaletteAddr:: ds 2
 
 wBTTempOTSprite:: ds 1
 
-wOverworldDelay:: ds 1
+wPendingOverworldGraphics:: ds 1
 wTextDelayFrames:: ds 1
 wVBlankOccurred:: ds 1
 wGenericDelay:: ds 1
-
-	ds 7 ; unused
 
 wGameTimerPause::
 ; bit 0
@@ -1069,11 +1031,18 @@ wGameTimerPause::
 
 wInputFlags::
 ; bits 7, 6, and 4 can be used to disable joypad input
-	ds 2
+	ds 1
+
+wOverworldDelaySkip::
+; amount of overworld frames to skip DelayFrame for
+	ds 1
 
 wInBattleTowerBattle:: ds 1
 
-wIsBattleMenu:: ds 1
+wBattleMenuFlags::
+; bit 0-2: quick-access buttons (b/start/select)
+; bit 3: quick-select last pack item
+	ds 1
 
 wFXAnimID::
 wFXAnimIDLo:: ds 1

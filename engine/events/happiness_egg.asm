@@ -1,16 +1,21 @@
-GetFirstPokemonHappiness: ; 718d
-	ld hl, wPartyMon1Happiness
-	ld bc, PARTYMON_STRUCT_LENGTH
-	ld de, wPartySpecies
+GetFirstPokemonHappiness:
+; returns first non-Egg party mon's happiness
+	ld hl, wPartyMon1Species
 .loop
-	ld a, [de]
-	cp EGG
-	jr nz, .done
-	inc de
+	ld a, [hl]
+	push hl
+	ld bc, wPartyMon1IsEgg - wPartyMon1Species
+	add hl, bc
+	bit MON_IS_EGG_F, [hl]
+	pop hl
+	jr z, .done
+	ld bc, PARTYMON_STRUCT_LENGTH
 	add hl, bc
 	jr .loop
 
 .done
+	ld bc, wPartyMon1Happiness - wPartyMon1Species
+	add hl, bc
 	ld [wd265], a
 	ld a, [hl]
 	ld [wScriptVar], a
@@ -18,11 +23,12 @@ GetFirstPokemonHappiness: ; 718d
 	jp CopyPokemonName_Buffer1_Buffer3
 
 CheckFirstMonIsEgg: ; 71ac
-	ld a, [wPartySpecies]
+	ld a, [wPartyMon1Species]
 	ld [wd265], a
-	cp EGG
+	ld a, [wPartyMon1IsEgg]
+	bit MON_IS_EGG_F, a
 	ld a, $1
-	jr z, .egg
+	jr nz, .egg
 	xor a
 
 .egg
@@ -34,17 +40,14 @@ ChangeHappiness: ; 71c2
 ; Perform happiness action c on wCurPartyMon
 
 	ld a, [wCurPartyMon]
-	inc a
-	ld e, a
-	ld d, 0
-	ld hl, wPartySpecies - 1
-	add hl, de
-	ld a, [hl]
-	cp EGG
-	ret z
+	ld hl, wPartyMon1IsEgg
+	push af
+	call GetPartyLocation
+	pop af
+	bit MON_IS_EGG_F, [hl]
+	ret nz
 
 	ld hl, wPartyMon1Happiness
-	ld a, [wCurPartyMon]
 	call GetPartyLocation
 
 	ld d, h
@@ -61,7 +64,6 @@ ChangeHappiness: ; 71c2
 	inc e
 
 .ok
-	dec c
 	ld b, 0
 	ld hl, HappinessChanges
 	add hl, bc
@@ -163,19 +165,19 @@ StepHappiness:: ; 725a
 	ld c, a
 	ld hl, wPartyMon1Happiness
 .loop
-	inc de
-	ld a, [de]
-	cp EGG
-	jr z, .next
+	push hl
+	ld de, wPartyMon1IsEgg - wPartyMon1Happiness
+	add hl, de
+	bit MON_IS_EGG_F, [hl]
+	pop hl
+	jr nz, .next
 	inc [hl]
 	jr nz, .next
-	ld [hl], $ff
+	dec [hl]
 
 .next
-	push de
 	ld de, PARTYMON_STRUCT_LENGTH
 	add hl, de
-	pop de
 	dec c
 	jr nz, .loop
 	ret
@@ -223,10 +225,9 @@ DaycareStep:: ; 7282
 	lb bc, 70, 88
 .got_odds
 	ld a, OVAL_CHARM
-	ld [wCurItem], a
+	ld [wCurKeyItem], a
 	push bc
-	ld hl, wNumKeyItems
-	call CheckItem
+	call CheckKeyItem
 	pop bc
 	jr nc, .no_oval_charm
 	ld b, c

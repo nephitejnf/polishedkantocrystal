@@ -49,7 +49,7 @@ roms_md5      = roms.md5
 bank_ends_txt = contents/bank_ends.txt
 sorted_sym    = contents/$(NAME).sym
 
-PYTHON = python
+PYTHON = python2
 CC     = gcc
 RM     = rm -f
 GFX    = $(PYTHON) gfx.py
@@ -74,7 +74,7 @@ data/maps/map_data.o \
 data/text/common.o \
 data/tilesets.o \
 engine/credits.o \
-engine/events.o \
+engine/overworld/events.o \
 gfx/pics.o \
 gfx/sprites.o
 
@@ -134,10 +134,29 @@ $(sorted_sym): crystal ; tail -n +3 $(NAME)-$(VERSION).sym | sort -o $@
 	$(RGBDS_DIR)rgblink $(RGBLINK_FLAGS) -o $@ $^
 	$(RGBDS_DIR)rgbfix $(RGBFIX_FLAGS) $@
 
+%.2bpp.vram0: %.2bpp
+# take the first 128 tiles (= 8192 px = 16384 bits = 2048 bytes)
+	head -c 2048 $< > $@
+
+%.2bpp.vram1: %.2bpp
+# skip the first 128 tiles
+	tail -c +2049 $< > $@
+
 %.2bpp: %.png ; $(GFX) 2bpp $<
 %.1bpp: %.png ; $(GFX) 1bpp $<
 
 gfx/pokemon/%/bitmask.asm gfx/pokemon/%/frames.asm: gfx/pokemon/%/front.2bpp
+
+data/tilesets/%_collision.bin: data/tilesets/%_collision.asm
+	@ TEMP_ASM=`mktemp -p /tmp collision.asm.XXX` ; \
+	TEMP_O=`mktemp -p /tmp collision.o.XXX` ; \
+	echo 'INCLUDE "constants/collision_constants.asm"' > "$$TEMP_ASM" ; \
+	echo 'INCLUDE "macros/collision.asm"' >> "$$TEMP_ASM" ; \
+	echo 'SECTION "C", ROM0[$$0]' >> "$$TEMP_ASM" ; \
+	echo 'INCLUDE "$<"' >> "$$TEMP_ASM" ; \
+	$(RGBDS_DIR)rgbasm -o "$$TEMP_O" "$$TEMP_ASM" ; \
+	tail -c +32 "$$TEMP_O" | head -c -4 > $@ ; \
+	$(RM) "$$TEMP_ASM" "$$TEMP_O"
 
 %.lz: % ; $(LZ) $< $@
 

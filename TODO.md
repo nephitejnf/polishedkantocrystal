@@ -25,8 +25,6 @@ The final, non-beta 3.0 release should include all of these.
 * Variety Channel with daily unique music
 * Separate radio channels for March and Lullaby, available every day
 * Send gift Pokémon to the PC if the party is full
-* Get better Wonder Trade items at higher levels
-* Play Pokémon cry+animation when they escape a Poké Ball (from Prism)
 * Generate Battle Tower Pokémon
 * Generate random team for Psychic Inver
 * Wild Ghosts and the SilphScope2
@@ -90,51 +88,8 @@ Shamouti Island:
 * Shamouti Restaurant (works like Seven Stars Restaurant) (different subset of all trainers every day of the week)
 
 
-### Move animations
-
-Refer to [B/W animations with sound effects](https://www.youtube.com/watch?v=TFDV0HeBz_0).
-
-High priority:
-
-* Giga Impact
-* Gyro Ball
-* Rock Blast
-* Skill Swap
-* Stone Edge
-* Sucker Punch
-* Trick
-* U-turn
-* Water Pulse
-
-Low priority:
-
-* Aerial Ace
-* Aqua Tail
-* Bug Bite
-* Bulldoze
-* Close Combat
-* DazzlinGleam
-* Disarm Voice
-* Earth Power
-* Extrasensory
-* Facade
-* Gunk Shot
-* Hex
-* Knock Off
-* Roost
-* Toxic Spikes
-* Venoshock
-* Volt Switch
-
-
-### Music player
-
-* Use the UnlockedMusic flag_array to hide unheard song titles
-
-
 ### Optimizations
 
-* LZ-compress metatiles.bin data, collision.asm data, and various tilemaps (potentially save ~2.7% space)
 * Optimize battle command engine, including parameterized commands
 * Optimize map scripts with the various new commands and PERSONTYPE_GENERICTRAINER
 
@@ -143,7 +98,7 @@ Low priority:
 
 Some of these may never be added; they're just suggestions.
 
-* Alolan forms (update GetBaseData and everything that refers to EvosAttacksPointers)
+* Alolan and Galarian forms (update GetBaseData and everything that refers to EvosAttacksPointers)
    * Persian as a one-time trade from an Alolan tourist (you can breed it for more)
    * Rattata/Raticate in Kanto
    * Grimer/Muk in Goldenrod City (Celadon's Muk are a sign of its pollution, Goldenrod's Alolan Muk would be a sign that they manage pollution better)
@@ -151,10 +106,11 @@ Some of these may never be added; they're just suggestions.
    * Diglett/Dugtrio on Cinnabar Island (right now I replaced all Diglett with the Alolan ones, with the explanation that the volcano affected climate everywhere, but I'd rather have the ones in Diglett's Cave be normal)
    * Geodude/Graveler/Golem in Rock Tunnel (the Lodestone there is already used to evolve Magnezone)
    * Marowak, Exeggutor, and Raichu evolve while holding the Odd Souvenir (bought on Shamouti Island)
+   * Ponyta/Rapidash on Shamouti Island
+   * Corsola/Cursola in Scary Cave
+   * Farfetch'd/Sirfetch'd instead of non-faithful Farfetch'd
 * More Pokémon
-   * Rewrite Eggs to use the IsEgg bitflag instead of $fe
    * Rewrite everything to use two-byte IDs, allowing 65,534 Pokémon
-   * Restore Shuckle as the Cianwood guy's Pokémon
    * Restore Stantler as a Normal/Psychic type, and make Girafarig Psychic/Dark
    * Add all the new babies and evolutions of Gen 1 and 2 Pokémon
       * Lickilicky
@@ -197,7 +153,7 @@ Some of these may never be added; they're just suggestions.
       * Phione from an Egg given by Wallace
       * Victini on a cruise to Liberty Garden
       * Magearna in the Ruins of Alph
-   * Add certain other Gen 3 and 4 Pokémon; Prism's dex is similar to my own taste
+   * Add certain other Gen 3+ Pokémon; Prism's dex is similar to my own taste
       * Ralts → Kirlia → Gardevoir / Gallade
       * Surskit → Masquerain (buff and retype to Bug/Water with Levitate)
       * Mawile and Sableye
@@ -214,14 +170,14 @@ Some of these may never be added; they're just suggestions.
       * Rotom (switch forms in Silph Co.)
       * Sigilyph in the Ruins of Alph grass
       * Litwick → Lampent → Chandelure
-      * Pawniard → Bisharp
       * Skiddo → Gogoat
-      * Mareanie → Toxapek (in Cherrygrove Bay with Corsola)
+      * Mareanie → Toxapex (in Cherrygrove Bay with Corsola)
+      * Wooloo → Dubwool
+      * Cufant → Copperajah
 * More music
    * PGo Overworld/Walking (for Safari Game)
    * PGo Battle! Legendary Raid (for Mew)
    * S/M Malie City (Day) (for Shamouti Shrine)
-   * R/S/E Bicycle (for bicycling in Orange Islands)
 * More Orange Islands
 * Add [Sweet Honey](http://iimarck.us/i/sweet-honey/) that acts like Sweet Scent and attracts rare Pokémon
 * First Pokémon walks behind you ([comet's prototype](https://hax.iimarck.us/topic/6248/) and [diff](https://github.com/yenatch/pokecrystal/commit/dbc5cd2025a0214c5b2cd1e3330f50603a0bb9d1))
@@ -239,23 +195,11 @@ Some of these may never be added; they're just suggestions.
 * Restore [unused memory game](http://iimarck.us/i/memory/) ([more info](https://tcrf.net/Pok%C3%A9mon_Gold_and_Silver#Unused_Memory_Game))
 * Restore the Pikachu's Beach minigame
 * Level ranges for wild Pokémon, instead of single values
-* Optional scaled experience formula from Gen V and Gen VII (port from [pokecrystal-speedchoice](https://github.com/Dabomstew/pokecrystal-speedchoice))
 * Use the News Machine for something (Mystery Gift?)
 * Championship title defense like in Gen VII (challengers: rival, Lyra, Lance, Prof.Oak, Prof.Elm, Clair, Blue, Eusine, Kimono Girl Naoko, Palmer, Lorelei, Agatha, Steven, Cynthia, Caitlin, and Lawrence)
 * Phone uses a bitfield to allow storing all numbers
 * Make more trainers rematchable
-* Ambient wild Pokémon cries from Gen III (see pokeruby and pokeemerald)
-   * Ruby [sub_8054164](https://github.com/pret/pokeruby/blob/master/src/rom4.c#L937), Emerald [sub_8085B2C](https://github.com/pret/pokeemerald/blob/master/asm/rom4.s#L2662): picks the random wild Pokémon (called on map initialization and every step), stored in gUnknown_02029814
-   * Ruby [sub_8054050](https://github.com/pret/pokeruby/blob/master/src/rom4.c#L893): plays the cry of gUnknown_02029814 if on a non-water encounter tile at volume 50–80 instead of the usual 125
-   * Ruby [sub_80540D0](https://github.com/pret/pokeruby/blob/master/src/rom4.c#L906): might randomly play the cry (run with time-based events)
-   * Emerald [wild_encounter_related](https://github.com/pret/pokeemerald/blob/master/asm/rom4.s#L2544): raises call probability for Swarm ability
-* Catch rate formula from Gen III
-* Port critical captures from Prism
 * Allow evolution during battle
-* Itemfinder makes you face towards the item
-* Itemfinder beeps N times for an item N steps away
-* Add more Berries
-* Restore Berry Juice, and make it heal full HP but cause confusion (in non-Faithful)
 * Battle [En and Madoka](http://bulbapedia.bulbagarden.net/wiki/The_Legendary_Rotation_Battle!) somewhere (Trainer House after catching the legendary trios, different trainer each day?)
    * Madoka:
    * She entered this tournament with new Pokémon! Which Pokémon wil she use?

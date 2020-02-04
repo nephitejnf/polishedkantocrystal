@@ -17,12 +17,12 @@ In the installer, select the following packages: `git`, `python`, `make`, and `g
 In the **Cygwin terminal**:
 
 ```bash
-git clone https://github.com/roukaour/polishedcrystal.git
+git clone https://github.com/Rangi42/polishedcrystal.git
 cd polishedcrystal
 mkdir rgbds
 ```
 
-Then download [**rgbds**](https://github.com/bentley/rgbds/). You'll need version 0.3.3 or later. Extract the archive and put all the .exe and .dll files in polishedcrystal/rgbds.
+Then download [**rgbds**](https://github.com/bentley/rgbds/). You'll need version 0.3.9 or later. Extract the archive and put all the .exe and .dll files in polishedcrystal/rgbds.
 
 To build **polishedcrystal.gbc**:
 
@@ -55,7 +55,7 @@ cd rgbds
 sudo make install
 cd ..
 
-git clone https://github.com/roukaour/polishedcrystal.git
+git clone https://github.com/Rangi42/polishedcrystal.git
 cd polishedcrystal
 ```
 
@@ -84,7 +84,7 @@ cd rgbds
 sudo make install
 cd ..
 
-git clone https://github.com/roukaour/polishedcrystal.git
+git clone https://github.com/Rangi42/polishedcrystal.git
 cd polishedcrystal
 ```
 

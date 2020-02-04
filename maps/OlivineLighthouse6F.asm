@@ -25,7 +25,7 @@ OlivineLighthouse6F_MapScriptHeader:
 JasmineScript_0x60b91:
 	faceplayer
 	opentext
-	checkitem SECRETPOTION
+	checkkeyitem SECRETPOTION
 	iftrue UnknownScript_0x60bab
 	checkevent EVENT_JASMINE_EXPLAINED_AMPHYS_SICKNESS
 	iftrue UnknownScript_0x60ba5
@@ -41,7 +41,7 @@ UnknownScript_0x60bab:
 	iffalse UnknownScript_0x60c25
 	writetext UnknownText_0x60dc3
 	buttonsound
-	takeitem SECRETPOTION
+	takekeyitem SECRETPOTION
 	writetext UnknownText_0x60dea
 	waitbutton
 	closetext
@@ -56,6 +56,7 @@ UnknownScript_0x60bab:
 	special RestartMapMusic
 	cry AMPHAROS
 	special FadeOutPalettes
+	special LoadMapPalettes
 	pause 10
 	special FadeInPalettes
 	showtext UnknownText_0x60f3d
@@ -102,8 +103,10 @@ MonsterScript_0x60c3a:
 UnknownScript_0x60c51:
 	showcrytext UnknownText_0x60f3d, AMPHAROS
 	special FadeOutPalettes
+	special LoadMapPalettes
 	special FadeInPalettes
 	special FadeOutPalettes
+	special LoadMapPalettes
 	special FadeInPalettes
 	end
 

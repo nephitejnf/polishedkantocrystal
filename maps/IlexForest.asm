@@ -415,7 +415,7 @@ GenericTrainerBug_catcherWayne:
 MapIlexForestSignpost4Script:
 	checkevent EVENT_FOREST_IS_RESTLESS
 	iffalse .DontDoCelebiEvent
-	checkitem GS_BALL
+	checkkeyitem GS_BALL
 	iftrue .AskCelebiEvent
 .DontDoCelebiEvent:
 	checkevent EVENT_TIME_TRAVEL_FINISHED
@@ -433,7 +433,7 @@ MapIlexForestSignpost4Script:
 	endtext
 
 .CelebiEvent:
-	takeitem GS_BALL
+	takekeyitem GS_BALL
 	clearevent EVENT_FOREST_IS_RESTLESS
 	setevent EVENT_AZALEA_TOWN_KURT
 	disappear ILEXFOREST_LASS
@@ -493,6 +493,7 @@ MapIlexForestSignpost4Script:
 	pause 30
 	playsound SFX_GAME_FREAK_LOGO_GS
 	special FadeOutPalettes
+	special LoadMapPalettes
 	turnobject ILEXFOREST_CELEBI, DOWN
 	pause 30
 	special FadeInPalettes

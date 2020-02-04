@@ -2,11 +2,15 @@ https://bulbapedia.bulbagarden.net/wiki/List_of_Gotta_Catch_%27Em_All_event_Pok√
 https://bulbapedia.bulbagarden.net/wiki/Game_move_errors
 https://www.pokecommunity.com/showthread.php?t=184717
 
+Shell Smash: Forretress, Corsola, Lapras, Pupitar
+
 Hoothoot: Healing Light
 Qwilfish: Aqua Jet
 Qwilfish: Astonish
 Heracross: Rock Blast
 Munchlax: Pursuit
+
+Rhyperior: Submission, Wild Charge
 
 Houndoom: Bonemerang
 Qwilfish: Selfdestruct
@@ -35,6 +39,41 @@ Houndour/Houndoom: Charm (purified), Night Slash (Prism tutor)
 Jigglypuff/Wigglytuff: Tri Attack (RBY TM), Pain Split (HGSS tutor)
 Meowth/Persian: Hypnosis (Dream World), Gunk Shot (HGSS tutor)
 Psyduck/Golduck: Charm (purified), Low Kick (HGSS tutor)
+
+Sw/Sh:
+Charizard: Hurricane
+Blastoise: Crunch
+Butterfree: Hurricane, Baton Pass, Draining Kiss
+Raichu: Draining Kiss, Play Rough, Safeguard
+Clefairy/Clefable: Baton Pass
+Vulpix: Encore
+Ninetales: Agility
+Arcanine: Scary Face
+Bellossom: Baton Pass
+Gengar: Nasty Plot, Encore
+Farfetch'd: Close Combat, Baton Pass
+Rapidash: Baton Pass
+Onix: Dragon Dance
+Steelix: Dragon Dance, Scary Face
+Kingler: Hydro Pump
+Hitmonlee: Aura Sphere
+Hitmonchan: Aura Sphere
+Mr. Mime: Dazzling Gleam
+Gyarados: Power Whip
+Lapras: Sparkling Aria, Charm
+Umbreon: Crunch, Thief
+Leafeon: Leech Seed
+Glaceon: Icicle Spear
+Sylveon: Play Rough
+Snorlax: Encore, Bite
+Hoothoot/Noctowl: Nasty Plot, Screech, Amnesia
+Natu/Xatu: Baton Pass
+Quagsire: Hydro Pump
+Togekiss: Tri Attack, Fairy Wind, Swift, Draining Kiss, Amnesia
+Qwilfish: Hex, Scary Face
+Mantine: Hurricane, Rock Blast
+Tyranitar: Rock Throw, Rock Blast
+Weavile: Icicle Spear
 
 Egg:
 Geodude/Graveler/Golem: Rock Slide

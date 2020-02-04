@@ -377,12 +377,12 @@ ElmAfterTheftDoneScript:
 
 ElmAfterTheftScript:
 	writetext ElmAfterTheftText1
-	checkitem MYSTERY_EGG
+	checkkeyitem MYSTERY_EGG
 	iffalse ElmAfterTheftDoneScript
 	buttonsound
 	writetext ElmAfterTheftText2
 	waitbutton
-	takeitem MYSTERY_EGG
+	takekeyitem MYSTERY_EGG
 	scall ElmJumpBackScript1
 	writetext ElmAfterTheftText3
 	waitbutton
@@ -442,7 +442,7 @@ ElmGiveTicketScript:
 	opentext
 	writetext ElmGiveTicketText1
 	buttonsound
-	verbosegiveitem S_S_TICKET
+	verbosegivekeyitem S_S_TICKET
 	writetext ElmGiveTicketText2
 	waitbutton
 	closetext
@@ -543,8 +543,8 @@ LyraBattleScript:
 	reloadmap
 	special DeleteSavedMusic
 	playmusic MUSIC_LYRA_DEPARTURE_HGSS
-	iftrue .AfterVictorious
-	jump .AfterYourDefeat
+	iftrue .AfterYourDefeat
+	jump .AfterVictorious
 
 .Totodile:
 	loadtrainer LYRA1, LYRA1_2
@@ -575,6 +575,14 @@ LyraBattleScript:
 .AfterYourDefeat:
 	showtext ElmsLabLyraText_YouLost
 .FinishLyra:
+	turnobject ELMSLAB_LYRA, UP
+	opentext
+	writetext ElmsLabLyraThankYouText
+	waitbutton
+	turnobject ELMSLAB_LYRA, LEFT
+	writetext ElmsLabLyraSeeYouText
+	waitbutton
+	closetext
 	turnobject PLAYER, DOWN
 	applymovement ELMSLAB_LYRA, LyraLeavesMovement
 	disappear ELMSLAB_LYRA
@@ -1604,12 +1612,16 @@ ElmsLabLyraText_YouWon:
 ElmsLabLyraText_YouLost:
 	text "That was an"
 	line "exciting battle!"
+	done
 
-	para "Thank you for the"
+ElmsLabLyraThankYouText:
+	text "Thank you for the"
 	line "#mon, Prof."
 	cont "Elm."
+	done
 
-	para "<PLAYER>, I'll"
+ElmsLabLyraSeeYouText:
+	text "<PLAYER>, I'll"
 	line "see you later!"
 
 	para "Have fun on your"

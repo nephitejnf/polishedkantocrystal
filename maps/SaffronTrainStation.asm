@@ -31,7 +31,7 @@ OfficerScript_0x18a81e:
 	writetext UnknownText_0x18a8dd
 	yesorno
 	iffalse_jumpopenedtext UnknownText_0x18a978
-	checkitem PASS
+	checkkeyitem PASS
 	iffalse_jumpopenedtext UnknownText_0x18a956
 	writetext UnknownText_0x18a917
 	waitbutton
@@ -133,7 +133,7 @@ UnknownText_0x18a993:
 
 UnknownText_0x18a9ca:
 	text "The Magnet Train"
-	line "is a super-modern"
+	line "is a super modern"
 
 	para "rail liner that"
 	line "uses electricity"

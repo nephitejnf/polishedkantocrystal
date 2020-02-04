@@ -137,6 +137,7 @@ Music:
 	dba Music_ZinniaEncounterORAS
 	dba Music_Route205DPPt
 	dba Music_SurfRSE
+	dba Music_BicycleRSE
 	dba Music_WildBattleSM
 	dba Music_SunyshoreCityDPPt
 	dba Music_TrainerBattleSM
@@ -187,3 +188,4 @@ Music:
 	dba Music_TrainerBattlePrism
 	dba Music_GymLeaderBattlePrism
 	dba Music_PaletteBattlePrism
+	dba Music_Megalovania

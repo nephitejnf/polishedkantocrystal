@@ -454,6 +454,7 @@ NamesPointers:: ; 33ab
 	dbw 0, wPartyMonOT
 	dbw 0, wOTPartyMonOT
 	dba TrainerClassNames
+	dba KeyItemNames
 ; 33c0
 
 GetName:: ; 33c3
@@ -479,7 +480,6 @@ GetName:: ; 33c3
 	jr .done
 
 .NotPokeName:
-	ld a, [wNamedObjectTypeBuffer]
 	dec a
 	ld e, a
 	ld d, 0
@@ -492,11 +492,9 @@ GetName:: ; 33c3
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-
 	ld a, [wCurSpecies]
 	dec a
 	call GetNthString
-
 	ld de, wStringBuffer1
 	ld bc, ITEM_NAME_LENGTH
 	rst CopyBytes
@@ -604,13 +602,22 @@ GetItemName:: ; 3468
 	ld a, [wNamedObjectIndexBuffer]
 	ld [wCurSpecies], a
 	ld a, ITEM_NAME
-	ld [wNamedObjectTypeBuffer], a
-	call GetName
-	ld de, wStringBuffer1
-	pop bc
-	pop hl
-	ret
+	jr PutNameInBufferAndGetName
 ; 3487
+
+GetCurKeyItemName::
+; Get item name from item in CurItem
+	ld a, [wCurKeyItem]
+	inc a
+	ld [wNamedObjectIndexBuffer], a
+GetKeyItemName:: ; 3468
+; Get key item item name wNamedObjectIndexBuffer.
+	push hl
+	push bc
+	ld a, [wNamedObjectIndexBuffer]
+	ld [wCurSpecies], a
+	ld a, KEY_ITEM_NAME
+	jr PutNameInBufferAndGetName
 
 GetApricornName::
 ; Get apricorn name wNamedObjectIndexBuffer.
@@ -619,6 +626,7 @@ GetApricornName::
 	ld a, [wNamedObjectIndexBuffer]
 	ld [wCurSpecies], a
 	ld a, APRICORN_NAME
+PutNameInBufferAndGetName::
 	ld [wNamedObjectTypeBuffer], a
 	call GetName
 	ld de, wStringBuffer1
@@ -626,97 +634,9 @@ GetApricornName::
 	pop hl
 	ret
 
-GetTMHMName:: ; 3487
-; Get TM/HM name by item id wNamedObjectIndexBuffer.
-
-	push hl
-	push de
-	push bc
-	ld a, [wNamedObjectIndexBuffer]
-	push af
-
-; TM/HM prefix
-	cp HM01
-	push af
-	jr c, .TM
-
-	ld hl, .HMText
-	ld bc, .HMTextEnd - .HMText
-	jr .asm_34a1
-
-.TM:
-	ld hl, .TMText
-	ld bc, .TMTextEnd - .TMText
-
-.asm_34a1
-	ld de, wStringBuffer1
-	rst CopyBytes
-
-; TM/HM number
-	ld a, [wNamedObjectIndexBuffer]
-	ld c, a
-
-; HM numbers start from 51, not 1
-	pop af
-	ld a, c
-	jr c, .asm_34b9
-	sub NUM_TMS
-.asm_34b9
-	inc a
-
-; Divide and mod by 10 to get the top and bottom digits respectively
-	ld b, "0"
-.mod10
-	sub 10
-	jr c, .asm_34c2
-	inc b
-	jr .mod10
-.asm_34c2
-	add 10
-
-	push af
-	ld a, b
-	ld [de], a
-	inc de
-	pop af
-
-	ld b, "0"
-	add b
-	ld [de], a
-
-; End the string
-	inc de
-	ld a, "@"
-	ld [de], a
-
-	pop af
-	ld [wNamedObjectIndexBuffer], a
-	pop bc
-	pop de
-	pop hl
-	ld de, wStringBuffer1
+GetTMHMName::
+	homecall _GetTMHMName
 	ret
-
-.TMText:
-	db "TM"
-.TMTextEnd:
-	db "@"
-
-.HMText:
-	db "HM"
-.HMTextEnd:
-	db "@"
-; 34df
-
-IsHM:: ; 34df
-	cp HM01
-	jr c, .NotHM
-	scf
-	ret
-.NotHM:
-	and a
-	ret
-; 34e7
 
 IsHMMove:: ; 34e7
 	ld hl, .HMMoves
@@ -1296,8 +1216,8 @@ PrepMonFrontpic:: ; 3786
 
 _PrepMonFrontpic:: ; 378b
 	ld a, [wCurPartySpecies]
-	call IsAPokemon
-	jr c, .not_pokemon
+	and a
+	jr z, .not_pokemon
 
 	push hl
 	ld de, VTiles2
@@ -1468,18 +1388,14 @@ GetCurNick:: ; 389c
 
 GetNick:: ; 38a2
 ; Get nickname a from list hl.
-
 	push hl
 	push bc
-
 	call SkipNames
 	ld de, wStringBuffer1
-
 	push de
 	ld bc, PKMN_NAME_LENGTH
 	rst CopyBytes
 	pop de
-
 	pop bc
 	pop hl
 	ret
@@ -1576,6 +1492,7 @@ GetPartyParamLocation:: ; 3917
 	ld a, [wCurPartyMon]
 	call GetPartyLocation
 	pop bc
+	ld a, [hl]
 	ret
 ; 3927
 

@@ -92,14 +92,14 @@ Text_ABoostedStringBuffer2ExpPoints::
 	text ""
 	line "a boosted"
 	cont "@"
-	deciram wStringBuffer2, 2, 5
+	deciram wStringBuffer2, 3, 6
 	text " Exp. Points!"
 	prompt
 
 Text_StringBuffer2ExpPoints::
 	text ""
 	line "@"
-	deciram wStringBuffer2, 2, 5
+	deciram wStringBuffer2, 3, 6
 	text " Exp. Points!"
 	prompt
 
@@ -451,16 +451,22 @@ WhiteoutToTrainerText::
 	line "out!"
 	done
 
-UnknownText_0x1c0a77::
-	text "Yes! Itemfinder"
-	line "indicates there's"
-	cont "an item nearby."
-	prompt
+ForfeitToTrainerText::
+	text "<PLAYER> forfeit-"
+	line "ed the battle…"
 
-UnknownText_0x1c0aa9::
-	text "Nope! Itemfinder"
-	line "isn't responding."
-	prompt
+	para "<PLAYER> paid"
+	line "¥@"
+	deciram hMoneyTemp, 3, 7
+	text " to the"
+	cont "winner…"
+
+	para "………………"
+	line "………………"
+
+	para "<PLAYER> blacked"
+	line "out!"
+	done
 
 UnknownText_0x1c0acc::
 	text_from_ram wStringBuffer3
@@ -552,36 +558,6 @@ Text_SoYoureABoy::
 Text_SoYoureAGirl::
 	text "So you're a girl?"
 	done
-
-UnknownText_0x1c0cc6::
-	text "<USER>'s"
-	line "@"
-	text_from_ram wStringBuffer2
-	db "@@"
-
-UnknownText_0x1c0cd0::
-	interpret_data
-	text $4c, "rose sharply!"
-	prompt
-
-UnknownText_0x1c0ce0::
-	text " rose!"
-	prompt
-
-UnknownText_0x1c0ceb::
-	text "<TARGET>'s"
-	line "@"
-	text_from_ram wStringBuffer2
-	db "@@"
-
-UnknownText_0x1c0cf5::
-	interpret_data
-	text $4c, "harshly fell!"
-	prompt
-
-UnknownText_0x1c0d06::
-	text " fell!"
-	prompt
 
 UnknownText_0x1c0d0e::
 	text "<USER>@@"
@@ -1152,11 +1128,6 @@ UnknownText_0x1c1aca::
 	line "@"
 	text_from_ram wStringBuffer1
 	text "(s)."
-	prompt
-
-UnknownText_0x1c1adf::
-	text "That's too impor-"
-	line "tant to toss out!"
 	prompt
 
 UnknownText_0x1c1b03::

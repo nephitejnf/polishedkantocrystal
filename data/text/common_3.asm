@@ -774,7 +774,16 @@ UnknownText_0x1c5b7f::
 	text "?"
 	done
 
-UnknownText_0x1c5b9a::
+_ItemHappinessRoseButStatFellText::
+	text_from_ram wStringBuffer1
+	text " became"
+	line "friendly. Base"
+	cont "@"
+	text_from_ram wStringBuffer2
+	text " fell!"
+	prompt
+
+_ItemStatRoseText::
 	text_from_ram wStringBuffer1
 	text "'s"
 	line "@"
@@ -1029,14 +1038,6 @@ WonderTradePromptText::
 ;	line "can't accept it."
 ;	prompt
 
-WonderTradeCantTradeGSBallText::
-	text "Sorry, but your"
-	line "#mon is holding"
-
-	para "a strange item. We"
-	line "can't accept it."
-	prompt
-
 WonderTradeConfirmText::
 	text "Offer to trade"
 	line "@"
@@ -1052,59 +1053,6 @@ WonderTradeSetupText::
 WonderTradeReadyText::
 	text "A trade partner"
 	line "has been found."
-	prompt
-
-WonderTradeCompleteText::
-	text "It's your new"
-	line "partner."
-
-	para "Please take care"
-	line "of it with love."
-	prompt
-
-WonderTradeDoneFanfare::
-	sound_dex_fanfare_80_109
-	interpret_data
-	db "@@"
-
-WonderTradeForGSBallPichuText::
-	text "…But what's this?"
-	line "Is something wrong"
-
-	para "with the Wonder"
-	line "Trade machine?"
-
-	para "It seems like you"
-	line "just traded a"
-
-	para "#mon with"
-	line "yourself."
-
-	para "But that can't be"
-	line "right… You can't"
-
-	para "be in two places"
-	line "at once."
-
-	para "Besides, the ma-"
-	line "chine communicates"
-
-	para "through space,"
-	line "not time…"
-
-	para "And what is that"
-	line "strange Ball it's"
-
-	para "holding? Is it an"
-	line "Apricorn Ball?"
-
-	para "…………"
-
-	para "Well, a #mon"
-	line "is a #mon."
-
-	para "Please look after"
-	line "it carefully."
 	prompt
 
 SilphMartIntroText::

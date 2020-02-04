@@ -41,13 +41,15 @@ Pokémon Polished Crystal would never have been finished without the help of man
 
 * Blue Emerald, solo993, Chamber, Lake, Neslug, and Pikachu25 for many sprites and icons.
 * metalflygon08 for the many Pokémon and trainer sprites.
-* JaceDeane for the Goldenrod Museum paintings, many Pokémon and trainer sprites, and some tiles.
+* JaceDeane for the Goldenrod Museum paintings, many Pokémon and trainer sprites, Prof. Ivy's overworld sprite, and some tiles.
 * bloodless for sprites of Buck, Maylene, Skyla, Veteran♂, Pikachu, Diglett, and Dugtrio.
 * Kuroko Aizawa for sprites of Prof. Ivy, Looker, Cheryl, Officer♀, Aroma Lady, Artist.
 * SCMidna for animations of Alolan Diglett and Dugtrio, Munchlax, Unown ! and ?, and Surfing Pikachu, and the stat trainers' overworld sprites.
 * Acrozz for many HGSS Pokémon palettes, and sprites and animations of Magikarp forms.
 * Freeline for animations of Honchkrow and Munchlax, and the Rocket Executives' and stat trainers' overworld sprites.
 * Megaman-Omega for some of Prism's overworld sprites.
+* SoupPotato (aka SourApple) for some move animations and Ace Duo's sprite.
+* slempa for some move animations.
 * spritershawn for sprites of Red, Blue, and Green.
 * isamuakai01 for sprites of Steven and Cynthia.
 * Luna for some sprites and tiles.
@@ -59,11 +61,13 @@ Pokémon Polished Crystal would never have been finished without the help of man
 * Pyro for Tamer's sprite.
 * Constantine for Nurse's sprite.
 * Paps for Twins' sprite.
+* ShockSlayer for Yellow's overworld sprite.
 * coraldev for rowboat and sakura petal tiles.
 * lilbluedemon for some bridge tiles.
 * BettyNewbie for elements of Green's sprite (combined with spritershawn's by me).
 * Fo0xerz for Lawrence III's sprite (devamped by me).
 * Bronzeswagger for the Grunt♂ and Grunt♀ sprite palettes.
+* SteppoBlazer, bloodless, and JaceDeane for Kiyo's sprite.
 * Mmmmmm, bloodless, and Kuroko Aizawa for help with Valerie's sprite.
 * Kuroko Aizawa, bloodless, and metalflygon08 for help with Pikachu's sprites.
 * jpmac26 for editing the Pokémon Center signs and fixing a typo.

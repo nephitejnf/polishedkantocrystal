@@ -105,9 +105,9 @@ wMoveScreenMoves:: ds 55
 
 NEXTU
 ; miscellaneous
-wTempDayOfWeek::
-wUnusedApricorns:: ds 1
-	ds 2
+wTempDayOfWeek:: ds 1
+
+	ds 2 ; unused
 
 wStartFlypoint:: ds 1
 wEndFlypoint:: ds 1
@@ -218,7 +218,17 @@ ENDU
 
 ENDU
 
-	ds 12 ; unused
+	ds 3 ; unused
+
+wLastBattlePocket:: ds 1
+wBattleItemsPocketCursor:: ds 1
+wBattleMedicinePocketCursor:: ds 1
+wBattleBallsPocketCursor:: ds 1
+wBattleBerriesPocketCursor:: ds 1
+wBattleItemsPocketScrollPosition:: ds 1
+wBattleMedicinePocketScrollPosition:: ds 1
+wBattleBallsPocketScrollPosition:: ds 1
+wBattleBerriesPocketScrollPosition:: ds 1
 
 wTMHMMoveNameBackup:: ds MOVE_NAME_LENGTH
 
@@ -240,7 +250,6 @@ wPartyMenuCursor:: ds 1
 wItemsPocketCursor:: ds 1
 wMedicinePocketCursor:: ds 1
 wBallsPocketCursor:: ds 1
-wTMHMPocketCursor:: ds 1
 wBerriesPocketCursor:: ds 1
 wKeyItemsPocketCursor:: ds 1
 
@@ -249,7 +258,6 @@ wPartyMenuScrollPosition:: ds 1 ; unused
 wItemsPocketScrollPosition:: ds 1
 wMedicinePocketScrollPosition:: ds 1
 wBallsPocketScrollPosition:: ds 1
-wTMHMPocketScrollPosition:: ds 1
 wBerriesPocketScrollPosition:: ds 1
 wKeyItemsPocketScrollPosition:: ds 1
 
@@ -278,7 +286,14 @@ wVramState::
 ;        flickers when climbing waterfall
 	ds 1
 
-wBattleResult:: ds 1
+wBattleResult::
+; bit 7: mon is captured and sent to PC
+; bit 6: legendary is captured (used for Celebi)
+; bit 1: set on fleeing
+; value of %xxxx0002: link battle draw (x is ignored)
+; value of %xx000001: whiteout
+	ds 1
+
 wUsingItemWithSelect:: ds 1
 
 UNION
@@ -300,6 +315,7 @@ ENDU
 
 wCurIconMonHasItemOrMail:: ds 1
 
+wCurKeyItem::
 wCurTMHM::
 wCurItem::
 	ds 1
@@ -373,7 +389,9 @@ wSpinning:: ds 1
 
 wBGMapAnchor:: ds 2
 
-	ds 64 ; unused
+wOldTileset:: ds 1
+
+	ds 63 ; unused
 
 wOverworldMapAnchor:: ds 2
 wMetatileStandingY:: ds 1
@@ -439,8 +457,11 @@ wEastConnectionStripXOffset:: ds 1
 wEastConnectionWindow:: ds 2
 
 wTilesetHeader::
-wTilesetGFXBank:: ds 1
-wTilesetGFXAddress:: ds 2
+wTilesetGFX0Bank:: ds 1
+wTilesetGFX0Address:: ds 2
+wTilesetGFX1Bank:: ds 1
+wTilesetGFX1Address:: ds 2
+wTilesetGFX2Bank:: ds 1
 wTilesetGFX2Address:: ds 2
 wTilesetBlocksBank:: ds 1
 wTilesetBlocksAddress:: ds 2
@@ -508,7 +529,9 @@ wTempBattleMonSpecies:: ds 1
 ENDU
 
 wEnemyMon:: battle_struct wEnemyMon
-wEnemyMonBaseStats:: ds 5
+
+	ds 5 ; unused
+
 wEnemyMonCatchRate:: ds 1
 wEnemyMonBaseExp:: ds 1
 wEnemyMonEnd::
@@ -596,6 +619,7 @@ wBattleHasJustStarted:: ds 1
 
 wd265:: ; TODO: replace with meaningful labels
 wNamedObjectIndexBuffer::
+wCurKeyItemBuffer::
 wCurTMHMBuffer::
 wTypeMatchup::
 wFoundMatchingIDInParty::
@@ -616,14 +640,18 @@ SECTION "Enemy Party", WRAMX
 wPokedexShowPointerAddr:: ds 2
 wPokedexShowPointerBank:: ds 1
 
-wFailedToFlee:: ds 1
+wEnemyFleeing:: ds 1
 wNumFleeAttempts:: ds 1
 
+wLinkOTExchangeStart::
 wOTPlayerName:: ds NAME_LENGTH
 wOTPlayerID:: ds 2
 wOTPartyCount:: ds 1
 wOTPartySpecies:: ds PARTY_LENGTH + 1 ; legacy scripts don't check PartyCount
 
+; OT party data -- OTPartyMon1 and nicknames is always available
+wOTPartyMons::
+wOTPartyMon1:: party_struct wOTPartyMon1
 UNION
 ; catch tutorial dude bag
 wDudeBag::
@@ -639,19 +667,17 @@ wDudeBallsEnd:: ds 1
 wDudeBagEnd::
 
 NEXTU
-; OT party data
-wOTPartyMons::
-wOTPartyMon1:: party_struct wOTPartyMon1
 wOTPartyMon2:: party_struct wOTPartyMon2
 wOTPartyMon3:: party_struct wOTPartyMon3
 wOTPartyMon4:: party_struct wOTPartyMon4
 wOTPartyMon5:: party_struct wOTPartyMon5
 wOTPartyMon6:: party_struct wOTPartyMon6
+ENDU
 wOTPartyMonsEnd::
 wOTPartyMonOT:: ds NAME_LENGTH * PARTY_LENGTH
 wOTPartyMonNicknames:: ds PKMN_NAME_LENGTH * PARTY_LENGTH
 wOTPartyDataEnd::
-ENDU
+wLinkOTExchangeEnd::
 
 wBattleAction:: ds 1
 wLinkBattleSentAction:: ds 1
@@ -771,7 +797,7 @@ else
 	ds 5
 endc
 
-	ds 1
+wPlayerGoingUpStairs:: ds 1
 
 wObjectFollow_Leader:: ds 1
 wObjectFollow_Follower:: ds 1
@@ -876,6 +902,9 @@ wPokemonJournalsEnd::
 wTMsHMs:: flag_array NUM_TMS + NUM_HMS
 wTMsHMsEnd::
 
+wKeyItems:: flag_array NUM_KEY_ITEMS
+wKeyItemsEnd::
+
 wNumItems:: ds 1
 wItems:: ds MAX_ITEMS * 2 + 1
 wItemsEnd::
@@ -888,9 +917,6 @@ wBallsEnd::
 wNumBerries:: ds 1
 wBerries:: ds MAX_BERRIES * 2 + 1
 wBerriesEnd::
-wNumKeyItems:: ds 1
-wKeyItems:: ds MAX_KEY_ITEMS + 1
-wKeyItemsEnd::
 wNumPCItems:: ds 1
 wPCItems:: ds MAX_PC_ITEMS * 2 + 1
 wPCItemsEnd::
@@ -907,7 +933,10 @@ wPokegearFlags::
 wRadioTuningKnob:: ds 1
 wLastDexMode:: ds 1
 
-	ds 2 ; unused
+wTMHMPocketScrollPosition:: ds 1
+wTMHMPocketCursor::
+; beyond the cursor position, bit 7 also controls how TMs are sorted
+	ds 1
 
 wPlayerState:: ds 1
 
@@ -1270,6 +1299,18 @@ wBestMagikarpLengthMmHi:: ds 1
 wBestMagikarpLengthMmLo:: ds 1
 wMagikarpRecordHoldersName:: ds NAME_LENGTH
 
+wRegisteredItemFlags:: 
+	; 0 - wRegisteredItems key item flag 
+	; 1 - wRegisteredItems + 1 key item flag
+	; 2 - wRegisteredItems + 2 key item flag
+	; 3 - wRegisteredItems + 3 key item flag
+
+	; 4 - wRegisteredItems second item list flag
+	; 5 - wRegisteredItems + 1 second item list flag
+	; 6 - wRegisteredItems + 2 second item list flag
+	; 7 - wRegisteredItems + 3 second item list flag
+	ds 1
+
 wRegisteredItems::
 ; You can map 4 items, to select + directions
 	ds 4
@@ -1349,11 +1390,6 @@ wDecompressedMetatiles:: ds 256 * 16
 SECTION "Attributes", WRAMX
 
 wDecompressedAttributes:: ds 256 * 16
-
-
-SECTION "Music Player Notes", WRAMX
-
-wMPNotes:: ds 4 * 256
 
 
 SECTION "GBC Video", WRAMX
@@ -1444,7 +1480,15 @@ wBattleAnimEnd::
 wSurfWaveBGEffectEnd::
 
 
-SECTION "WRAM 6", WRAMX
+SECTION "Collisions or Music Player", WRAMX
+
+UNION
+wDecompressedCollisions:: ds 256 * 4
+NEXTU
+wMPNotes:: ds 4 * 256
+ENDU
+
+SECTION "Scratch RAM", WRAMX
 
 UNION
 wDecompressScratch:: ds $80 tiles
@@ -1452,6 +1496,7 @@ NEXTU
 wScratchTileMap:: ds BG_MAP_WIDTH * BG_MAP_HEIGHT
 wScratchAttrMap:: ds BG_MAP_WIDTH * BG_MAP_HEIGHT
 ENDU
+
 
 SECTION "Window Stack", WRAMX
 

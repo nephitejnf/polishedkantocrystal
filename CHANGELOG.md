@@ -102,6 +102,7 @@ These changes have been made since the current 2.2.0 release. If you build the p
 * Add: Grass-green for Faraway Island.
 * Add: TM prices from OR/AS.
 * Add: Update random Wonder Trade OT names.
+* Add: Respawn roaming beasts when released.
 * Add: Mr. Pokémon gives you a non-OT Ditto, not an Egg, for the Masuda breeding method.
 * Add: Use original Jynx sprite.
 * Add: Make overworld sprites darker at night.
@@ -110,7 +111,7 @@ These changes have been made since the current 2.2.0 release. If you build the p
 * Add: Unlock frame type 9.
 * Add: Choose a typeface/font.
 * Add: XY Bicycle music for Cycling Road.
-* Add: Prof.Oak gives you the Oval Charm for seeing all 253 Pokémon, and the Shiny Charm for catching all 253.
+* Add: Prof.Oak gives you the Oval Charm for seeing all 254 Pokémon, and the Shiny Charm for catching all 254.
 * Add: Prof.Elm is in the intro.
 * Add: Cosplayer, Bug Maniac, Ruin Maniac, Lady, Baker, Tamer, Artist, Aroma Lady, Sightseer♂, and Sightseer♀ trainer classes.
 * Add: New Trainer Card based on the Name Cards from the Mobile Adapter system.
@@ -161,6 +162,7 @@ These changes have been made since the current 2.2.0 release. If you build the p
 * Add: Evolution moves from Gen VII.
 * Add: Move Reminder supports pre-evolution and evolution moves.
 * Add: Dark battle intro at night.
+* Add: Trainer battles can be forfeited.
 * Add: Show genders in party menu.
 * Add: Vending machines have a 1/32 chance of giving an extra item.
 * Add: Cross whirlpools, don't remove them (like HGSS).
@@ -198,3 +200,5 @@ These changes have been made since the current 2.2.0 release. If you build the p
 * Fix: Magnet Train tracks were missing tiles.
 * Fix: Shiny icon is the star from Gen 3+.
 * Fix: SPRITE_DRAGONITE uses Dragonite's side view.
+
+* Remove: Rebattling Breeders like in B2/W2.

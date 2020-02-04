@@ -132,7 +132,7 @@ else
 endc
 	move TOXIC,        EFFECT_TOXIC,               0, POISON,     90, 10,   0, STATUS
 	move CONFUSION,    EFFECT_CONFUSE_HIT,        50, PSYCHIC,   100, 25,  10, SPECIAL
-	move PSYCHIC_M,    EFFECT_SP_DEF_DOWN_HIT,    90, PSYCHIC,   100, 15,  10, SPECIAL
+	move PSYCHIC_M,    EFFECT_SP_DEF_DOWN_HIT,    90, PSYCHIC,   100, 10,  10, SPECIAL
 	move HYPNOSIS,     EFFECT_SLEEP,               0, PSYCHIC,    60, 20,   0, STATUS
 	move HONE_CLAWS,   EFFECT_HONE_CLAWS,          0, DARK,      100, 40,   0, STATUS
 	move AGILITY,      EFFECT_SPEED_UP_2,          0, PSYCHIC,   100, 30,   0, STATUS
@@ -162,7 +162,7 @@ else
 	move METRONOME,    EFFECT_METRONOME,           0, UNKNOWN_T, 100, 10,   0, STATUS
 endc
 	move SCALD,        EFFECT_BURN_HIT,           80, WATER,     100, 15,  30, SPECIAL
-	move SELFDESTRUCT, EFFECT_EXPLOSION,         200, NORMAL,    100,  5,   0, PHYSICAL
+	move TRICK_ROOM,   EFFECT_TRICK_ROOM,          0, PSYCHIC,   100,  5,   0, STATUS
 	move SKILL_SWAP,   EFFECT_SKILL_SWAP,          0, PSYCHIC,   100, 10,   0, STATUS
 	move LICK,         EFFECT_PARALYZE_HIT,       30, GHOST,     100, 30,  30, PHYSICAL
 	move GUNK_SHOT,    EFFECT_POISON_HIT,        120, POISON,     80,  5,  30, PHYSICAL
@@ -177,7 +177,7 @@ endc
 	move BULLDOZE,     EFFECT_SPEED_DOWN_HIT,     60, GROUND,    100, 20, 100, PHYSICAL
 	move AMNESIA,      EFFECT_SP_DEF_UP_2,         0, PSYCHIC,   100, 20,   0, STATUS
 	move ROOST,        EFFECT_ROOST,               0, FLYING,    100, 10,   0, STATUS
-	move SOFTBOILED,   EFFECT_HEAL,                0, NORMAL,    100, 10,   0, STATUS
+	move FRESH_SNACK,  EFFECT_HEAL,                0, NORMAL,    100, 10,   0, STATUS
 	move HI_JUMP_KICK, EFFECT_JUMP_KICK,         130, FIGHTING,   90, 10,   0, PHYSICAL
 	move GLARE,        EFFECT_PARALYZE,            0, NORMAL,    100, 30,   0, STATUS
 	move DREAM_EATER,  EFFECT_DREAM_EATER,       100, PSYCHIC,   100, 15,   0, SPECIAL
@@ -262,7 +262,7 @@ endc
 	move ROLLOUT,      EFFECT_ROLLOUT,            30, ROCK,       90, 20,   0, PHYSICAL
 	move FALSE_SWIPE,  EFFECT_FALSE_SWIPE,        40, NORMAL,    100, 40,   0, PHYSICAL
 	move SWAGGER,      EFFECT_SWAGGER,             0, NORMAL,     85, 15, 100, STATUS
-	move MILK_DRINK,   EFFECT_HEAL,                0, NORMAL,    100, 10,   0, STATUS
+	move SHELL_SMASH,  EFFECT_SHELL_SMASH,         0, NORMAL,    100, 15,   0, STATUS
 	move SPARK,        EFFECT_PARALYZE_HIT,       65, ELECTRIC,  100, 20,  30, PHYSICAL
 	move BUG_BITE,     EFFECT_BUG_BITE,           60, BUG,       100, 20,   0, PHYSICAL
 	move STEEL_WING,   EFFECT_DEFENSE_UP_HIT,     70, STEEL,      90, 25,  10, PHYSICAL
@@ -272,7 +272,7 @@ endc
 	move HEAL_BELL,    EFFECT_HEAL_BELL,           0, NORMAL,    100,  5,   0, STATUS
 	move RETURN,       EFFECT_RETURN,              1, NORMAL,    100, 20,   0, PHYSICAL
 	move PSYSTRIKE,    EFFECT_PSYSTRIKE,         100, PSYCHIC,   100, 10,   0, SPECIAL
-	move BUG_BUZZ,     EFFECT_SP_DEF_DOWN_HIT,    90, BUG,       100, 10,   0, SPECIAL
+	move BUG_BUZZ,     EFFECT_SP_DEF_DOWN_HIT,    90, BUG,       100, 10,  10, SPECIAL
 	move SAFEGUARD,    EFFECT_SAFEGUARD,           0, NORMAL,    100, 25,   0, STATUS
 if DEF(FAITHFUL)
 	move PAIN_SPLIT,   EFFECT_PAIN_SPLIT,          0, NORMAL,    100, 20,   0, STATUS

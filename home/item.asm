@@ -1,14 +1,3 @@
-CheckTossableItem:: ; 2f46
-	push hl
-	push de
-	push bc
-	farcall _CheckTossableItem
-	pop bc
-	pop de
-	pop hl
-	ret
-; 2f53
-
 TossItem:: ; 2f53
 	push hl
 	push de
@@ -111,4 +100,42 @@ CountItem::
 	ld a, b
 	rst Bankswitch
 	pop bc
+	ret
+
+ReceiveKeyItem::
+	ld a, [wCurKeyItem]
+	ld e, a
+	ld d, 0
+	ld b, SET_FLAG
+	ld hl, wKeyItems
+	call FlagAction
+	scf
+	ret
+
+TossKeyItem::
+	ld a, [wCurKeyItem]
+	ld e, a
+	ld d, 0
+	ld b, RESET_FLAG
+	ld hl, wKeyItems
+	call FlagAction
+	scf
+	ret
+
+CheckKeyItem::
+	ld a, [wCurKeyItem]
+	ld e, a
+	ld d, 0
+	ld b, CHECK_FLAG
+	ld hl, wKeyItems
+	call FlagAction
+	ret z
+	scf
+	ret
+
+CheckUniqueItemPocket::
+	ld a, [wCurrPocket]
+	cp TM_HM - 1
+	ret z
+	cp KEY_ITEM - 1
 	ret

@@ -97,7 +97,6 @@ MoveEffectsPointers:
 	dw Reversal
 	dw FalseSwipe
 	dw HealBell
-	dw TripleKick
 	dw Thief
 	dw MeanLook
 	dw FlameWheel
@@ -151,3 +150,5 @@ MoveEffectsPointers:
 	dw BodySlam
 	dw LowKick
 	dw BrickBreak
+	dw TrickRoom
+	dw ShellSmash

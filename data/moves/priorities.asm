@@ -1,4 +1,6 @@
 MovePriorities:
+	; no move is for explicit switch-out
+	db NO_MOVE,       10
 	db PROTECT,       4
 	db ENDURE,        4
 	db EXTREMESPEED,  2
@@ -14,4 +16,5 @@ MovePriorities:
 	db MIRROR_COAT,  -5
 	db ROAR,         -6
 	db TELEPORT,     -6
+	db TRICK_ROOM,   -7
 	db -1

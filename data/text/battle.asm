@@ -69,6 +69,11 @@ BattleText_EnemyFled: ; 0x807cf
 	prompt
 ; 0x807e2
 
+BattleText_EnemyCantEscape:
+	text "<USER>"
+	line "can't escape!"
+	prompt
+
 HurtByPoisonText: ; 0x807e2
 	text "<USER> is"
 	line "hurt by poison!"
@@ -183,6 +188,39 @@ BrokeReflectText:
 	cont "Reflect!"
 	prompt
 
+BattleText_ItemLowered:
+	text "The @"
+	text_from_ram wStringBuffer1
+	text ""
+	line "lowered"
+	cont "<USER>'s"
+	cont "@"
+	text_from_ram wStringBuffer2
+	text "!"
+	prompt
+
+BattleText_ItemHarshlyLowered:
+	text "The @"
+	text_from_ram wStringBuffer1
+	text ""
+	line "sharply lowered"
+	cont "<USER>'s"
+	cont "@"
+	text_from_ram wStringBuffer2
+	text "!"
+	prompt
+
+BattleText_ItemSeverelyLowered:
+	text "The @"
+	text_from_ram wStringBuffer1
+	text ""
+	line "severely lowered"
+	cont "<USER>'s"
+	cont "@"
+	text_from_ram wStringBuffer2
+	text "!"
+	prompt
+
 BattleText_ItemRaised:
 	text "The @"
 	text_from_ram wStringBuffer1
@@ -203,6 +241,25 @@ BattleText_ItemSharplyRaised:
 	cont "@"
 	text_from_ram wStringBuffer2
 	text "!"
+	prompt
+
+BattleText_ItemDrasticallyRaised:
+	text "The @"
+	text_from_ram wStringBuffer1
+	text ""
+	line "drastically raised"
+	cont "<USER>'s"
+	cont "@"
+	text_from_ram wStringBuffer2
+	text "!"
+	prompt
+
+BattleText_ItemRaisedCrit:
+	text "<USER>"
+	line "used @"
+	text_from_ram wStringBuffer1
+	text ""
+	cont "to get pumped!"
 	prompt
 
 BattleText_UserChargedWithItem:
@@ -427,11 +484,10 @@ BattleText_CantEscape: ; 0x80ba0
 	prompt
 ; 0x80bae
 
-BattleText_TheresNoEscapeFromTrainerBattle: ; 0x80b49
-	text "No! There's no"
-	line "running from a"
-	cont "trainer battle!"
-	prompt
+BattleText_AskForfeitTrainerBattle: ; 0x80b49
+	text "Are you sure you"
+	line "want to forfeit?"
+	done
 
 BattleText_GotAwaySafely: ; 0x80b77
 	text "Got away safely!"
@@ -542,8 +598,8 @@ BattleText_PkmnHasNoMovesLeft: ; 0x80c72
 	done
 ; 0x80c8a
 
-BattleText_TargetsEncoreEnded: ; 0x80c8a
-	text "<TARGET>'s"
+BattleText_UserEncoreEnded: ; 0x80c8a
+	text "<USER>'s"
 	line "encore ended!"
 	prompt
 ; 0x80c9c
@@ -877,7 +933,7 @@ CriticalHitText: ; 0x81086
 ; 0x81097
 
 SuperEffectiveText: ; 0x810aa
-	text "It's super-"
+	text "It's super"
 	line "effective!"
 	prompt
 ; 0x810c1
@@ -1029,13 +1085,59 @@ WontRiseAnymoreText: ; 0x81272
 ; 0x8128f
 
 WontDropAnymoreText: ; 0x8128f
-	text "<TARGET>'s"
+	text "<USER>'s"
 	line "@"
 	text_from_ram wStringBuffer2
 	text " won't go"
 	cont "any lower!"
 	prompt
 ; 0x812ac
+
+StatRoseText:
+	text "<USER>'s"
+	line "@"
+	text_from_ram wStringBuffer2
+	text " rose!"
+	prompt
+
+StatRoseSharplyText:
+	text "<USER>'s"
+	line "@"
+	text_from_ram wStringBuffer2
+	text " rose"
+	cont "sharply!"
+	prompt
+
+StatRoseDrasticallyText:
+	text "<USER>'s"
+	line "@"
+	text_from_ram wStringBuffer2
+	text " rose"
+	cont "drastically!"
+	prompt
+
+StatFellText:
+	text "<USER>'s"
+	line "@"
+	text_from_ram wStringBuffer2
+	text " fell!"
+	prompt
+
+StatHarshlyFellText:
+	text "<USER>'s"
+	line "@"
+	text_from_ram wStringBuffer2
+	text " harshly"
+	cont "fell!"
+	prompt
+
+StatSeverelyFellText:
+	text "<USER>'s"
+	line "@"
+	text_from_ram wStringBuffer2
+	text " severely"
+	cont "fell!"
+	prompt
 
 FledFromBattleText:: ; 0x812ac
 	text "<USER>"
@@ -1049,19 +1151,17 @@ FledInFearText: ; 0x812c1
 	prompt
 ; 0x812d2
 
-PlayerHitTimesText: ; 0x812e5
+Hit1TimeText:
 	text "Hit @"
-	deciram wPlayerDamageTaken, 1, 1
-	text " times!"
+	deciram wStringBuffer1, 1, 1
+	text " time!"
 	prompt
-; 0x812f8
 
-EnemyHitTimesText: ; 0x812f8
+HitNTimesText:
 	text "Hit @"
-	deciram wEnemyDamageTaken, 1, 1
+	deciram wStringBuffer1, 1, 1
 	text " times!"
 	prompt
-; 0x8130b
 
 ProtectedByMistText: ; 0x81321
 	text "<TARGET> is"
@@ -1163,6 +1263,22 @@ TransformedText: ; 0x81499
 	text "!"
 	prompt
 ; 0x814b4
+
+TrickRoomText:
+	text "<USER>"
+	line "twisted the"
+	cont "dimensions!"
+	prompt
+
+TrickRoomEndedText:
+	text "The twisted"
+	line "dimensions"
+
+	para "returned to"
+	line "normal!"
+	prompt
+
+
 
 LightScreenEffectText: ; 0x814b4
 	text "<USER>'s"
@@ -1429,6 +1545,12 @@ BellyDrumText: ; 0x817d2
 	prompt
 ; 0x817f6
 
+BellyDrumContraryText:
+	text "<USER>"
+	line "cut its HP and"
+	cont "minimized Attack!"
+	prompt
+
 ForesawAttackText: ; 0x81817
 	text "<USER>"
 	line "foresaw an attack!"
@@ -1468,6 +1590,15 @@ TraceFailureText:
 	cont "<TARGET>!"
 	prompt
 
+BattleText_IntimidateResisted:
+	text "<TARGET>'s"
+	line "@"
+	text_from_ram wStringBuffer1
+	text ""
+	para "protects it from"
+	line "Intimidate!"
+	prompt
+
 NotifyCloudNine:
 	text "The weather was"
 	line "suppressed!"
@@ -1488,6 +1619,13 @@ NotifyUnnerve:
 	text "<TARGET> is"
 	line "too afraid to eat"
 	cont "Berries!"
+	prompt
+
+NotifyNeutralizingGas:
+	text "<USER>"
+	line "suppresses"
+	cont "abilities using"
+	cont "Neutralizing Gas!"
 	prompt
 
 FriskedItemText:
@@ -1551,6 +1689,14 @@ ForewarnText: ; 0x80f02
 	text "<TARGET>"
 	line "has @"
 	text_from_ram wStringBuffer1
+	text "!"
+	prompt
+
+BattleText_EnemyWithdrew::
+	text "<ENEMY>"
+	line "withdrew"
+	cont "@"
+	text_from_ram wEnemyMonNick
 	text "!"
 	prompt
 

@@ -10,12 +10,13 @@ MrPokemonsHouse_MapScriptHeader:
 
 	db 0 ; coord events
 
-	db 5 ; bg events
+	db 6 ; bg events
 	bg_event  0,  1, SIGNPOST_JUMPTEXT, MrPokemonsHouse_ForeignMagazinesText
 	bg_event  1,  1, SIGNPOST_JUMPTEXT, MrPokemonsHouse_ForeignMagazinesText
 	bg_event  6,  1, SIGNPOST_JUMPTEXT, MrPokemonsHouse_BrokenComputerText
 	bg_event  7,  1, SIGNPOST_JUMPTEXT, MrPokemonsHouse_BrokenComputerText
 	bg_event  6,  4, SIGNPOST_JUMPTEXT, MrPokemonsHouse_StrangeCoinsText
+	bg_event  3,  1, SIGNPOST_READ, MrPokemonsHouse_CabinetScript
 
 	db 3 ; object events
 	object_event  3,  5, SPRITE_GENTLEMAN, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, PERSONTYPE_SCRIPT, 0, MrPokemonsHouse_MrPokemonScript, -1
@@ -40,11 +41,11 @@ MrPokemonsHouseTrigger0:
 	writetext MrPokemonIntroText2
 	buttonsound
 	waitsfx
-	giveitem MYSTERY_EGG
+	givekeyitem MYSTERY_EGG
 	writetext MrPokemonsHouse_GotEggText
 	playsound SFX_KEY_ITEM
 	waitsfx
-	itemnotify
+	keyitemnotify
 	setevent EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON
 	blackoutmod CHERRYGROVE_CITY
 if !DEF(DEBUG)
@@ -64,7 +65,7 @@ endc
 MrPokemonsHouse_MrPokemonScript:
 	faceplayer
 	opentext
-	checkitem RED_SCALE
+	checkkeyitem RED_SCALE
 	iftrue .RedScale
 	checkevent EVENT_GAVE_MYSTERY_EGG_TO_ELM
 	iftrue_jumpopenedtext MrPokemonText_AlwaysNewDiscoveries
@@ -81,7 +82,8 @@ MrPokemonsHouse_MrPokemonScript:
 	writetext MrPokemonText_GotShinyDittoEgg
 	playsound SFX_KEY_ITEM
 	waitsfx
-	takeitem RED_SCALE
+	takekeyitem RED_SCALE
+	setevent EVENT_TRADED_RED_SCALE
 	jumpopenedtext MrPokemonText_AlwaysNewDiscoveries
 
 .party_full
@@ -145,6 +147,18 @@ MrPokemonsHouse_OakScript:
 
 .RivalTakesCyndaquil:
 	setevent EVENT_CYNDAQUIL_POKEBALL_IN_ELMS_LAB
+	end
+
+MrPokemonsHouse_CabinetScript:
+	opentext
+	writetext MrPokemonsHouse_CabinetText
+	checkevent EVENT_TRADED_RED_SCALE
+	iffalse .NoRedScale
+	buttonsound
+	writetext MrPokemonsHouse_RedScaleCabinetText
+.NoRedScale
+	waitbutton
+	closetext
 	end
 
 MrPokemonsHouse_PlayerWalksToMrPokemon:
@@ -336,8 +350,13 @@ MrPokemonText_GimmeTheScale:
 	line "What's that?"
 	cont "A red Gyarados?"
 
-	para "That's rare!"
-	line "I, I want it…"
+	para "It must have kept"
+	line "its coloration as"
+	cont "a Magikarp!"
+
+	para "That could be"
+	line "one of a kind!"
+	cont "I, I want it…"
 
 	para "<PLAYER>, would you"
 	line "care to trade it?"
@@ -382,4 +401,15 @@ MrPokemonsHouse_StrangeCoinsText:
 
 	para "Maybe they're from"
 	line "another country…"
+	done
+
+MrPokemonsHouse_CabinetText:
+	text "A collection of"
+	line "rare curiosities"
+	cont "from all over!"
+	done
+
+MrPokemonsHouse_RedScaleCabinetText:
+	text "One of them is the"
+	line "shiny red scale!"
 	done

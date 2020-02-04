@@ -1,9 +1,14 @@
 UniqueWildMoves:
 	; landmark, species, move
 	; TODO: finish unique moves
+	db MAHOGANY_TOWN, VOLTORB, EXPLOSION ; TeamRocketBaseB1F
+	db MAHOGANY_TOWN, KOFFING, EXPLOSION ; TeamRocketBaseB1F
+	db MAHOGANY_TOWN, GEODUDE, EXPLOSION ; TeamRocketBaseB1F
+	db UNION_CAVE, LAPRAS, SHELL_SMASH ; UnionCaveB2F, Fridays
 	db CHERRYGROVE_BAY, CORSOLA, SUCKER_PUNCH ; HGSS tutor move
 	db SPROUT_TOWER, BELLSPROUT, GROWTH ; knows Growth early
 	db ROUTE_32_COAST, FLAAFFY, PURSUIT ; Prism tutor move
+	db RUINS_OF_ALPH, SHUCKLE, ANCIENTPOWER ; Sw/Sh move
 	db RUINS_OF_ALPH, SMEARGLE, SKETCH ; knows Sketch twice
 	db SLOWPOKE_WELL, SLOWPOKE, GROWTH ; Prism tutor move
 	db ILEX_FOREST, 0, 0
@@ -20,7 +25,7 @@ UniqueWildMoves:
 	db WHIRL_ISLANDS, 0, 0
 	db CLIFF_CAVE, 0, 0
 	db YELLOW_FOREST, PIKACHU, FLY ; replaced with Surf if Surfing
-	db QUIET_CAVE, MUNCHLAX, SELFDESTRUCT ; Pokéwalker move
+	db QUIET_CAVE, MUNCHLAX, GIGA_IMPACT ; Snorlax move
 	db MT_MORTAR, 0, 0
 	db LAKE_OF_RAGE, MAGIKARP, HYDRO_PUMP ; Pokéwalker move
 	db ICE_PATH, 0, 0
@@ -34,7 +39,7 @@ UniqueWildMoves:
 	db CERULEAN_CAVE, GENGAR, METRONOME ; RBY TM move
 	db CERULEAN_CAVE, ALAKAZAM, METRONOME ; RBY TM move
 	db CERULEAN_CAPE, POLIWHIRL, METRONOME ; RBY TM move
-	db DIGLETTS_CAVE, 0, 0
+	db DIGLETTS_CAVE, DUGTRIO, SCREECH ; Sw/Sh move
 	db ROCK_TUNNEL, ELECTABUZZ, METRONOME ; RBY TM move
 	db DIM_CAVE, GRAVELER, SUCKER_PUNCH ; HGSS tutor move
 	db DIM_CAVE, RHYDON, CRUNCH ; Prism tutor move
