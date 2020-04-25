@@ -1,4 +1,3 @@
-; PidgeotPokedexEntry: ; 0x181dd7
 	db "Bird@" ; species name
 	dw 411, 870 ; height, width
 

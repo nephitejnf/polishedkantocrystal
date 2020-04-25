@@ -1,33 +1,25 @@
-FindItemInBallScript:: ; 0x122ce
+FindItemInBallScript::
 	callasm .TryReceiveItem
 	iffalse .no_room
 	disappear LAST_TALKED
 	opentext
-	writetext .text_found
+	writetext FoundItemText
 	specialsound
 	itemnotify
 	closetext
 	end
-; 0x122e3
 
-.no_room ; 0x122e3
+.no_room
 	opentext
-	writetext .text_found
+	writetext FoundItemText
 	waitbutton
 	pocketisfull
 	closetext
 	end
-; 0x122ee
 
-.text_found ; 0x122ee
-	; found @ !
-	text_jump UnknownText_0x1c0a1c
-	db "@"
-; 0x122f3
-
-.TryReceiveItem: ; 122f8
+.TryReceiveItem:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld a, [wCurItemBallContents]
 	ld [wNamedObjectIndexBuffer], a
 	call GetItemName
@@ -41,29 +33,22 @@ FindItemInBallScript:: ; 0x122ce
 	call ReceiveItem
 	ret nc
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; 12324
 
 FindKeyItemInBallScript::
 	callasm .ReceiveKeyItem
 	disappear LAST_TALKED
 	opentext
-	writetext .text_found
+	writetext FoundItemText
 	specialsound
-	waitsfx
 	keyitemnotify
 	closetext
 	end
 
-.text_found
-	; found @ !
-	text_jump UnknownText_0x1c0a1c
-	db "@"
-
 .ReceiveKeyItem:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld a, [wCurItemBallContents]
 	inc a
 	ld [wNamedObjectIndexBuffer], a
@@ -74,28 +59,23 @@ FindKeyItemInBallScript::
 	ld [wCurKeyItem], a
 	call ReceiveKeyItem
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 FindTMHMInBallScript::
 	callasm .ReceiveTMHM
 	disappear LAST_TALKED
 	opentext
-	writetext .text_found
+	writetext FoundItemText
 	playsound SFX_GET_TM
 	waitsfx
 	tmhmnotify
 	closetext
 	end
 
-.text_found
-	; found @ !
-	text_jump UnknownText_0x1c0a1c
-	db "@"
-
 .ReceiveTMHM:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld a, [wCurItemBallContents]
 	ld [wNamedObjectIndexBuffer], a
 	call GetTMHMName
@@ -121,5 +101,10 @@ FindTMHMInBallScript::
 	ld [wCurTMHM], a
 	call ReceiveTMHM
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
+
+FoundItemText:
+	; found @ !
+	text_jump UnknownText_0x1c0a1c
+	text_end

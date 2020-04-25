@@ -1,4 +1,3 @@
-; BeedrillPokedexEntry: ; 0x181c8a
 	db "Poison Bee@" ; species name
 	dw 303, 650 ; height, width
 

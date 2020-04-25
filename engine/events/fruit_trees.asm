@@ -1,8 +1,7 @@
-FruitTreeScript:: ; 44000
+FruitTreeScript::
 	opentext
 	writetext FruitBearingTreeText
 	buttonsound
-	callasm TryResetFruitTrees
 	copybytetovar wCurFruit
 	callasm CheckFruitTree
 	iffalse PickBerryScript
@@ -55,7 +54,6 @@ PickBerryScript:
 .packisfull
 	buttonsound
 	jumpopenedtext FruitPackIsFullText
-; 44041
 
 PickApricornScript:
 	checkkeyitem APRICORN_BOX
@@ -95,44 +93,27 @@ PickApricornScript:
 	jumpopenedtext FruitPackIsFullText
 
 .get_name:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld [wd265], a
 	call GetApricornName
 	ld de, wStringBuffer1
 	ld hl, wStringBuffer3
 	jp CopyName2
 
-TryResetFruitTrees: ; 4404c
-	ld hl, wDailyFlags
-	bit 4, [hl] ; ENGINE_ALL_FRUIT_TREES
-	ret nz
-	xor a
-	ld hl, wFruitTreeFlags
-rept (NUM_FRUIT_TREES + 7) / 8 - 1
-	ld [hli], a
-endr
-	ld [hl], a
-	ld hl, wDailyFlags
-	set 4, [hl] ; ENGINE_ALL_FRUIT_TREES
-	ret
-; 44078
-
-CheckFruitTree: ; 44055
+CheckFruitTree:
 	ld b, CHECK_FLAG
 	call GetFruitTreeFlag
 	ld a, c
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; 4405f
 
-PickedFruitTree: ; 4405f
+PickedFruitTree:
 	ld b, SET_FLAG
 	jr GetFruitTreeFlag
-; 4406a
 
 FertilizedFruitTree:
 	ld b, RESET_FLAG
-GetFruitTreeFlag: ; 44078
+GetFruitTreeFlag:
 	push hl
 	push de
 	ld a, [wCurFruitTree]
@@ -144,64 +125,58 @@ GetFruitTreeFlag: ; 44078
 	pop de
 	pop hl
 	ret
-; 4408a
 
 GetFruitTreeCount:
 	ld a, 3
 	call RandomRange
 	inc a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
-FruitBearingTreeText: ; 440b5
+FruitBearingTreeText:
 	text_jump _FruitBearingTreeText
-	db "@"
-; 440ba
+	text_end
 
-HeyItsFruitText: ; 440ba
+HeyItsFruitText:
 	text_jump _HeyItsFruitText
-	db "@"
-; 440bf
+	text_end
 
-ObtainedOneFruitText: ; 440bf
+ObtainedOneFruitText:
 	text_jump _ObtainedOneFruitText
-	db "@"
-; 440c4
+	text_end
 
 ObtainedTwoFruitText:
 	text_jump _ObtainedTwoFruitText
-	db "@"
+	text_end
 
 ObtainedThreeFruitText:
 	text_jump _ObtainedThreeFruitText
-	db "@"
+	text_end
 
-FruitPackIsFullText: ; 440c4
+FruitPackIsFullText:
 	text_jump _FruitPackIsFullText
-	db "@"
-; 440c9
+	text_end
 
 NoApricornBoxText:
 	text_jump _NoApricornBoxText
-	db "@"
+	text_end
 
 ApricornBoxIsFullText:
 	text_jump _ApricornBoxIsFullText
-	db "@"
+	text_end
 
 PutAwayTheApricornText:
 	text_jump _PutAwayTheApricornText
-	db "@"
+	text_end
 
-NothingHereText: ; 440c9
+NothingHereText:
 	text_jump _NothingHereText
-	db "@"
-; 440ce
+	text_end
 
 WantToUseMulchText:
 	text_jump _WantToUseMulchText
-	db "@"
+	text_end
 
 UsedMulchText:
 	text_jump _UsedMulchText
-	db "@"
+	text_end

@@ -1,4 +1,3 @@
-; NidoqueenPokedexEntry: ; 0x18232e
 	db "Drill@" ; species name
 	dw 403, 1320 ; height, width
 

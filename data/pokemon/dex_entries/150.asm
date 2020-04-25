@@ -1,4 +1,3 @@
-; MewtwoPokedexEntry: ; 0x1cc8ae
 	db "Genetic@" ; species name
 	dw 607, 2690 ; height, width
 

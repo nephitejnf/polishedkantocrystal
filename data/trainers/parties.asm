@@ -1,3 +1,5 @@
+INCLUDE "data/trainers/party_pointers.asm"
+
 ; All trainers follow a basic structure:
 	; Name
 		; String in format "TEXT@"
@@ -24,7 +26,6 @@
 
 SECTION "Enemy Trainer Parties 1", ROMX
 
-
 CarrieGroup:
 ; ================================
 ; ================
@@ -50,7 +51,6 @@ CarrieGroup:
 ; ================
 ; ================================
 
-
 CalGroup:
 ; ================================
 ; ================
@@ -75,7 +75,6 @@ CalGroup:
 
 ; ================
 ; ================================
-
 
 FalknerGroup:
 ; ================================
@@ -115,7 +114,6 @@ FalknerGroup:
 
 ; ================
 ; ================================
-
 
 BugsyGroup:
 ; ================================
@@ -162,7 +160,6 @@ endc
 ; ================
 ; ================================
 
-
 WhitneyGroup:
 ; ================================
 ; ================
@@ -204,7 +201,6 @@ WhitneyGroup:
 ; ================
 ; ================================
 
-
 MortyGroup:
 ; ================================
 ; ================
@@ -238,7 +234,7 @@ endc
 		db WILL_O_WISP, SHADOW_BALL, FOCUS_BLAST, SUBSTITUTE
 	db 70, NINETALES, CHARCOAL, ABILITY_1 | QUIRKY, MALE
 		db NASTY_PLOT, SHADOW_BALL, FLAMETHROWER, WILL_O_WISP
-	db 71, MAROWAK, THICK_CLUB, ABILITY_1 | QUIRKY, MALE
+	db 71, MAROWAK, THICK_CLUB, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 		db BONEMERANG, STONE_EDGE, ICE_PUNCH, SHADOW_CLAW
 	db 73, MISMAGIUS, PINK_BOW, ABILITY_1 | QUIRKY, MALE
 		db DAZZLINGLEAM, SHADOW_BALL, NASTY_PLOT, THUNDERBOLT
@@ -255,7 +251,6 @@ endc
 
 ; ================
 ; ================================
-
 
 ChuckGroup:
 ; ================================
@@ -302,7 +297,6 @@ endc
 
 ; ================
 ; ================================
-
 
 JasmineGroup:
 ; ================================
@@ -352,7 +346,6 @@ endc
 ; ================
 ; ================================
 
-
 PryceGroup:
 ; ================================
 ; ================
@@ -396,7 +389,6 @@ PryceGroup:
 ; ================
 ; ================================
 
-
 ClairGroup:
 ; ================================
 ; ================
@@ -432,14 +424,10 @@ endc
 	db "Clair@"
 	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 72, GYARADOS, LUM_BERRY, ABILITY_1 | QUIRKY, FEMALE
+	db 72, GYARADOS, BRIGHTPOWDER, ABILITY_1 | QUIRKY, FEMALE
 		db DRAGON_DANCE, WATERFALL, FLY, EARTHQUAKE
-	db 74, YANMEGA, BRIGHTPOWDER, ABILITY_1 | QUIRKY, FEMALE
-if DEF(FAITHFUL)
-		db DOUBLE_TEAM, BUG_BUZZ, AIR_SLASH, ANCIENTPOWER
-else
-		db DOUBLE_TEAM, BUG_BUZZ, AIR_SLASH, DRAGON_PULSE
-endc
+	db 74, EXEGGUTOR, LUM_BERRY, HIDDEN_ABILITY | QUIRKY, FEMALE ; Harvest
+		db REST, SLEEP_POWDER, GIGA_DRAIN, DRAGON_PULSE
 	db 73, DRAGONITE, LEFTOVERS, ABILITY_1 | QUIRKY, FEMALE
 		db OUTRAGE, EXTREMESPEED, FIRE_PUNCH, EARTHQUAKE
 if DEF(FAITHFUL)
@@ -457,7 +445,6 @@ endc
 
 ; ================
 ; ================================
-
 
 WillGroup:
 ; ================================
@@ -504,7 +491,6 @@ WillGroup:
 ; ================
 ; ================================
 
-
 KogaGroup:
 ; ================================
 ; ================
@@ -549,7 +535,6 @@ KogaGroup:
 
 ; ================
 ; ================================
-
 
 BrunoGroup:
 ; ================================
@@ -596,26 +581,25 @@ BrunoGroup:
 ; ================
 ; ================================
 
-
 KarenGroup:
 ; ================================
 ; ================
 
 	; KAREN
 	db "Karen@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 53, UMBREON, LEFTOVERS, 240
+	db 53, UMBREON, LEFTOVERS, 240, ABILITY_1 | QUIRKY, FEMALE
 		db MUD_SLAP, CONFUSE_RAY, FEINT_ATTACK, MEAN_LOOK
-	db 53, PERSIAN, PINK_BOW, 240
+	db 53, PERSIAN, PINK_BOW, 240, ABILITY_1 | QUIRKY, FEMALE | ALOLAN_FORM
 		db NIGHT_SLASH, FEINT_ATTACK, SCREECH, PLAY_ROUGH
-	db 54, WEAVILE, KINGS_ROCK, 240
+	db 54, WEAVILE, KINGS_ROCK, 240, ABILITY_1 | QUIRKY, FEMALE
 		db SWORDS_DANCE, SCREECH, NIGHT_SLASH, ICE_PUNCH
-	db 55, GENGAR, SPELL_TAG, 240
+	db 55, GENGAR, SPELL_TAG, 240, ABILITY_1 | QUIRKY, FEMALE
 		db SHADOW_BALL, WILL_O_WISP, CURSE, DESTINY_BOND
-	db 55, HONCHKROW, BLACKGLASSES, 240
+	db 55, HONCHKROW, BLACKGLASSES, 240, ABILITY_1 | QUIRKY, FEMALE
 		db DRILL_PECK, SUCKER_PUNCH, PURSUIT, BRAVE_BIRD
-	db 57, HOUNDOOM, CHARCOAL, 240
+	db 57, HOUNDOOM, CHARCOAL, 240, ABILITY_1 | QUIRKY, FEMALE
 		db ROAR, PURSUIT, FLAMETHROWER, DARK_PULSE
 	db -1 ; end
 
@@ -641,7 +625,6 @@ KarenGroup:
 
 ; ================
 ; ================================
-
 
 ChampionGroup:
 ; ================================
@@ -692,7 +675,6 @@ endc
 ; ================
 ; ================================
 
-
 BrockGroup:
 ; ================================
 ; ================
@@ -737,7 +719,6 @@ BrockGroup:
 
 ; ================
 ; ================================
-
 
 MistyGroup:
 ; ================================
@@ -784,7 +765,6 @@ MistyGroup:
 ; ================
 ; ================================
 
-
 LtSurgeGroup:
 ; ================================
 ; ================
@@ -829,7 +809,6 @@ LtSurgeGroup:
 
 ; ================
 ; ================================
-
 
 ErikaGroup:
 ; ================================
@@ -889,7 +868,6 @@ endc
 ; ================
 ; ================================
 
-
 JanineGroup:
 ; ================================
 ; ================
@@ -934,7 +912,6 @@ JanineGroup:
 
 ; ================
 ; ================================
-
 
 SabrinaGroup:
 ; ================================
@@ -981,7 +958,6 @@ SabrinaGroup:
 ; ================
 ; ================================
 
-
 BlaineGroup:
 ; ================================
 ; ================
@@ -1025,7 +1001,6 @@ BlaineGroup:
 ; ================
 ; ================================
 
-
 BlueGroup:
 ; ================================
 ; ================
@@ -1034,14 +1009,14 @@ BlueGroup:
 	db "Blue@"
 	db TRAINERTYPE_ITEM | TRAINERTYPE_MOVES
 	; party
+	db 68, EXEGGUTOR, ROOM_SERVICE
+		db PSYCHIC_M, LEECH_SEED, TRICK_ROOM, GIGA_DRAIN
 	db 69, UMBREON, LEFTOVERS
 		db CONFUSE_RAY, TOXIC, FEINT_ATTACK, PROTECT
 	db 66, MACHAMP, BLACK_BELT
 		db DYNAMICPUNCH, EARTHQUAKE, STONE_EDGE, THUNDERPUNCH
 	db 67, KABUTOPS, HARD_STONE
 		db SLASH, SURF, STONE_EDGE, GIGA_DRAIN
-	db 68, EXEGGUTOR, MIRACLE_SEED
-		db PSYCHIC_M, LEECH_SEED, STOMP, GIGA_DRAIN
 	db 68, ARCANINE, CHARCOAL
 		db ROAR, FLAME_WHEEL, FLAMETHROWER, EXTREMESPEED
 	db 70, BLASTOISE, MYSTIC_WATER
@@ -1073,7 +1048,6 @@ endc
 ; ================
 ; ================================
 
-
 RedGroup:
 ; ================================
 ; ================
@@ -1103,7 +1077,6 @@ endc
 ; ================
 ; ================================
 
-
 LeafGroup:
 ; ================================
 ; ================
@@ -1128,7 +1101,6 @@ LeafGroup:
 
 ; ================
 ; ================================
-
 
 Rival0Group:
 ; ================================
@@ -1164,7 +1136,6 @@ Rival0Group:
 
 ; ================
 ; ================================
-
 
 Rival1Group:
 ; ================================
@@ -1375,7 +1346,6 @@ Rival1Group:
 ; ================
 ; ================================
 
-
 Rival2Group:
 ; ================================
 ; ================
@@ -1500,7 +1470,6 @@ Rival2Group:
 
 ; ================
 ; ================================
-
 
 ; TODO: give Lyra custom movesets
 Lyra1Group:
@@ -1652,7 +1621,6 @@ Lyra1Group:
 ; ================
 ; ================================
 
-
 Lyra2Group:
 ; ================================
 ; ================
@@ -1699,7 +1667,6 @@ Lyra2Group:
 
 ; ================
 ; ================================
-
 
 YoungsterGroup:
 ; ================================
@@ -1885,7 +1852,6 @@ YoungsterGroup:
 
 ; ================
 ; ================================
-
 
 BugCatcherGroup:
 ; ================================
@@ -2100,7 +2066,6 @@ BugCatcherGroup:
 ; ================
 ; ================================
 
-
 CamperGroup:
 ; ================================
 ; ================
@@ -2177,9 +2142,9 @@ CamperGroup:
 	db "Ivan@"
 	db TRAINERTYPE_NORMAL
 	; party
-	db 10, SANDSHREW
+	db 10, DIGLETT
 	db 10, ZUBAT
-	db 14, DUNSPARCE
+	db 14, DIGLETT
 	db -1 ; end
 
 ; ================
@@ -2344,7 +2309,6 @@ CamperGroup:
 
 ; ================
 ; ================================
-
 
 PicnickerGroup:
 ; ================================
@@ -2668,7 +2632,6 @@ endc
 ; ================
 ; ================================
 
-
 TwinsGroup:
 ; ================================
 ; ================
@@ -2822,7 +2785,6 @@ TwinsGroup:
 ; ================
 ; ================================
 
-
 FisherGroup:
 ; ================================
 ; ================
@@ -2960,7 +2922,7 @@ FisherGroup:
 	db "Justin@"
 	db TRAINERTYPE_DVS | TRAINERTYPE_PERSONALITY
 	; party
-	db 5, MAGIKARP, $87, $78, $77, ABILITY_1 | QUIRKY, MALE | MAGIKARP_PLAIN_FORM
+	db 5, MAGIKARP, $87, $78, $77, ABILITY_1 | QUIRKY, MALE | PLAIN_FORM
 	db 5, MAGIKARP, $88, $B8, $8B, ABILITY_1 | QUIRKY, MALE | MAGIKARP_FOREHEAD_FORM
 	db 15, MAGIKARP, $A2, $AA, $2A, ABILITY_1 | QUIRKY, MALE | MAGIKARP_CALICO3_FORM
 	db 5, MAGIKARP, $39, $93, $99, ABILITY_1 | QUIRKY, MALE | MAGIKARP_ORCA_FORM
@@ -3116,7 +3078,7 @@ FisherGroup:
 	db "Kiley@"
 	db TRAINERTYPE_PERSONALITY
 	; party
-	db 25, MAGIKARP, ABILITY_1 | QUIRKY, MALE | MAGIKARP_PLAIN_FORM
+	db 25, MAGIKARP, ABILITY_1 | QUIRKY, MALE | PLAIN_FORM
 	db 25, MAGIKARP, ABILITY_1 | QUIRKY, MALE | MAGIKARP_DAPPLES_FORM
 	db 25, MAGIKARP, ABILITY_1 | QUIRKY, MALE | MAGIKARP_TIGER_FORM
 	db 25, MANTINE, ABILITY_1 | QUIRKY, MALE
@@ -3153,7 +3115,7 @@ FisherGroup:
 	db "Kyler@"
 	db TRAINERTYPE_PERSONALITY
 	; party
-	db 48, MAGIKARP, ABILITY_1 | QUIRKY, MALE | MAGIKARP_PLAIN_FORM
+	db 48, MAGIKARP, ABILITY_1 | QUIRKY, MALE | PLAIN_FORM
 	db 48, MAGIKARP, ABILITY_1 | QUIRKY, MALE | MAGIKARP_BUBBLES_FORM
 	db 48, MAGIKARP, ABILITY_1 | QUIRKY, MALE | MAGIKARP_CALICO3_FORM
 	db -1 ; end
@@ -3220,7 +3182,6 @@ FisherGroup:
 
 ; ================
 ; ================================
-
 
 BirdKeeperGroup:
 ; ================================
@@ -3548,7 +3509,6 @@ BirdKeeperGroup:
 ; ================
 ; ================================
 
-
 HikerGroup:
 ; ================================
 ; ================
@@ -3678,8 +3638,8 @@ HikerGroup:
 	db "Benjamin@"
 	db TRAINERTYPE_NORMAL
 	; party
+	db 24, DIGLETT
 	db 24, DUNSPARCE
-	db 24, LARVITAR
 	db 28, GLIGAR
 	db -1 ; end
 
@@ -3712,7 +3672,7 @@ HikerGroup:
 	db TRAINERTYPE_NORMAL
 	; party
 	db 36, SANDSLASH
-	db 37, SKARMORY
+	db 37, DUGTRIO
 	db -1 ; end
 
 ; ================
@@ -3939,7 +3899,6 @@ HikerGroup:
 ; ================
 ; ================================
 
-
 GruntMGroup:
 ; ================================
 ; ================
@@ -3966,34 +3925,34 @@ GruntMGroup:
 
 	; GRUNTM
 	db "Grunt@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 33, RATICATE
-	db 33, SNEASEL
+	db 33, RATICATE, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 33, SNEASEL, ABILITY_1 | QUIRKY, MALE
 	db -1 ; end
 
 ; ================
 
 	; GRUNTM
 	db "Grunt@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 32, GRIMER
-	db 33, HOUNDOUR
-	db 34, MUK
+	db 32, GRIMER, ABILITY_1 | QUIRKY, MALE
+	db 33, HOUNDOUR, ABILITY_1 | QUIRKY, MALE
+	db 34, MUK, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
 
 	; GRUNTM
 	db "Grunt@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 31, RATTATA
-	db 33, HOUNDOUR
-	db 32, RATICATE
-	db 32, RATICATE
-	db 33, MEOWTH
+	db 31, RATTATA, ABILITY_1 | QUIRKY, MALE
+	db 33, HOUNDOUR, ABILITY_1 | QUIRKY, MALE
+	db 32, RATICATE, ABILITY_1 | QUIRKY, MALE
+	db 32, RATICATE, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 33, MEOWTH, ABILITY_1 | QUIRKY, MALE
 	db -1 ; end
 
 ; ================
@@ -4063,10 +4022,10 @@ GruntMGroup:
 
 	; GRUNTM
 	db "Grunt@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 23, RATICATE
-	db 24, PERSIAN
+	db 23, RATICATE, ABILITY_1 | QUIRKY, MALE
+	db 24, PERSIAN, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
@@ -4102,12 +4061,12 @@ GruntMGroup:
 
 	; GRUNTM
 	db "Grunt@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 26, MEOWTH
-	db 26, GASTLY
-	db 27, RATICATE
-	db 26, RATTATA
+	db 26, MEOWTH, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 26, GASTLY, ABILITY_1 | QUIRKY, MALE
+	db 27, RATICATE, ABILITY_1 | QUIRKY, MALE
+	db 26, RATTATA, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
@@ -4268,7 +4227,6 @@ GruntMGroup:
 ; ================
 ; ================================
 
-
 GruntFGroup:
 ; ================================
 ; ================
@@ -4339,7 +4297,6 @@ GruntFGroup:
 
 ; ================
 ; ================================
-
 
 PokefanMGroup:
 ; ================================
@@ -4484,7 +4441,6 @@ PokefanMGroup:
 ; ================
 ; ================================
 
-
 PokefanFGroup:
 ; ================================
 ; ================
@@ -4568,7 +4524,6 @@ PokefanFGroup:
 ; ================
 ; ================================
 
-
 OfficerMGroup:
 ; ================================
 ; ================
@@ -4593,7 +4548,6 @@ OfficerMGroup:
 
 ; ================
 ; ================================
-
 
 OfficerFGroup:
 ; ================================
@@ -4632,7 +4586,6 @@ OfficerFGroup:
 ; ================
 ; ================================
 
-
 NurseGroup:
 ; ================================
 ; ================
@@ -4646,7 +4599,6 @@ NurseGroup:
 
 ; ================
 ; ================================
-
 
 PokemaniacGroup:
 ; ================================
@@ -4818,7 +4770,6 @@ PokemaniacGroup:
 ; ================
 ; ================================
 
-
 CosplayerGroup:
 ; ================================
 ; ================
@@ -4864,7 +4815,6 @@ CosplayerGroup:
 
 ; ================
 ; ================================
-
 
 SuperNerdGroup:
 ; ================================
@@ -5072,7 +5022,6 @@ SuperNerdGroup:
 
 ; ================
 ; ================================
-
 
 LassGroup:
 ; ================================
@@ -5341,7 +5290,6 @@ endc
 ; ================
 ; ================================
 
-
 BeautyGroup:
 ; ================================
 ; ================
@@ -5494,7 +5442,6 @@ BeautyGroup:
 ; ================
 ; ================================
 
-
 BugManiacGroup:
 ; ================================
 ; ================
@@ -5645,7 +5592,6 @@ BugManiacGroup:
 ; ================
 ; ================================
 
-
 RuinManiacGroup:
 ; ================================
 ; ================
@@ -5702,7 +5648,6 @@ RuinManiacGroup:
 
 ; ================
 ; ================================
-
 
 FirebreatherGroup:
 ; ================================
@@ -5820,7 +5765,6 @@ FirebreatherGroup:
 ; ================
 ; ================================
 
-
 JugglerGroup:
 ; ================================
 ; ================
@@ -5904,7 +5848,6 @@ JugglerGroup:
 
 ; ================
 ; ================================
-
 
 SchoolboyGroup:
 ; ================================
@@ -6209,7 +6152,6 @@ SchoolboyGroup:
 ; ================
 ; ================================
 
-
 SchoolgirlGroup:
 ; ================================
 ; ================
@@ -6278,7 +6220,6 @@ SchoolgirlGroup:
 
 ; ================
 ; ================================
-
 
 PsychicGroup:
 ; ================================
@@ -6442,7 +6383,6 @@ PsychicGroup:
 ; ================
 ; ================================
 
-
 HexManiacGroup:
 ; ================================
 ; ================
@@ -6547,7 +6487,6 @@ HexManiacGroup:
 ; ================
 ; ================================
 
-
 SageGroup:
 ; ================================
 ; ================
@@ -6637,7 +6576,6 @@ SageGroup:
 ; ================
 ; ================================
 
-
 MediumGroup:
 ; ================================
 ; ================
@@ -6684,7 +6622,6 @@ MediumGroup:
 ; ================
 ; ================================
 
-
 KimonoGirl1Group:
 ; ================================
 ; ================
@@ -6698,7 +6635,6 @@ KimonoGirl1Group:
 
 ; ================
 ; ================================
-
 
 KimonoGirl2Group:
 ; ================================
@@ -6714,7 +6650,6 @@ KimonoGirl2Group:
 ; ================
 ; ================================
 
-
 KimonoGirl3Group:
 ; ================================
 ; ================
@@ -6728,7 +6663,6 @@ KimonoGirl3Group:
 
 ; ================
 ; ================================
-
 
 KimonoGirl4Group:
 ; ================================
@@ -6744,7 +6678,6 @@ KimonoGirl4Group:
 ; ================
 ; ================================
 
-
 KimonoGirl5Group:
 ; ================================
 ; ================
@@ -6758,7 +6691,6 @@ KimonoGirl5Group:
 
 ; ================
 ; ================================
-
 
 ElderGroup:
 ; ================================
@@ -6808,7 +6740,6 @@ ElderGroup:
 
 ; ================
 ; ================================
-
 
 SrAndJrGroup:
 ; ================================
@@ -6874,7 +6805,6 @@ SrAndJrGroup:
 
 ; ================
 ; ================================
-
 
 CoupleGroup:
 ; ================================
@@ -7025,7 +6955,6 @@ CoupleGroup:
 ; ================
 ; ================================
 
-
 GentlemanGroup:
 ; ================================
 ; ================
@@ -7100,7 +7029,6 @@ GentlemanGroup:
 ; ================
 ; ================================
 
-
 RichBoyGroup:
 ; ================================
 ; ================
@@ -7141,7 +7069,6 @@ RichBoyGroup:
 ; ================
 ; ================================
 
-
 LadyGroup:
 ; ================================
 ; ================
@@ -7156,7 +7083,6 @@ LadyGroup:
 
 ; ================
 ; ================================
-
 
 BreederGroup:
 ; ================================
@@ -7234,7 +7160,6 @@ BreederGroup:
 ; ================
 ; ================================
 
-
 BakerGroup:
 ; ================================
 ; ================
@@ -7285,7 +7210,6 @@ endc
 ; ================
 ; ================================
 
-
 CowgirlGroup:
 ; ================================
 ; ================
@@ -7317,13 +7241,12 @@ CowgirlGroup:
 	db "Daniela@"
 	db TRAINERTYPE_NORMAL
 	; party
-	db 25, TAUROS
-	db 25, MILTANK
+	db 45, TAUROS
+	db 45, MILTANK
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 SailorGroup:
 ; ================================
@@ -7494,7 +7417,6 @@ SailorGroup:
 
 ; ================
 ; ================================
-
 
 SwimmerMGroup:
 ; ================================
@@ -7830,7 +7752,6 @@ SwimmerMGroup:
 ; ================
 ; ================================
 
-
 SwimmerFGroup:
 ; ================================
 ; ================
@@ -8156,7 +8077,6 @@ SwimmerFGroup:
 ; ================
 ; ================================
 
-
 BurglarGroup:
 ; ================================
 ; ================
@@ -8184,12 +8104,12 @@ BurglarGroup:
 
 	; BURGLAR
 	db "Corey@"
-	db TRAINERTYPE_ITEM
+	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY
 	; party
-	db 44, KOFFING, NO_ITEM
-	db 46, WEEZING, NO_ITEM
-	db 46, MAGMAR, NO_ITEM
-	db 48, PERSIAN, AMULET_COIN
+	db 44, KOFFING, NO_ITEM, ABILITY_1 | QUIRKY, MALE
+	db 46, WEEZING, NO_ITEM, ABILITY_1 | QUIRKY, MALE
+	db 46, MAGMAR, NO_ITEM, ABILITY_1 | QUIRKY, MALE
+	db 48, PERSIAN, AMULET_COIN, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
@@ -8215,7 +8135,6 @@ BurglarGroup:
 ; ================
 ; ================================
 
-
 PIGroup:
 ; ================================
 ; ================
@@ -8231,7 +8150,6 @@ PIGroup:
 
 ; ================
 ; ================================
-
 
 ScientistGroup:
 ; ================================
@@ -8339,17 +8257,16 @@ ScientistGroup:
 ; ================
 ; ================================
 
-
 RocketScientistGroup:
 ; ================================
 ; ================
 
 	; SCIENTIST
 	db "Ross@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 30, KOFFING
-	db 30, KOFFING
+	db 30, KOFFING, ABILITY_1 | QUIRKY, MALE
+	db 30, GRIMER, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
@@ -8396,7 +8313,6 @@ RocketScientistGroup:
 
 ; ================
 ; ================================
-
 
 BoarderGroup:
 ; ================================
@@ -8467,15 +8383,14 @@ BoarderGroup:
 
 	; BOARDER
 	db "Max@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 36, PILOSWINE
-	db 37, LAPRAS
+	db 36, PILOSWINE, ABILITY_1 | QUIRKY, MALE
+	db 37, SANDSLASH, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 SkierGroup:
 ; ================================
@@ -8519,16 +8434,15 @@ SkierGroup:
 
 	; SKIER
 	db "Becky@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
-	db 37, LAPRAS
-	db 38, DEWGONG
-	db 38, DEWGONG
+	db 37, LAPRAS, ABILITY_1 | QUIRKY, FEMALE
+	db 38, DEWGONG, ABILITY_1 | QUIRKY, FEMALE
+	db 38, NINETALES, ABILITY_1 | QUIRKY, FEMALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 BlackbeltGroup:
 ; ================================
@@ -8690,7 +8604,6 @@ BlackbeltGroup:
 ; ================
 ; ================================
 
-
 BattleGirlGroup:
 ; ================================
 ; ================
@@ -8772,7 +8685,6 @@ BattleGirlGroup:
 
 ; ================
 ; ================================
-
 
 DragonTamerGroup:
 ; ================================
@@ -8860,7 +8772,6 @@ endc
 ; ================
 ; ================================
 
-
 EngineerGroup:
 ; ================================
 ; ================
@@ -8926,7 +8837,6 @@ EngineerGroup:
 ; ================
 ; ================================
 
-
 TeacherGroup:
 ; ================================
 ; ================
@@ -8981,8 +8891,6 @@ TeacherGroup:
 
 ; ================
 ; ================================
-
-
 
 GuitaristMGroup:
 ; ================================
@@ -9049,20 +8957,19 @@ GuitaristMGroup:
 ; ================
 ; ================================
 
-
 GuitaristFGroup:
 ; ================================
 ; ================
 
 	; GUITARISTF
 	db "Janet@"
-	db TRAINERTYPE_MOVES
+	db TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 56, PIKACHU
+	db 56, PIKACHU, ABILITY_1 | QUIRKY, FEMALE
 		db IRON_TAIL, EXTREMESPEED, SURF, THUNDERBOLT
-	db 54, ELECTABUZZ
+	db 54, ELECTABUZZ, ABILITY_1 | QUIRKY, FEMALE
 		db LIGHT_SCREEN, THUNDERPUNCH, CROSS_CHOP, SCREECH
-	db 55, RAICHU
+	db 55, RAICHU, ABILITY_1 | QUIRKY, FEMALE | ALOLAN_FORM
 		db EXTREMESPEED, SURF, THUNDERBOLT, AGILITY
 	db -1 ; end
 
@@ -9108,7 +9015,6 @@ GuitaristFGroup:
 
 ; ================
 ; ================================
-
 
 BikerGroup:
 ; ================================
@@ -9249,7 +9155,6 @@ BikerGroup:
 ; ================
 ; ================================
 
-
 RoughneckGroup:
 ; ================================
 ; ================
@@ -9285,7 +9190,6 @@ RoughneckGroup:
 
 ; ================
 ; ================================
-
 
 TamerGroup:
 ; ================================
@@ -9333,7 +9237,6 @@ TamerGroup:
 
 ; ================
 ; ================================
-
 
 ArtistGroup:
 ; ================================
@@ -9384,7 +9287,6 @@ ArtistGroup:
 
 ; ================
 ; ================================
-
 
 AromaLadyGroup:
 ; ================================
@@ -9444,20 +9346,17 @@ AromaLadyGroup:
 ; ================
 ; ================================
 
-
 WaiterGroup:
 ; ================================
 ; ================
 ; ================
 ; ================================
 
-
 WaitressGroup:
 ; ================================
 ; ================
 ; ================
 ; ================================
-
 
 SightseerMGroup:
 ; ================================
@@ -9514,7 +9413,6 @@ SightseerMGroup:
 ; ================
 ; ================================
 
-
 SightseerFGroup:
 ; ================================
 ; ================
@@ -9559,7 +9457,6 @@ SightseerFGroup:
 	db 65, LANTURN, ABILITY_1 | QUIRKY, FEMALE, "Linterna@"
 	db -1 ; end
 
-
 ; ================
 
 	; SIGHTSEERF
@@ -9576,7 +9473,6 @@ SightseerFGroup:
 
 ; ================
 ; ================================
-
 
 SightseersGroup:
 ; ================================
@@ -9622,7 +9518,6 @@ SightseersGroup:
 
 ; ================
 ; ================================
-
 
 CooltrainerMGroup:
 ; ================================
@@ -9900,7 +9795,6 @@ CooltrainerMGroup:
 
 
 SECTION "Enemy Trainer Parties 2", ROMX
-
 
 CooltrainerFGroup:
 ; ================================
@@ -10200,7 +10094,6 @@ endc
 ; ================
 ; ================================
 
-
 AceDuoGroup:
 ; ================================
 ; ================
@@ -10334,7 +10227,6 @@ AceDuoGroup:
 ; ================
 ; ================================
 
-
 VeteranMGroup:
 ; ================================
 ; ================
@@ -10400,7 +10292,6 @@ endc
 ; ================
 ; ================================
 
-
 VeteranFGroup:
 ; ================================
 ; ================
@@ -10460,7 +10351,6 @@ VeteranFGroup:
 ; ================
 ; ================================
 
-
 ProtonGroup:
 ; ================================
 ; ================
@@ -10469,11 +10359,13 @@ ProtonGroup:
 	db "Proton@"
 	db TRAINERTYPE_ITEM | TRAINERTYPE_MOVES
 	; party
-	db 40, GOLBAT, KINGS_ROCK
+	db 39, GOLBAT, KINGS_ROCK
 		db AERIAL_ACE, CONFUSE_RAY, SUPER_FANG, POISON_JAB
-	db 41, QWILFISH, BRIGHTPOWDER
+	db 40, QWILFISH, BRIGHTPOWDER
 		db MINIMIZE, BUBBLE_BEAM, PAIN_SPLIT, ROLLOUT
-	db 42, WEEZING, CHARCOAL
+	db 40, OCTILLERY, LUM_BERRY
+		db OCTAZOOKA, POWER_WHIP, FLAMETHROWER, ICE_BEAM
+	db 41, WEEZING, CHARCOAL
 		db FIRE_BLAST, EXPLOSION, SLUDGE_BOMB, SMOKESCREEN
 	db -1 ; end
 
@@ -10491,24 +10383,23 @@ ProtonGroup:
 ; ================
 ; ================================
 
-
 PetrelGroup:
 ; ================================
 ; ================
 
 	; PETREL
 	db "Petrel@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 39, KOFFING, EVIOLITE
+	db 39, KOFFING, EVIOLITE, ABILITY_1 | QUIRKY, MALE
 		db TACKLE, EXPLOSION, VENOSHOCK, SMOKESCREEN
-	db 39, GOLBAT, EVIOLITE
+	db 39, GOLBAT, EVIOLITE, ABILITY_1 | QUIRKY, MALE
 		db LEECH_LIFE, AERIAL_ACE, CONFUSE_RAY, SUPER_FANG
-	db 42, PERSIAN, BLACKGLASSES
-		db PLAY_ROUGH, SCREECH, FEINT_ATTACK, SLASH
-	db 40, WEEZING, SILK_SCARF
+	db 40, MUK, HARD_STONE, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+		db FIRE_PUNCH, KNOCK_OFF, POISON_JAB, ROCK_SLIDE
+	db 41, WEEZING, SILK_SCARF, ABILITY_1 | QUIRKY, MALE
 		db TACKLE, EXPLOSION, VENOSHOCK, SMOKESCREEN
-	db 39, RATICATE, KINGS_ROCK
+	db 39, RATICATE, BLACKGLASSES, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 		db QUICK_ATTACK, SCREECH, CRUNCH, SUPER_FANG
 	db -1 ; end
 
@@ -10516,21 +10407,20 @@ PetrelGroup:
 
 	; PETREL
 	db "Petrel@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 34, GOLBAT, BLACKGLASSES, 108
+	db 34, GOLBAT, EVIOLITE, 108, ABILITY_1 | QUIRKY, MALE
 		db BITE, AERIAL_ACE, CONFUSE_RAY, SUPER_FANG
-	db 35, PERSIAN, HARD_STONE, 108
-		db PLAY_ROUGH, FURY_STRIKES, SCREECH, FEINT_ATTACK
-	db 35, RATICATE, KINGS_ROCK, 108
+	db 35, MUK, BLACKGLASSES, 108, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+		db MINIMIZE, CRUNCH, VENOSHOCK, KNOCK_OFF
+	db 35, RATICATE, KINGS_ROCK, 108, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 		db SWORDS_DANCE, CRUNCH, SUPER_FANG, HYPER_FANG
-	db 36, WEEZING, POISON_BARB, 108
+	db 36, WEEZING, POISON_BARB, 108, ABILITY_1 | QUIRKY, MALE
 		db ENDURE, WILL_O_WISP, SLUDGE_BOMB, EXPLOSION
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 ArcherGroup:
 ; ================================
@@ -10538,17 +10428,17 @@ ArcherGroup:
 
 	; ARCHER
 	db "Archer@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 41, HOUNDOUR, EVIOLITE
+	db 41, HOUNDOUR, EVIOLITE, ABILITY_1 | QUIRKY, MALE
 		db SUPER_FANG, FIRE_SPIN, FEINT_ATTACK, WILL_O_WISP
-	db 43, RATICATE, BLACKGLASSES
+	db 43, RATICATE, BLACKGLASSES, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 		db CRUNCH, SUPER_FANG, HYPER_FANG, DOUBLE_EDGE
-	db 41, GENGAR, SPELL_TAG
+	db 41, GENGAR, SPELL_TAG, ABILITY_1 | QUIRKY, MALE
 		db HYPNOSIS, CONFUSE_RAY, PAIN_SPLIT, SHADOW_BALL
-	db 42, WEEZING, BRIGHTPOWDER
+	db 42, WEEZING, BRIGHTPOWDER, ABILITY_1 | QUIRKY, MALE
 		db SMOKESCREEN, WILL_O_WISP, PAIN_SPLIT, SLUDGE_BOMB
-	db 43, HOUNDOOM, KINGS_ROCK
+	db 44, HOUNDOOM, KINGS_ROCK, ABILITY_1 | QUIRKY, MALE
 		db SMOKESCREEN, SUPER_FANG, FEINT_ATTACK, FLAMETHROWER
 	db -1 ; end
 
@@ -10556,21 +10446,20 @@ ArcherGroup:
 
 	; ARCHER
 	db "Archer@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 28, HAUNTER, SPELL_TAG, 88
+	db 28, HAUNTER, SPELL_TAG, 88, ABILITY_1 | QUIRKY, MALE
 		db DISABLE, NIGHT_SHADE, CONFUSE_RAY, SHADOW_BALL
-	db 30, RATICATE, BLACKGLASSES, 88
+	db 30, RATICATE, BLACKGLASSES, 88, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 		db PURSUIT, HYPER_FANG, SCARY_FACE, CRUNCH
-	db 28, WEEZING, SILK_SCARF, 88
+	db 28, WEEZING, SILK_SCARF, 88, ABILITY_1 | QUIRKY, MALE
 		db WILL_O_WISP, EXPLOSION, VENOSHOCK, SMOKESCREEN
-	db 32, HOUNDOOM, KINGS_ROCK, 88
+	db 32, HOUNDOOM, KINGS_ROCK, 88, ABILITY_1 | QUIRKY, MALE
 		db FLAMETHROWER, SMOKESCREEN, FEINT_ATTACK, SUPER_FANG
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 ArianaGroup:
 ; ================================
@@ -10605,7 +10494,6 @@ ArianaGroup:
 ; ================
 ; ================================
 
-
 GiovanniGroup:
 ; ================================
 ; ================
@@ -10614,7 +10502,7 @@ GiovanniGroup:
 	db "Giovanni@"
 	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY | TRAINERTYPE_NICKNAME | TRAINERTYPE_MOVES
 	; party
-	db 70, MEWTWO, ARMOR_SUIT, ABILITY_2 | MODEST, MALE, "???@"
+	db 70, MEWTWO, ARMOR_SUIT, ABILITY_2 | MODEST, MALE | MEWTWO_ARMORED_FORM, "???@"
 		db SHADOW_BALL, PSYSTRIKE, NASTY_PLOT, AURA_SPHERE
 	db -1 ; end
 
@@ -10635,7 +10523,6 @@ GiovanniGroup:
 
 ; ================
 ; ================================
-
 
 ProfOakGroup:
 ; ================================
@@ -10662,7 +10549,6 @@ ProfOakGroup:
 ; ================
 ; ================================
 
-
 ProfElmGroup:
 ; ================================
 ; ================
@@ -10688,7 +10574,6 @@ ProfElmGroup:
 ; ================
 ; ================================
 
-
 ProfIvyGroup:
 ; ================================
 ; ================
@@ -10708,7 +10593,6 @@ ProfIvyGroup:
 
 ; ================
 ; ================================
-
 
 MysticalmanGroup:
 ; ================================
@@ -10731,7 +10615,6 @@ MysticalmanGroup:
 ; ================
 ; ================================
 
-
 KarateKingGroup:
 ; ================================
 ; ================
@@ -10750,7 +10633,6 @@ KarateKingGroup:
 
 ; ================
 ; ================================
-
 
 TowerTycoonGroup:
 ; ================================
@@ -10790,7 +10672,6 @@ TowerTycoonGroup:
 ; ================
 ; ================================
 
-
 JessieJamesGroup:
 ; ================================
 ; ================
@@ -10809,7 +10690,6 @@ JessieJamesGroup:
 
 ; ================
 ; ================================
-
 
 LoreleiGroup:
 ; ================================
@@ -10876,7 +10756,6 @@ LoreleiGroup:
 ; ================
 ; ================================
 
-
 AgathaGroup:
 ; ================================
 ; ================
@@ -10895,7 +10774,7 @@ if DEF(FAITHFUL)
 	db 61, MUK, SILK_SCARF, 180, ABILITY_1 | QUIRKY, FEMALE
 		db EXPLOSION, SLUDGE_BOMB, SCREECH, MINIMIZE
 else
-	db 61, MAROWAK, THICK_CLUB, 180, ABILITY_1 | QUIRKY, FEMALE
+	db 61, MAROWAK, THICK_CLUB, 180, ABILITY_1 | QUIRKY, FEMALE | ALOLAN_FORM
 		db SWORDS_DANCE, BONEMERANG, FIRE_PUNCH, SHADOW_CLAW
 endc
 	db 63, ARBOK, KINGS_ROCK, 180, ABILITY_1 | QUIRKY, FEMALE | ARBOK_AGATHA_FORM
@@ -10920,7 +10799,7 @@ if DEF(FAITHFUL)
 	db 72, MUK, SILK_SCARF, ABILITY_1 | QUIRKY, FEMALE
 		db EXPLOSION, SLUDGE_BOMB, SCREECH, MINIMIZE
 else
-	db 72, MAROWAK, THICK_CLUB, ABILITY_1 | QUIRKY, FEMALE
+	db 72, MAROWAK, THICK_CLUB, ABILITY_1 | QUIRKY, FEMALE | ALOLAN_FORM
 		db SWORDS_DANCE, BONEMERANG, ROCK_SMASH, SHADOW_CLAW
 endc
 	db 74, ARBOK, KINGS_ROCK, ABILITY_1 | QUIRKY, FEMALE | ARBOK_AGATHA_FORM
@@ -10932,33 +10811,30 @@ endc
 ; ================
 ; ================================
 
-
 StevenGroup:
 ; ================================
 ; ================
 
 	; STEVEN
 	db "Steven@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 61, SKARMORY, QUICK_CLAW
+	db 61, SKARMORY, QUICK_CLAW, ABILITY_1 | QUIRKY, MALE
 		db SPIKES, SCREECH, DRILL_PECK, STEEL_WING
-	db 60, FORRETRESS, FOCUS_BAND
+	db 60, FORRETRESS, FOCUS_BAND, ABILITY_1 | QUIRKY, MALE
 		db EARTHQUAKE, GYRO_BALL, EXPLOSION, SPIKES
 if DEF(FAITHFUL)
-	db 58, SCIZOR, MUSCLE_BAND
-		db SWORDS_DANCE, BULLET_PUNCH, PURSUIT, IRON_HEAD
-	db 58, MAGNEZONE, WISE_GLASSES
+	db 58, MAGNEZONE, WISE_GLASSES, ABILITY_1 | QUIRKY, MALE
 		db THUNDERBOLT, FLASH_CANNON, TRI_ATTACK, EXPLOSION
 else
-	db 58, BLASTOISE, WISE_GLASSES
+	db 58, BLASTOISE, WISE_GLASSES, ABILITY_1 | QUIRKY, MALE
 		db SURF, BLIZZARD, FLASH_CANNON, AURA_SPHERE
-	db 58, RHYPERIOR, MUSCLE_BAND
-		db EARTHQUAKE, STONE_EDGE, MEGAHORN, AVALANCHE
 endc
-	db 58, AERODACTYL, KINGS_ROCK
+	db 58, SANDSLASH, NEVERMELTICE, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+		db IRON_HEAD, ICICLE_CRASH, EARTHQUAKE, RAPID_SPIN
+	db 58, AERODACTYL, KINGS_ROCK, ABILITY_1 | QUIRKY, MALE
 		db ROCK_SLIDE, CRUNCH, AERIAL_ACE, IRON_HEAD
-	db 62, STEELIX, LEFTOVERS
+	db 62, STEELIX, MUSCLE_BAND, ABILITY_1 | QUIRKY, MALE
 		db EARTHQUAKE, STONE_EDGE, IRON_HEAD, SANDSTORM
 	db -1 ; end
 
@@ -10966,30 +10842,29 @@ endc
 
 	; STEVEN
 	db "Steven@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 78, SKARMORY, QUICK_CLAW
+	db 78, SKARMORY, QUICK_CLAW, ABILITY_1 | QUIRKY, MALE
 		db SPIKES, SCREECH, DRILL_PECK, STEEL_WING
-	db 77, FORRETRESS, FOCUS_BAND
-		db EARTHQUAKE, GYRO_BALL, EXPLOSION, SPIKES
-	db 76, MAGNEZONE, WISE_GLASSES
-		db THUNDERBOLT, FLASH_CANNON, TRI_ATTACK, EXPLOSION
 if DEF(FAITHFUL)
-	db 76, SCIZOR, MUSCLE_BAND
-		db SWORDS_DANCE, BULLET_PUNCH, PURSUIT, IRON_HEAD
+	db 77, FORRETRESS, FOCUS_BAND, ABILITY_1 | QUIRKY, MALE
+		db EARTHQUAKE, GYRO_BALL, EXPLOSION, SPIKES
 else
-	db 76, RHYPERIOR, MUSCLE_BAND
+	db 76, RHYPERIOR, FOCUS_BAND, ABILITY_1 | QUIRKY, MALE
 		db EARTHQUAKE, STONE_EDGE, MEGAHORN, IRON_HEAD
 endc
-	db 76, AERODACTYL, KINGS_ROCK
+	db 76, MAGNEZONE, WISE_GLASSES, ABILITY_1 | QUIRKY, MALE
+		db THUNDERBOLT, FLASH_CANNON, TRI_ATTACK, EXPLOSION
+	db 76, SANDSLASH, NEVERMELTICE, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+		db IRON_HEAD, ICICLE_CRASH, EARTHQUAKE, RAPID_SPIN
+	db 76, AERODACTYL, KINGS_ROCK, ABILITY_1 | QUIRKY, MALE
 		db ROCK_SLIDE, CRUNCH, AERIAL_ACE, IRON_HEAD
-	db 80, STEELIX, LEFTOVERS
+	db 80, STEELIX, MUSCLE_BAND, ABILITY_1 | QUIRKY, MALE
 		db EARTHQUAKE, STONE_EDGE, IRON_HEAD, SANDSTORM
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 CynthiaGroup:
 ; ================================
@@ -11044,7 +10919,6 @@ endc
 ; ================
 ; ================================
 
-
 InverGroup:
 ; ================================
 ; ================
@@ -11073,7 +10947,6 @@ endc
 
 ; ================
 ; ================================
-
 
 CherylGroup:
 ; ================================
@@ -11124,7 +10997,6 @@ CherylGroup:
 ; ================
 ; ================================
 
-
 RileyGroup:
 ; ================================
 ; ================
@@ -11160,7 +11032,6 @@ RileyGroup:
 ; ================
 ; ================================
 
-
 BuckGroup:
 ; ================================
 ; ================
@@ -11195,7 +11066,6 @@ BuckGroup:
 
 ; ================
 ; ================================
-
 
 MarleyGroup:
 ; ================================
@@ -11246,7 +11116,6 @@ MarleyGroup:
 ; ================
 ; ================================
 
-
 MiraGroup:
 ; ================================
 ; ================
@@ -11281,7 +11150,6 @@ MiraGroup:
 
 ; ================
 ; ================================
-
 
 AnabelGroup:
 ; ================================
@@ -11318,7 +11186,6 @@ AnabelGroup:
 ; ================
 ; ================================
 
-
 DarachGroup:
 ; ================================
 ; ================
@@ -11344,7 +11211,6 @@ endc
 ; ================
 ; ================================
 
-
 CaitlinGroup:
 ; ================================
 ; ================
@@ -11364,7 +11230,6 @@ CaitlinGroup:
 
 ; ================
 ; ================================
-
 
 CandelaGroup:
 ; ================================
@@ -11386,7 +11251,6 @@ CandelaGroup:
 ; ================
 ; ================================
 
-
 BlancheGroup:
 ; ================================
 ; ================
@@ -11407,27 +11271,25 @@ BlancheGroup:
 ; ================
 ; ================================
 
-
 SparkGroup:
 ; ================================
 ; ================
 
 	; SPARK_T
 	db "Spark@"
-	db TRAINERTYPE_ITEM
+	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY
 	; party
 	; TODO: movesets, etc
-	db 63, JOLTEON, NO_ITEM
-	db 62, ELECTABUZZ, NO_ITEM
-	db 63, VENUSAUR, NO_ITEM
-	db 61, SNORLAX, NO_ITEM
-	db 62, RAICHU, NO_ITEM
-	db 65, ZAPDOS, MAGNET
+	db 63, JOLTEON, NO_ITEM, ABILITY_1 | QUIRKY, MALE
+	db 62, ELECTABUZZ, NO_ITEM, ABILITY_1 | QUIRKY, MALE
+	db 63, VENUSAUR, NO_ITEM, ABILITY_1 | QUIRKY, MALE
+	db 61, SNORLAX, NO_ITEM, ABILITY_1 | QUIRKY, MALE
+	db 64, PIKACHU, LIGHT_BALL, ABILITY_1 | QUIRKY, MALE | PIKACHU_SPARK_FORM
+	db 65, ZAPDOS, MAGNET, ABILITY_1 | QUIRKY, MALE
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 FlanneryGroup:
 ; ================================
@@ -11463,7 +11325,6 @@ FlanneryGroup:
 
 ; ================
 ; ================================
-
 
 MayleneGroup:
 ; ================================
@@ -11509,7 +11370,6 @@ endc
 
 ; ================
 ; ================================
-
 
 SkylaGroup:
 ; ================================
@@ -11560,7 +11420,6 @@ SkylaGroup:
 ; ================
 ; ================================
 
-
 ValerieGroup:
 ; ================================
 ; ================
@@ -11576,7 +11435,7 @@ ValerieGroup:
 	db 36, AZUMARILL, NO_ITEM, 112
 		db PLAY_ROUGH, AQUA_TAIL, DIZZY_PUNCH, ROLLOUT
 	db 38, TOGETIC, NO_ITEM, 112
-		db ANCIENTPOWER, FRESH_SNACK, DISARM_VOICE, ENCORE
+		db ANCIENTPOWER, FRESH_SNACK, DAZZLINGLEAM, ENCORE
 	db 40, SYLVEON, SITRUS_BERRY, 112
 		db MOONBLAST, CALM_MIND, DRAIN_KISS, SWIFT
 	db -1 ; end
@@ -11585,19 +11444,19 @@ ValerieGroup:
 
 	; VALERIE
 	db "Valerie@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_EVS | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 57, CLEFABLE, LEFTOVERS, 160
+	db 57, CLEFABLE, LEFTOVERS, 160, ABILITY_1 | QUIRKY, FEMALE
 		db MOONBLAST, CALM_MIND, HEALINGLIGHT, METRONOME
-	db 57, MR__MIME, QUICK_CLAW, 160
+	db 57, MR__MIME, QUICK_CLAW, 160, ABILITY_1 | QUIRKY, FEMALE
 		db PSYCHIC_M, DAZZLINGLEAM, LIGHT_SCREEN, REFLECT
-	db 56, WIGGLYTUFF, KINGS_ROCK, 160
-		db REST, SLEEP_TALK, HYPER_VOICE, DAZZLINGLEAM
-	db 56, AZUMARILL, MUSCLE_BAND, 160
+	db 56, AZUMARILL, MUSCLE_BAND, 160, ABILITY_1 | QUIRKY, FEMALE
 		db PLAY_ROUGH, WATERFALL, DIZZY_PUNCH, CLOSE_COMBAT
-	db 58, TOGEKISS, WISE_GLASSES, 160
+	db 56, RAPIDASH, KINGS_ROCK, 160, ABILITY_1 | QUIRKY, FEMALE | GALARIAN_FORM
+		db FLAMETHROWER, ZEN_HEADBUTT, PLAY_ROUGH, SWORDS_DANCE
+	db 58, TOGEKISS, WISE_GLASSES, 160, ABILITY_1 | QUIRKY, FEMALE
 		db AURA_SPHERE, FRESH_SNACK, DAZZLINGLEAM, AIR_SLASH
-	db 60, SYLVEON, PINK_BOW, 160
+	db 60, SYLVEON, PINK_BOW, 160, ABILITY_1 | QUIRKY, FEMALE
 		db MOONBLAST, CALM_MIND, DRAIN_KISS, HYPER_VOICE
 	db -1 ; end
 
@@ -11605,25 +11464,24 @@ ValerieGroup:
 
 	; VALERIE
 	db "Valerie@"
-	db TRAINERTYPE_ITEM | TRAINERTYPE_MOVES
+	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY | TRAINERTYPE_MOVES
 	; party
-	db 73, CLEFABLE, LEFTOVERS
+	db 73, CLEFABLE, LEFTOVERS, ABILITY_1 | QUIRKY, FEMALE
 		db MOONBLAST, CALM_MIND, FRESH_SNACK, THUNDER_WAVE
-	db 73, MR__MIME, QUICK_CLAW
+	db 73, MR__MIME, QUICK_CLAW, ABILITY_1 | QUIRKY, FEMALE
 		db PSYCHIC_M, DAZZLINGLEAM, LIGHT_SCREEN, REFLECT
-	db 72, WIGGLYTUFF, KINGS_ROCK
-		db FIRE_BLAST, HEAL_BELL, HYPER_VOICE, DAZZLINGLEAM
-	db 72, AZUMARILL, MUSCLE_BAND
+	db 72, AZUMARILL, MUSCLE_BAND, ABILITY_1 | QUIRKY, FEMALE
 		db PLAY_ROUGH, WATERFALL, RETURN, CLOSE_COMBAT
-	db 74, TOGEKISS, WISE_GLASSES
+	db 72, RAPIDASH, KINGS_ROCK, ABILITY_1 | QUIRKY, FEMALE | GALARIAN_FORM
+		db FIRE_BLAST, ZEN_HEADBUTT, PLAY_ROUGH, WILD_CHARGE
+	db 74, TOGEKISS, WISE_GLASSES, ABILITY_1 | QUIRKY, FEMALE
 		db AURA_SPHERE, FRESH_SNACK, DAZZLINGLEAM, AIR_SLASH
-	db 75, SYLVEON, PINK_BOW
+	db 75, SYLVEON, PINK_BOW, ABILITY_1 | QUIRKY, FEMALE
 		db MOONBLAST, CALM_MIND, DRAIN_KISS, HYPER_VOICE
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 KukuiGroup:
 ; ================================
@@ -11631,35 +11489,34 @@ KukuiGroup:
 
 	; KUKUI
 	db "Kukui@"
-	db TRAINERTYPE_EVS
+	db TRAINERTYPE_EVS | TRAINERTYPE_PERSONALITY
 	; party
 	; TODO: movesets, etc
-	db 67, GRANBULL, 244
-	db 65, NINETALES, 244
-	db 66, MAGNEZONE, 244
-	db 66, SNORLAX, 244
-	db 65, HONCHKROW, 244
-	db 68, POLIWRATH, 244
+	db 67, MAROWAK, 244, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 65, NINETALES, 244, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 66, MAGNEZONE, 244, ABILITY_1 | QUIRKY, MALE
+	db 66, SNORLAX, 244, ABILITY_1 | QUIRKY, MALE
+	db 65, RATICATE, 244, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 68, EXEGGUTOR, 244, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
 
 	; KUKUI
 	db "Kukui@"
-	db TRAINERTYPE_NORMAL
+	db TRAINERTYPE_PERSONALITY
 	; party
 	; TODO: movesets, etc
-	db 74, GRANBULL
-	db 72, NINETALES
-	db 73, MAGNEZONE
-	db 73, SNORLAX
-	db 72, HONCHKROW
-	db 75, POLIWRATH
+	db 74, MAROWAK, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 72, NINETALES, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 73, MAGNEZONE, ABILITY_1 | QUIRKY, MALE
+	db 73, SNORLAX, ABILITY_1 | QUIRKY, MALE
+	db 72, MUK, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
+	db 75, EXEGGUTOR, ABILITY_1 | QUIRKY, MALE | ALOLAN_FORM
 	db -1 ; end
 
 ; ================
 ; ================================
-
 
 VictorGroup:
 ; ================================
@@ -11675,7 +11532,6 @@ VictorGroup:
 
 ; ================
 ; ================================
-
 
 BillGroup:
 ; ================================
@@ -11701,7 +11557,6 @@ BillGroup:
 
 ; ================
 ; ================================
-
 
 YellowGroup:
 ; ================================
@@ -11748,7 +11603,6 @@ YellowGroup:
 ; ================
 ; ================================
 
-
 WalkerGroup:
 ; ================================
 ; ================
@@ -11794,7 +11648,6 @@ endc
 ; ================
 ; ================================
 
-
 ImakuniGroup:
 ; ================================
 ; ================
@@ -11814,7 +11667,6 @@ ImakuniGroup:
 
 ; ================
 ; ================================
-
 
 LawrenceGroup:
 ; ================================
@@ -11868,7 +11720,6 @@ endc
 
 ; ================
 ; ================================
-
 
 ReiGroup:
 ; ================================

@@ -1,4 +1,3 @@
-; RemoraidPokedexEntry: ; 0x1d0cd3
 	db "Jet@" ; species name
 	dw 200, 260 ; height, width
 

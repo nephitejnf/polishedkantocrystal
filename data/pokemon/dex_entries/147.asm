@@ -1,4 +1,3 @@
-; DratiniPokedexEntry: ; 0x1cc761
 	db "Dragon@" ; species name
 	dw 511, 70 ; height, width
 

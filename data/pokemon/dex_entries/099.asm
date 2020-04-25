@@ -1,4 +1,3 @@
-; KinglerPokedexEntry: ; 0x1b8e45
 	db "Pincer@" ; species name
 	dw 403, 1320 ; height, width
 

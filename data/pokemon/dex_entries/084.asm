@@ -1,4 +1,3 @@
-; DoduoPokedexEntry: ; 0x1b87d7
 	db "Twin Bird@" ; species name
 	dw 407, 860 ; height, width
 

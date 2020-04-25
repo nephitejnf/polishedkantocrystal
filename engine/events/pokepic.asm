@@ -1,4 +1,4 @@
-Pokepic:: ; 244e3
+Pokepic::
 	ld hl, PokepicMenuDataHeader
 	call CopyMenuDataHeader
 	call MenuBox
@@ -14,16 +14,16 @@ Pokepic:: ; 244e3
 	farcall LoadPartyMonPalette
 	ld hl, wPartyMon1Form
 	ld a, [wCurPartyMon]
-	farcall GetPartyLocation
+	call GetPartyLocation
 	farcall GetVariant
 .got_palette
 	call UpdateTimePals
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [wCurPartySpecies]
 	ld [wCurSpecies], a
 	call GetBaseData
-	ld de, VTiles1
+	ld de, vTiles1
 	predef GetFrontpic
 _Displaypic:
 	ld a, [wMenuBorderTopCoord]
@@ -34,7 +34,7 @@ _Displaypic:
 	ld c, a
 	call Coord2Tile
 	ld a, $80
-	ld [hGraphicStartTile], a
+	ldh [hGraphicStartTile], a
 	lb bc, 7, 7
 	predef PlaceGraphic
 	ld b, 1
@@ -49,9 +49,9 @@ Trainerpic::
 	farcall LoadTrainerPalette
 	call UpdateTimePals
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [wTrainerClass]
-	ld de, VTiles1
+	ld de, vTiles1
 	farcall GetTrainerPic
 	jr _Displaypic
 
@@ -59,7 +59,7 @@ Paintingpic::
 	farcall LoadPaintingPalette
 	call UpdateTimePals
 	ld de, PaintingFrameGFX
-	ld hl, VTiles0 tile ("┌" - 3)
+	ld hl, vTiles0 tile ("┌" - 3)
 	lb bc, BANK(PaintingFrameGFX), 9
 	call Get2bpp
 	ld hl, PokepicMenuDataHeader
@@ -74,26 +74,26 @@ Paintingpic::
 	ld [hl], a
 	call UpdateSprites
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [wTrainerClass]
-	ld de, VTiles1
+	ld de, vTiles1
 	farcall GetPaintingPic
 	jp _Displaypic
 
-ClosePokepic:: ; 24528
+ClosePokepic::
 	ld hl, PokepicMenuDataHeader
 	call CopyMenuDataHeader
 	call ClearMenuBoxInterior
 	call GetMemCGBLayout
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call LoadMapPart
 	call UpdateSprites
 	ld b, 1
 	call SafeCopyTilemapAtOnce
 	farjp ReloadVisibleSprites
 
-PokepicMenuDataHeader: ; 0x24547
+PokepicMenuDataHeader:
 	db $40 ; flags
 	db 04, 06 ; start coords
 	db 12, 14 ; end coords

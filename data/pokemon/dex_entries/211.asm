@@ -1,4 +1,3 @@
-; QwilfishPokedexEntry: ; 0x1d07b1
 	db "Balloon@" ; species name
 	dw 108, 90 ; height, width
 

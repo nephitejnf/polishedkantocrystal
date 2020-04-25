@@ -1,4 +1,3 @@
-; TeddiursaPokedexEntry: ; 0x1d09da
 	db "Little Bear@" ; species name
 	dw 200, 190 ; height, width
 

@@ -1,4 +1,3 @@
-; ZubatPokedexEntry: ; 0x18275d
 	db "Bat@" ; species name
 	dw 207, 170 ; height, width
 

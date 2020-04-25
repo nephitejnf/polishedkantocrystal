@@ -1,4 +1,3 @@
-; PersianPokedexEntry: ; 0x182c78
 	db "Classy Cat@" ; species name
 	dw 303, 710 ; height, width
 

@@ -1,4 +1,4 @@
-AIChooseMove: ; 440ce
+AIChooseMove:
 ; Score each move in wEnemyMonMoves starting from wBuffer1. Lower is better.
 ; Pick the move with the lowest score.
 
@@ -60,6 +60,14 @@ AIChooseMove: ; 440ce
 	cp 16 ; up to 16 scoring layers
 	jr z, .DecrementScores
 
+	call .BadgeAICheck
+	jr nc, .check_flags
+	inc c
+	push bc
+	push hl
+	jr .apply_layer
+
+.check_flags
 	push bc
 	ld d, BANK(TrainerClassAttributes)
 	predef FlagPredef
@@ -70,10 +78,15 @@ AIChooseMove: ; 440ce
 	push bc
 	push hl
 
+if DEF(DEBUG)
+	call AIDebug
+endc
+
 	ld a, d
 	and a
 	jr z, .CheckLayer
 
+.apply_layer
 	ld hl, AIScoringPointers
 	dec c
 	ld b, 0
@@ -86,6 +99,44 @@ AIChooseMove: ; 440ce
 	call FarCall_hl
 
 	jr .CheckLayer
+
+.BadgeAICheck:
+	push hl
+	push de
+	ld hl, .BadgeAILayers
+	push bc
+	ld de, 2
+	call IsInArray
+	jr nc, .done
+	push hl
+	ld hl, wBadges
+	ld b, wBadgesEnd - wBadges
+	call CountSetBits
+	pop hl
+	inc hl
+	ld c, [hl]
+
+	; If our total badges (in a) exceed badge threshold (in c), return c.
+	cp c
+	ccf
+.done
+	pop bc
+	pop de
+	pop hl
+	ret
+
+.BadgeAILayers:
+	; Don't do redundant things (such as paralyzing a paralyzed foe, etc)
+	db AI_BASIC_F, 0
+	; Learn about type advantage
+	db AI_TYPES_F, 2
+	; Learn about ineffective status moves (Hypnosis vs Insomnia, etc)
+	db AI_STATUS_F, 4
+	; Maximize damage potential
+	db AI_AGGRESSIVE_F, 8
+	; "Smart" AI
+	db AI_SMART_F, 16
+	db -1
 
 ; Decrement the scores of all moves one by one until one reaches 0.
 .DecrementScores:
@@ -168,10 +219,8 @@ AIChooseMove: ; 440ce
 	ld a, c
 	ld [wCurEnemyMoveNum], a
 	ret
-; 441af
 
-
-AIScoringPointers: ; 441af
+AIScoringPointers:
 	dw AI_Basic
 	dw AI_Setup
 	dw AI_Types
@@ -182,10 +231,97 @@ AIScoringPointers: ; 441af
 	dw AI_Cautious
 	dw AI_Status
 	dw AI_Risky
-	dw AI_None
-	dw AI_None
-	dw AI_None
-	dw AI_None
-	dw AI_None
-	dw AI_None
-; 441cf
+	dw DoNothing
+	dw DoNothing
+	dw DoNothing
+	dw DoNothing
+	dw DoNothing
+	dw DoNothing
+
+if DEF(DEBUG)
+AIDebug:
+; Prints out an AI score table and delays
+	push hl
+	push de
+	push bc
+
+	; Clear the text display
+	hlcoord 1, 13
+	push hl
+	ld c, 4
+	ld a, " "
+.clear_loop
+	ld b, 18
+.clear_row
+	ld [hli], a
+	dec b
+	jr nz, .clear_row
+	inc hl
+	inc hl
+	dec c
+	jr nz, .clear_loop
+
+	; Print move names
+	pop hl
+	ld de, wEnemyMonMoves
+	ld c, 4
+.move_loop
+	push de
+	push bc
+	ld [hl], "-"
+	ld a, [de]
+	inc de
+	and a
+	jr z, .get_score
+	ld [wNamedObjectIndexBuffer], a
+	push hl
+	call GetMoveName
+	pop hl
+	push hl
+	ld de, wStringBuffer1
+	rst PlaceString
+	pop hl
+.get_score
+	ld bc, MOVE_NAME_LENGTH
+	add hl, bc
+	pop bc
+	push bc
+	ld de, wStringBuffer5 - 1
+	ld a, 5
+.score_target
+	inc de
+	dec a
+	cp c
+	jr nz, .score_target
+
+	lb bc, 1, 3
+	push hl
+	call PrintNum
+	pop hl
+	ld bc, SCREEN_WIDTH - MOVE_NAME_LENGTH
+	add hl, bc
+	pop bc
+	pop de
+	inc de
+	dec c
+	jr nz, .move_loop
+
+	pop bc
+	push bc
+	hlcoord 18, 13
+	ld a, c
+	cp 10
+	jr c, .numeric
+	add "A" - "0" - 10
+.numeric
+	add "0"
+	ld [hl], a
+
+	call ApplyTilemap
+	ld c, 30
+	call DelayFrames
+	pop bc
+	pop de
+	pop hl
+	ret
+endc

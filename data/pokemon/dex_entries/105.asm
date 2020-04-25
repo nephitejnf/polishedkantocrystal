@@ -1,4 +1,3 @@
-; MarowakPokedexEntry: ; 0x1b90d2
 	db "Bone Keeper@" ; species name
 	dw 303, 990 ; height, width
 

@@ -22,42 +22,41 @@ connection: MACRO
 if "\1" == "north"
 	map_id \3
 	dw wDecompressScratch + \3_WIDTH * (\3_HEIGHT - 3) + \5
-	dw wOverworldMap + \4 + 3
+	dw wOverworldMapBlocks + \4 + 3
 	db \6
 	db \3_WIDTH
 	db \3_HEIGHT * 2 - 1
 	db (\4 - \5) * -2
-	dw wOverworldMap + \3_HEIGHT * (\3_WIDTH + 6) + 1
+	dw wOverworldMapBlocks + \3_HEIGHT * (\3_WIDTH + 6) + 1
 elif "\1" == "south"
 	map_id \3
 	dw wDecompressScratch + \5
-	dw wOverworldMap + (CURRENT_MAP_HEIGHT + 3) * (CURRENT_MAP_WIDTH + 6) + \4 + 3
+	dw wOverworldMapBlocks + (CURRENT_MAP_HEIGHT + 3) * (CURRENT_MAP_WIDTH + 6) + \4 + 3
 	db \6
 	db \3_WIDTH
 	db 0
 	db (\4 - \5) * -2
-	dw wOverworldMap + \3_WIDTH + 7
+	dw wOverworldMapBlocks + \3_WIDTH + 7
 elif "\1" == "west"
 	map_id \3
 	dw wDecompressScratch + (\3_WIDTH * \5) + \3_WIDTH - 3
-	dw wOverworldMap + (CURRENT_MAP_WIDTH + 6) * (\4 + 3)
+	dw wOverworldMapBlocks + (CURRENT_MAP_WIDTH + 6) * (\4 + 3)
 	db \6
 	db \3_WIDTH
 	db (\4 - \5) * -2
 	db \3_WIDTH * 2 - 1
-	dw wOverworldMap + \3_WIDTH * 2 + 6
+	dw wOverworldMapBlocks + \3_WIDTH * 2 + 6
 elif "\1" == "east"
 	map_id \3
 	dw wDecompressScratch + (\3_WIDTH * \5)
-	dw wOverworldMap + (CURRENT_MAP_WIDTH + 6) * (\4 + 3 + 1) - 3
+	dw wOverworldMapBlocks + (CURRENT_MAP_WIDTH + 6) * (\4 + 3 + 1) - 3
 	db \6
 	db \3_WIDTH
 	db (\4 - \5) * -2
 	db 0
-	dw wOverworldMap + \3_WIDTH + 7
+	dw wOverworldMapBlocks + \3_WIDTH + 7
 endc
 ENDM
-
 
 	map_attributes NewBarkTown, NEW_BARK_TOWN, $5, WEST | EAST
 	connection west, Route29, ROUTE_29, 0, 0, 9
@@ -818,7 +817,7 @@ ENDM
 	map_attributes CianwoodPharmacy, CIANWOOD_PHARMACY, $0, 0
 	map_attributes CianwoodCityPhotoStudio, CIANWOOD_CITY_PHOTO_STUDIO, $0, 0
 	map_attributes CianwoodLugiaSpeechHouse, CIANWOOD_LUGIA_SPEECH_HOUSE, $0, 0
-	map_attributes StatsJudgesHouse, STATS_JUDGES_HOUSE, $0, 0
+	map_attributes MoveManiacsHouse, MOVE_MANIACS_HOUSE, $0, 0
 	map_attributes BattleTower1F, BATTLE_TOWER_1F, $0, 0
 	map_attributes BattleTower2F, BATTLE_TOWER_2F, $0, 0
 	map_attributes BattleTowerBattleRoom, BATTLE_TOWER_BATTLE_ROOM, $0, 0

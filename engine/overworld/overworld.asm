@@ -1,15 +1,14 @@
-_ReplaceKrisSprite:: ; 14135
+_ReplaceKrisSprite::
 	call GetPlayerSprite
 	ld a, [wPlayerSprite]
-	ld [hUsedSpriteIndex], a
+	ldh [hUsedSpriteIndex], a
 	xor a
-	ld [hUsedSpriteTile], a
+	ldh [hUsedSpriteTile], a
 	ld hl, wSpriteFlags
 	res 5, [hl]
 	jp GetUsedSprite
-; 14146
 
-GetPlayerSprite: ; 14183
+GetPlayerSprite:
 ; Get Chris or Kris's sprite.
 	ld hl, .Chris
 	ld a, [wPlayerSpriteSetupFlags]
@@ -58,10 +57,8 @@ GetPlayerSprite: ; 14183
 	db PLAYER_SURF,      SPRITE_KRIS_SURF
 	db PLAYER_SURF_PIKA, SPRITE_SURFING_PIKACHU
 	db $ff
-; 141c9
 
-
-MapCallbackSprites_LoadUsedSpritesGFX: ; 14209
+MapCallbackSprites_LoadUsedSpritesGFX:
 	ld a, MAPCALLBACK_SPRITES
 	call RunMapCallback
 ReloadVisibleSprites::
@@ -70,25 +67,21 @@ ReloadVisibleSprites::
 	push bc
 	call GetPlayerSprite
 	xor a
-	ld [hUsedSpriteIndex], a
+	ldh [hUsedSpriteIndex], a
 	call ReloadSpriteIndex
 	call LoadEmoteGFX
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 ReloadSpriteIndex::
 ; Reloads sprites using hUsedSpriteIndex.
 ; Used to reload variable sprites
 	ld hl, wObjectStructs
 	ld de, OBJECT_STRUCT_LENGTH
-	push bc
-	ld a, [hUsedSpriteIndex]
+	ldh a, [hUsedSpriteIndex]
 	ld b, a
 	xor a
 .loop
-	ld [hObjectStructIndexBuffer], a
+	ldh [hObjectStructIndexBuffer], a
 	ld a, [hl]
 	and a
 	jr z, .done
@@ -98,20 +91,27 @@ ReloadSpriteIndex::
 	jr nz, .done
 .continue
 	push hl
+	; hl points to an object_struct; we want bc to point to a map_object,
+	; to get the radius (actually the SPRITE_MON_ICON species).
+	push bc
+	ld bc, OBJECT_RADIUS - MAPOBJECT_RADIUS
+	add hl, bc
+	ld b, h
+	ld c, l
 	call GetSpriteVTile
+	pop bc
 	pop hl
 	push hl
-	inc hl
-	inc hl
-	ld [hl], a
+	inc hl ; skip OBJECT_SPRITE
+	inc hl ; skip OBJECT_MAP_OBJECT_INDEX
+	ld [hl], a ; OBJECT_SPRITE_TILE
 	pop hl
 .done
 	add hl, de
-	ld a, [hObjectStructIndexBuffer]
+	ldh a, [hObjectStructIndexBuffer]
 	inc a
 	cp NUM_OBJECT_STRUCTS
 	jr nz, .loop
-	pop bc
 	ret
 
 LoadEmoteGFX::
@@ -132,18 +132,14 @@ LoadEmoteGFX::
 	call LoadEmote
 	ld c, EMOTE_PUDDLE_SPLASH
 	jp LoadEmote
-; 14236
 
-
-
-SafeGetSprite: ; 14236
+SafeGetSprite:
 	push hl
 	call GetSprite
 	pop hl
 	ret
-; 1423c
 
-GetSprite:: ; 1423c
+GetSprite::
 	call GetMonSprite
 	ret c
 
@@ -171,14 +167,11 @@ GetSprite:: ; 1423c
 	ret z
 	ld c, 12
 	ret
-; 14259
 
-
-GetMonSprite: ; 14259
+GetMonSprite:
 ; Return carry if a monster sprite was loaded.
-
-	cp SPRITE_POKEMON
-	jr c, .Normal
+	cp SPRITE_MON_ICON
+	jr z, .MonIcon
 	cp SPRITE_MON_DOLL_1
 	jr z, .MonDoll1
 	cp SPRITE_MON_DOLL_2
@@ -189,57 +182,9 @@ GetMonSprite: ; 14259
 	jr z, .BreedMon2
 	cp SPRITE_GROTTO_MON
 	jr z, .GrottoMon
+
 	cp SPRITE_VARS
-	jr nc, .Variable
-	jr .Icon
-
-.Normal:
-	and a
-	ret
-
-.Icon:
-	sub SPRITE_POKEMON
-	ld e, a
-	ld d, 0
-	ld hl, SpriteMons
-	add hl, de
-	ld a, [hl]
-	jr .Mon
-
-.BreedMon1
-	ld a, [wBreedMon1Species]
-	jr .Mon
-
-.BreedMon2
-	ld a, [wBreedMon2Species]
-	jr .Mon
-
-.GrottoMon
-	farcall GetHiddenGrottoContents
-	ld a, [hl]
-	jr .Mon
-
-.MonDoll1
-	ld a, [wLeftOrnament]
-	farcall GetDecorationSpecies
-	jr .Mon
-
-.MonDoll2
-	ld a, [wRightOrnament]
-	farcall GetDecorationSpecies
-
-.Mon:
-	ld e, a
-	and a
-	jr z, .NoBreedmon
-
-	farcall LoadOverworldMonIcon
-
-	lb hl, 0, MON_SPRITE
-	scf
-	ret
-
-.Variable:
+	jr c, .Normal
 	sub SPRITE_VARS
 	ld e, a
 	ld d, 0
@@ -247,17 +192,76 @@ GetMonSprite: ; 14259
 	add hl, de
 	ld a, [hl]
 	and a
-	jp nz, GetMonSprite
+	jr nz, GetMonSprite
+	; fallthrough
 
-.NoBreedmon:
+.NoSprite:
 	ld a, 1
 	lb hl, 0, MON_SPRITE
+.Normal:
 	and a
 	ret
-; 142a7
 
+.MonIcon:
+; Everything that calls GetMonSprite either points to a map_object struct in bc,
+; or will not be used for Pokémon icons, so this SPRITE_MON_ICON can assume
+; that bc takes MAPOBJECT_* offsets.
+; (That means the player, Battle Tower trainers, and variable sprites cannot
+;  use Pokémon icons.)
+	ld hl, MAPOBJECT_RADIUS
+	add hl, bc
+	ld a, [hl]
+	jr .NoFormMon
 
-_DoesSpriteHaveFacings:: ; 142a7
+.BreedMon1:
+	ld a, [wBreedMon1Shiny]
+	ld d, a
+	ld a, [wBreedMon1Form]
+	and FORM_MASK
+	ld e, a
+	ld a, [wBreedMon1Species]
+	jr .Mon
+
+.BreedMon2:
+	ld a, [wBreedMon2Shiny]
+	ld d, a
+	ld a, [wBreedMon2Form]
+	and FORM_MASK
+	ld e, a
+	ld a, [wBreedMon2Species]
+	jr .Mon
+
+.GrottoMon:
+	farcall GetHiddenGrottoContents
+	ld a, [hl]
+	jr .NoFormMon
+
+.MonDoll1:
+	ld a, [wDecoLeftOrnament]
+	jr .MonDoll
+
+.MonDoll2:
+	ld a, [wDecoRightOrnament]
+.MonDoll:
+	farcall GetDecorationSpecies
+	; fallthrough
+
+.NoFormMon:
+	lb de, 0, 0
+.Mon:
+	and a
+	jr z, .NoSprite
+	ld [wCurIcon], a
+	ld hl, wCurIconPersonality
+	ld a, d
+	ld [hli], a
+	ld [hl], e
+	farcall LoadOverworldMonIcon
+	lb hl, 0, MON_SPRITE
+	scf
+	ret
+
+_DoesSpriteHaveFacings::
 ; Checks to see whether we can apply a facing to a sprite.
 ; Returns zero for Pokémon sprites, carry for the rest.
 	cp SPRITE_POKEMON
@@ -270,11 +274,8 @@ _DoesSpriteHaveFacings:: ; 142a7
 .facings
 	and a
 	ret
-; 142c4
 
-
-_GetSpritePalette:: ; 142c4
-	ld a, c
+_GetSpritePalette::
 	call GetMonSprite
 	jr c, .is_pokemon
 
@@ -284,7 +285,7 @@ _GetSpritePalette:: ; 142c4
 	ld b, 0
 	ld a, NUM_SPRITEHEADER_FIELDS
 	rst AddNTimes
-	ld c, [hl]
+	ld a, [hl]
 	ret
 
 .is_pokemon
@@ -294,9 +295,7 @@ _GetSpritePalette:: ; 142c4
 	ld a, [wMapNumber]
 	cp MAP_KRISS_HOUSE_2F
 	jr nz, .not_doll
-	farcall GetMonIconPalette
-	ld c, a
-	ret
+	farjp GetOverworldMonIconPalette
 
 .not_doll
 	cp GROUP_ROUTE_34
@@ -304,36 +303,36 @@ _GetSpritePalette:: ; 142c4
 	ld a, [wMapNumber]
 	cp MAP_ROUTE_34
 	jr nz, .not_daycare
-	farcall GetMonIconPalette
+	farcall GetOverworldMonIconPalette
+
+	; gray, pink, and teal exist in the party menu and the player's room,
+	; but not on Route 34 for the Daycare
 	cp PAL_OW_GRAY
-	ld c, PAL_OW_ROCK
-	ret z
-	cp PAL_OW_PINK
-	ld c, PAL_OW_RED
-	ret z
+	jr z, .use_rock
 	cp PAL_OW_TEAL
-	ld c, PAL_OW_GREEN
-	ret z
-	ld c, a
-	ret
-
+	jr z, .use_green
+	cp PAL_OW_PINK
+	ret nz
 .not_daycare
-	ld c, PAL_OW_RED
+	xor a ; PAL_OW_RED
 	ret
-; 142db
 
+.use_rock
+	ld a, PAL_OW_ROCK
+	ret
 
-GetUsedSprite:: ; 143c8
-	ld a, [hUsedSpriteIndex]
+.use_green
+	ld a, PAL_OW_GREEN
+	ret
+
+GetUsedSprite::
+	ldh a, [hUsedSpriteIndex]
 	call SafeGetSprite
-	ld a, [hUsedSpriteTile]
+	ldh a, [hUsedSpriteTile]
 	call .GetTileAddr
 	push bc
 	push hl
-	push hl
-	ld h, d
-	ld l, e
-	pop de
+	call SwapHLDE
 	call FarDecompressWRA6InB
 	pop hl
 	pop bc
@@ -360,7 +359,7 @@ endr
 	bit 6, a
 	ret nz
 
-	ld a, [hUsedSpriteIndex]
+	ldh a, [hUsedSpriteIndex]
 	call _DoesSpriteHaveFacings
 	ret c
 
@@ -374,18 +373,16 @@ endr
 	ld h, a
 
 .CopyToVram:
-	ld a, [rVBK]
+	ldh a, [rVBK]
 	push af
 	ld a, [wSpriteFlags]
-	bit 5, a
-	ld a, $0
-	jr z, .bankswitch
-	inc a
-.bankswitch
-	ld [rVBK], a
+	and 1 << 5
+	swap a
+	rra
+	ldh [rVBK], a
 	call Request2bppInWRA6
 	pop af
-	ld [rVBK], a
+	ldh [rVBK], a
 	ret
 
 .GetTileAddr:
@@ -397,14 +394,14 @@ rept 4
 	add hl, hl
 endr
 	ld a, l
-	add VTiles0 % $100
+	add LOW(vTiles0)
 	ld l, a
 	ld a, h
-	adc VTiles0 / $100
+	adc HIGH(vTiles0)
 	ld h, a
 	ret
 
-LoadEmote:: ; 1442f
+LoadEmote::
 ; Get the address of the pointer to emote c.
 	ld a, c
 	ld bc, 6
@@ -426,16 +423,11 @@ LoadEmote:: ; 1442f
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-; if the emote has a length of 0, do not proceed (error handling)
-	ld a, c
-	and a
-	ret z
+; swap the source into hl and the destination into de
+	call SwapHLDE
 ; load into vram0
-	jp Get2bpp
-
+	jp DecompressRequest2bpp
 
 INCLUDE "data/sprites/emotes.asm"
-
-INCLUDE "data/sprites/sprite_mons.asm"
 
 INCLUDE "data/sprites/sprites.asm"

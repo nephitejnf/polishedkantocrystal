@@ -2,24 +2,22 @@
 
 ; do not talk to the RTC hardware in the no-RTC patch
 if !DEF(NO_RTC)
-LatchClock:: ; 59c
+LatchClock::
 ; latch clock counter data
 	xor a
 	ld [MBC3LatchClock], a
 	inc a
 	ld [MBC3LatchClock], a
 	ret
-; 5a7
 endc
 
-UpdateTime:: ; 5a7
+UpdateTime::
 	call GetClock ; read the clock hardware
 	call FixDays  ; keep the number of days passed in-bounds
 	call FixTime  ; calculate the time based on the start time and RTC duration
 	farjp GetTimeOfDay
-; 5b7
 
-GetClock:: ; 5b7
+GetClock::
 ; store clock data in hRTCDayHi-hRTCSeconds
 
 if DEF(NO_RTC)
@@ -41,46 +39,45 @@ else
 	ld [hl], RTC_S
 	ld a, [de]
 	and $3f
-	ld [hRTCSeconds], a
+	ldh [hRTCSeconds], a
 
 	ld [hl], RTC_M
 	ld a, [de]
 	and $3f
-	ld [hRTCMinutes], a
+	ldh [hRTCMinutes], a
 
 	ld [hl], RTC_H
 	ld a, [de]
 	and $1f
-	ld [hRTCHours], a
+	ldh [hRTCHours], a
 
 	ld [hl], RTC_DL
 	ld a, [de]
-	ld [hRTCDayLo], a
+	ldh [hRTCDayLo], a
 
 	ld [hl], RTC_DH
 	ld a, [de]
-	ld [hRTCDayHi], a
+	ldh [hRTCDayHi], a
 
 ; unlatch clock / disable clock r/w
 	jp CloseSRAM
 endc
-; 5e8
 
-FixDays:: ; 5e8
+FixDays::
 ; fix day count
 ; mod by 140
 
 ; check if day count > 255 (bit 8 set)
-	ld a, [hRTCDayHi] ; DH
+	ldh a, [hRTCDayHi] ; DH
 	bit 0, a
 	jr z, .daylo
 ; reset dh (bit 8)
 	res 0, a
-	ld [hRTCDayHi], a ; DH
+	ldh [hRTCDayHi], a ; DH
 
 ; mod 140
 ; mod twice since bit 8 (DH) was set
-	ld a, [hRTCDayLo] ; DL
+	ldh a, [hRTCDayLo] ; DL
 .modh
 	sub 140
 	jr nc, .modh
@@ -90,7 +87,7 @@ FixDays:: ; 5e8
 	add 140
 
 ; update dl
-	ld [hRTCDayLo], a ; DL
+	ldh [hRTCDayLo], a ; DL
 
 ; flag for sRTCStatusFlags
 	ld a, %01000000
@@ -98,7 +95,7 @@ FixDays:: ; 5e8
 
 .daylo
 ; quit if fewer than 140 days have passed
-	ld a, [hRTCDayLo] ; DL
+	ldh a, [hRTCDayLo] ; DL
 	cp 140
 	jr c, .quit
 
@@ -109,7 +106,7 @@ FixDays:: ; 5e8
 	add 140
 
 ; update dl
-	ld [hRTCDayLo], a ; DL
+	ldh [hRTCDayLo], a ; DL
 
 ; flag for sRTCStatusFlags
 	ld a, %00100000
@@ -125,14 +122,13 @@ FixDays:: ; 5e8
 .quit
 	xor a
 	ret
-; 61d
 
-FixTime:: ; 61d
+FixTime::
 ; add ingame time (set at newgame) to current time
 ;				  day     hr    min    sec
 ; store time in wCurDay, hHours, hMinutes, hSeconds
 
-	ld a, [hRTCSeconds]
+	ldh a, [hRTCSeconds]
 	ld c, a
 	ld a, [wStartSecond]
 	add c
@@ -140,10 +136,10 @@ FixTime:: ; 61d
 	jr nc, .updatesec
 	add 60
 .updatesec
-	ld [hSeconds], a
+	ldh [hSeconds], a
 
 	ccf ; carry is set, so turn it off
-	ld a, [hRTCMinutes]
+	ldh a, [hRTCMinutes]
 	ld c, a
 	ld a, [wStartMinute]
 	adc c
@@ -151,10 +147,10 @@ FixTime:: ; 61d
 	jr nc, .updatemin
 	add 60
 .updatemin
-	ld [hMinutes], a
+	ldh [hMinutes], a
 
 	ccf ; carry is set, so turn it off
-	ld a, [hRTCHours]
+	ldh a, [hRTCHours]
 	ld c, a
 	ld a, [wStartHour]
 	adc c
@@ -162,47 +158,44 @@ FixTime:: ; 61d
 	jr nc, .updatehr
 	add 24
 .updatehr
-	ld [hHours], a
+	ldh [hHours], a
 
 	ccf ; carry is set, so turn it off
-	ld a, [hRTCDayLo]
+	ldh a, [hRTCDayLo]
 	ld c, a
 	ld a, [wStartDay]
 	adc c
 	ld [wCurDay], a
 	ret
-; 658
 
-SetTimeOfDay:: ; 658
+SetTimeOfDay::
 	xor a
 	ld [wStringBuffer2], a
 	ld [wStringBuffer2 + 3], a
 	jr InitTime
 
-SetDayOfWeek:: ; 663
+SetDayOfWeek::
 	call UpdateTime
-	ld a, [hHours]
+	ldh a, [hHours]
 	ld [wStringBuffer2 + 1], a
-	ld a, [hMinutes]
+	ldh a, [hMinutes]
 	ld [wStringBuffer2 + 2], a
-	ld a, [hSeconds]
+	ldh a, [hSeconds]
 	ld [wStringBuffer2 + 3], a
 
-InitTime:: ; 677
+InitTime::
 	farjp _InitTime
-; 67e
 
-PanicResetClock:: ; 67e
+PanicResetClock::
 	xor a
-	ld [hRTCSeconds], a
-	ld [hRTCMinutes], a
-	ld [hRTCHours], a
-	ld [hRTCDayLo], a
-	ld [hRTCDayHi], a
+	ldh [hRTCSeconds], a
+	ldh [hRTCMinutes], a
+	ldh [hRTCHours], a
+	ldh [hRTCDayLo], a
+	ldh [hRTCDayHi], a
 ; fallthrough
-; 685
 
-SetClock:: ; 691
+SetClock::
 ; set clock data from hram
 
 ; do not talk to the RTC hardware in the no-RTC patch
@@ -224,32 +217,31 @@ else
 	ld de, MBC3RTC
 
 	ld [hl], RTC_S
-	ld a, [hRTCSeconds]
+	ldh a, [hRTCSeconds]
 	ld [de], a
 
 	ld [hl], RTC_M
-	ld a, [hRTCMinutes]
+	ldh a, [hRTCMinutes]
 	ld [de], a
 
 	ld [hl], RTC_H
-	ld a, [hRTCHours]
+	ldh a, [hRTCHours]
 	ld [de], a
 
 	ld [hl], RTC_DL
-	ld a, [hRTCDayLo]
+	ldh a, [hRTCDayLo]
 	ld [de], a
 
 	ld [hl], RTC_DH
-	ld a, [hRTCDayHi]
+	ldh a, [hRTCDayHi]
 	res 6, a ; make sure timer is active
 	ld [de], a
 
 ; cleanup
 	jp CloseSRAM ; unlatch clock, disable clock r/w
 endc
-; 6c4
 
-RecordRTCStatus:: ; 6d3
+RecordRTCStatus::
 ; append flags to sRTCStatusFlags
 	ld hl, sRTCStatusFlags
 	push af
@@ -259,12 +251,10 @@ RecordRTCStatus:: ; 6d3
 	or [hl]
 	ld [hl], a
 	jp CloseSRAM
-; 6e3
 
-CheckRTCStatus:: ; 6e3
+CheckRTCStatus::
 ; check sRTCStatusFlags
 	ld a, BANK(sRTCStatusFlags)
 	call GetSRAMBank
 	ld a, [sRTCStatusFlags]
 	jp CloseSRAM
-; 6ef

@@ -1,4 +1,3 @@
-; TogepiPokedexEntry: ; 0x1cd396
 	db "Spike Ball@" ; species name
 	dw 100, 30 ; height, width
 

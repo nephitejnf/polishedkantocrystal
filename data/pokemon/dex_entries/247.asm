@@ -1,4 +1,3 @@
-; PupitarPokedexEntry: ; 0x1d1709
 	db "Hard Shell@" ; species name
 	dw 311, 3350 ; height, width
 

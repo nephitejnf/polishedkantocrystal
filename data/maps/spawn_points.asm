@@ -4,7 +4,7 @@ spawn: MACRO
 	db \2, \3
 ENDM
 
-SpawnPoints: ; 0x152ab
+SpawnPoints:
 	spawn KRISS_HOUSE_2F,              3,  3
 
 	spawn PALLET_TOWN,                 5,  6
@@ -37,4 +37,5 @@ SpawnPoints: ; 0x152ab
 	spawn BLACKTHORN_CITY,            21, 30
 	spawn SILVER_CAVE_OUTSIDE,        23, 14
 	spawn FAST_SHIP_CABINS_SW_SSW_NW,  6,  2
+
 	spawn N_A,                        -1, -1

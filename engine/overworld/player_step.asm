@@ -1,10 +1,10 @@
-_HandlePlayerStep:: ; d497 (3:5497)
+_HandlePlayerStep::
 	ld a, [wPlayerStepFlags]
-	add a, a
+	add a
 	jr c, .updateOverworldMap ; starting step
-	add a, a
+	add a
 	jr c, .updatePlayerCoords ; finishing step
-	add a, a
+	add a
 	jr c, .finish ; ongoing step
 	ret
 
@@ -32,39 +32,35 @@ _HandlePlayerStep:: ; d497 (3:5497)
 	ld [wPlayerBGMapOffsetY], a
 	ret
 
-ScrollScreen:: ; d4d2 (3:54d2)
+ScrollScreen::
 	ld a, [wPlayerStepVectorX]
 	ld d, a
 	ld a, [wPlayerStepVectorY]
 	ld e, a
-	ld a, [hSCX]
+	ldh a, [hSCX]
 	add d
-	ld [hSCX], a
-	ld a, [hSCY]
+	ldh [hSCX], a
+	ldh a, [hSCY]
 	add e
-	ld [hSCY], a
+	ldh [hSCY], a
 	ret
 
-HandlePlayerStep: ; d4e5 (3:54e5)
+HandlePlayerStep:
 	ld hl, wHandlePlayerStep
 	ld a, [hl]
 	and a
 	ret z
 	dec [hl]
 	ld a, [hl]
-	ld hl, .Jumptable
-	rst JumpTable
-.fail
-	ret
+	call StackJumpTable
 
-.Jumptable: ; d4f2 (3:54f2)
-
+.Jumptable:
 	dw GetMovementPermissions
 	dw BufferScreen
-	dw .fail
-	dw .fail
+	dw DoNothing
+	dw DoNothing
 
-UpdatePlayerCoords: ; d511 (3:5511)
+UpdatePlayerCoords:
 	ld hl, wYCoord
 	ld a, [wPlayerStepDirection]
 	and a
@@ -83,7 +79,7 @@ UpdatePlayerCoords: ; d511 (3:5511)
 	dec [hl]
 	ret
 
-UpdateOverworldMap: ; d536 (3:5536)
+UpdateOverworldMap:
 	ld a, [wPlayerStepDirection]
 	and a
 	jr z, .stepDown
@@ -110,7 +106,7 @@ UpdateOverworldMap: ; d536 (3:5536)
 	call _LoadMapPart
 	jp ScrollMapRight
 
-.ScrollOverworldMapDown: ; d571 (3:5571)
+.ScrollOverworldMapDown:
 	ld a, [wBGMapAnchor]
 	add 2 * BG_MAP_WIDTH
 	ld [wBGMapAnchor], a
@@ -118,7 +114,7 @@ UpdateOverworldMap: ; d536 (3:5536)
 	ld a, [wBGMapAnchor + 1]
 	inc a
 	and $3
-	or VBGMap0 / $100
+	or HIGH(vBGMap0)
 	ld [wBGMapAnchor + 1], a
 .not_overflowed
 	ld hl, wMetatileStandingY
@@ -136,7 +132,7 @@ UpdateOverworldMap: ; d536 (3:5536)
 	inc [hl]
 	ret
 
-.ScrollOverworldMapUp: ; d5a2 (3:55a2)
+.ScrollOverworldMapUp:
 	ld a, [wBGMapAnchor]
 	sub 2 * BG_MAP_WIDTH
 	ld [wBGMapAnchor], a
@@ -144,7 +140,7 @@ UpdateOverworldMap: ; d536 (3:5536)
 	ld a, [wBGMapAnchor + 1]
 	dec a
 	and $3
-	or VBGMap0 / $100
+	or HIGH(vBGMap0)
 	ld [wBGMapAnchor + 1], a
 .not_underflowed
 	ld hl, wMetatileStandingY
@@ -164,7 +160,7 @@ UpdateOverworldMap: ; d536 (3:5536)
 	dec [hl]
 	ret
 
-.ScrollOverworldMapLeft: ; d5d5 (3:55d5)
+.ScrollOverworldMapLeft:
 	ld a, [wBGMapAnchor]
 	ld e, a
 	and $e0
@@ -182,13 +178,13 @@ UpdateOverworldMap: ; d536 (3:5536)
 	ld [hl], 1
 	ld hl, wOverworldMapAnchor
 	ld a, [hl]
-	sub 1
+	sub 1 ; no-optimize a++|a-- (dec a can't set carry)
 	ld [hli], a
 	ret nc
 	dec [hl]
 	ret
 
-.ScrollOverworldMapRight: ; d5fe (3:55fe)
+.ScrollOverworldMapRight:
 	ld a, [wBGMapAnchor]
 	ld e, a
 	and $e0

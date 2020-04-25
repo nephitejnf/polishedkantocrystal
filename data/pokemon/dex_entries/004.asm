@@ -1,4 +1,3 @@
-; CharmanderPokedexEntry: ; 0x1817db
 	db "Lizard@" ; species name
 	dw 200, 190 ; height, width
 

@@ -32,10 +32,10 @@ BattleCommandPointers:
 	command damagevariation
 	command checkhit
 	command lowersub
-	command hittargetnosub
+	command moveanimnosub
 	command raisesub
 	command failuretext
-	command checkfaint
+	command applydamage
 	command criticaltext
 	command supereffectivetext
 	command postfainteffects
@@ -71,11 +71,9 @@ BattleCommandPointers:
 	command disable
 	command cleartext
 	command charge
-	command checkcharge
 	command traptarget
 	command growth
 	command rampage
-	command checkrampage
 	command constantdamage
 	command counter
 	command encore
@@ -99,7 +97,6 @@ BattleCommandPointers:
 	command startsandstorm
 	command starthail
 	command endure
-	command checkcurl
 	command rolloutpower
 	command conditionalboost
 	command attract
@@ -124,24 +121,21 @@ BattleCommandPointers:
 	command checkfuturesight
 	command futuresight
 	command doubleminimizedamage
-	command skipsuncharge
 	command thunderaccuracy
 	command teleport
 	command switchout
-	command ragedamage
 	command resettypematchup
-	command allstatsup
 	command raisesubnoanim
 	command lowersubnoanim
 	command clearmissdamage
 	command movedelay
-	command hittarget
+	command moveanim
 	command tristatuschance
 	command startloop
 	command curl
+	command minimize
 	command burn
 	command bounceback
-	command pickpocket
 	command suckerpunch
 	command toxicspikes
 	command roost

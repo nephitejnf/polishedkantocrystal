@@ -34,6 +34,7 @@ PikachuAnimationExtraPointers:
 	dw PikachuSurfAnimationExtra
 	dw PikachuPikaAnimationExtra
 	dw PikachuChuchuAnimationExtra
+	dw PikachuSparkAnimationExtra
 
 PichuAnimationExtraPointers:
 	dw PichuPlainAnimationExtra
@@ -61,6 +62,8 @@ MagikarpAnimationExtraPointers:
 	dw MagikarpBubblesAnimationExtra
 	dw MagikarpForeheadAnimationExtra
 	dw MagikarpMaskAnimationExtra
+	dw MagikarpSaucyAnimationExtra
+	dw MagikarpRaindropAnimationExtra
 
 GyaradosAnimationExtraPointers:
 rept NUM_MAGIKARP
@@ -71,3 +74,87 @@ endr
 MewtwoAnimationExtraPointers:
 	dw MewtwoPlainAnimationExtra
 	dw MewtwoArmoredAnimationExtra
+
+RattataAnimationExtraPointers:
+	dw RattataPlainAnimationExtra
+	dw RattataAlolanAnimationExtra
+
+RaticateAnimationExtraPointers:
+	dw RaticatePlainAnimationExtra
+	dw RaticateAlolanAnimationExtra
+
+SandshrewAnimationExtraPointers:
+	dw SandshrewPlainAnimationExtra
+	dw SandshrewAlolanAnimationExtra
+
+SandslashAnimationExtraPointers:
+	dw SandslashPlainAnimationExtra
+	dw SandslashAlolanAnimationExtra
+
+VulpixAnimationExtraPointers:
+	dw VulpixPlainAnimationExtra
+	dw VulpixAlolanAnimationExtra
+
+NinetalesAnimationExtraPointers:
+	dw NinetalesPlainAnimationExtra
+	dw NinetalesAlolanAnimationExtra
+
+DiglettAnimationExtraPointers:
+	dw DiglettPlainAnimationExtra
+	dw DiglettAlolanAnimationExtra
+
+DugtrioAnimationExtraPointers:
+	dw DugtrioPlainAnimationExtra
+	dw DugtrioAlolanAnimationExtra
+
+MeowthAnimationExtraPointers:
+	dw MeowthPlainAnimationExtra
+	dw MeowthAlolanAnimationExtra
+
+PersianAnimationExtraPointers:
+	dw PersianPlainAnimationExtra
+	dw PersianAlolanAnimationExtra
+
+GeodudeAnimationExtraPointers:
+	dw GeodudePlainAnimationExtra
+	dw GeodudeAlolanAnimationExtra
+
+GravelerAnimationExtraPointers:
+	dw GravelerPlainAnimationExtra
+	dw GravelerAlolanAnimationExtra
+
+GolemAnimationExtraPointers:
+	dw GolemPlainAnimationExtra
+	dw GolemAlolanAnimationExtra
+
+GrimerAnimationExtraPointers:
+	dw GrimerPlainAnimationExtra
+	dw GrimerAlolanAnimationExtra
+
+MukAnimationExtraPointers:
+	dw MukPlainAnimationExtra
+	dw MukAlolanAnimationExtra
+
+RaichuAnimationExtraPointers:
+	dw RaichuPlainAnimationExtra
+	dw RaichuAlolanAnimationExtra
+
+ExeggutorAnimationExtraPointers:
+	dw ExeggutorPlainAnimationExtra
+	dw ExeggutorAlolanAnimationExtra
+
+MarowakAnimationExtraPointers:
+	dw MarowakPlainAnimationExtra
+	dw MarowakAlolanAnimationExtra
+
+PonytaAnimationExtraPointers:
+	dw PonytaPlainAnimationExtra
+	dw PonytaGalarianAnimationExtra
+
+RapidashAnimationExtraPointers:
+	dw RapidashPlainAnimationExtra
+	dw RapidashGalarianAnimationExtra
+
+WeezingAnimationExtraPointers:
+	dw WeezingPlainAnimationExtra
+	dw WeezingGalarianAnimationExtra

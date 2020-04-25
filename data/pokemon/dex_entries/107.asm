@@ -1,4 +1,3 @@
-; HitmonchanPokedexEntry: ; 0x1b91a4
 	db "Punching@" ; species name
 	dw 407, 1110 ; height, width
 

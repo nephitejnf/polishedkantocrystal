@@ -1,4 +1,3 @@
-; SwinubPokedexEntry: ; 0x1d0b8d
 	db "Pig@" ; species name
 	dw 104, 140 ; height, width
 

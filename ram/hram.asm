@@ -1,160 +1,225 @@
-HRAM_START         EQU $ff80
-hPushOAM           EQU $ff80 ; 10 bytes
+SECTION "HRAM", HRAM
 
-hROMBankBackup     EQU $ff8a
-hBuffer            EQU $ff8b
-hLYOverrideStackCopyAmount EQU $ff8c
+HRAM_START::
 
-hRTCDayHi          EQU $ff8d
-hRTCDayLo          EQU $ff8e
-hRTCHours          EQU $ff8f
-hRTCMinutes        EQU $ff90
-hRTCSeconds        EQU $ff91
+hPushOAM:: ds 5
 
-hHours             EQU $ff94
-hMinutes           EQU $ff96
-hSeconds           EQU $ff98
+hScriptVar:: db
 
-hVBlankCounter     EQU $ff9b
+hROMBankBackup:: db
 
-hROMBank           EQU $ff9d
-hVBlank            EQU $ff9e
-hMapEntryMethod    EQU $ff9f
-hMenuReturn        EQU $ffa0
+; TODO: come up with other names for hBuffer
+; related to home/audio.asm and home/decompress.asm
+hTempBank::
+hBuffer:: db
+hLYOverrideStackCopyAmount:: db
 
-hJoypadReleased    EQU $ffa2
-hJoypadPressed     EQU $ffa3
-hJoypadDown        EQU $ffa4
-hJoypadSum         EQU $ffa5
-hJoyReleased       EQU $ffa6
-hJoyPressed        EQU $ffa7
-hJoyDown           EQU $ffa8
-hJoyLast           EQU $ffa9
-hInMenu            EQU $ffaa
+hRTCDayHi::   db
+hRTCDayLo::   db
+hRTCHours::   db
+hRTCMinutes:: db
+hRTCSeconds:: db
 
-hGraphicStartTile        EQU $ffad
-hMoveMon                 EQU $ffae
-hMapObjectIndexBuffer    EQU $ffaf
-hObjectStructIndexBuffer EQU $ffb0
+hHours:: db
+hMinutes:: db
+hSeconds:: db
 
-hConnectionStripLength EQU $ffaf
-hConnectedMapWidth EQU $ffb0
+hVBlankCounter:: db
 
-hMapBorderBlock     EQU $ffad
-hMapWidthPlus6      EQU $ffae
+hVBlankOccurred:: db
 
-hPredefTemp        EQU $ffb1
+hROMBank:: db
+hVBlank:: db
+hMapEntryMethod:: db
+hMenuReturn:: db
 
-; can only use the bytes reserved for hPredefTemp in contained functions, unless you know what you're doing
+hJoypadReleased:: db
+hJoypadPressed::  db
+hJoypadDown::     db
+hJoypadSum::      db
+hJoyReleased::    db
+hJoyPressed::     db
+hJoyDown::        db
+hJoyLast::        db
 
-hLZAddress         EQU $ffb1
+hInMenu:: db
 
-; Arithmetic addresses aren't seperate, to simplify
-; chain usage. The exact format is (all big endian):
-;  hDividend   hProduct
-;  hDividend+1 hProduct+1 hQuotient   hMultiplicand
-;  hDividend+2 hProduct+2 hQuotient+1 hMultiplicand+1
-;  hDividend+3 hProduct+3 hQuotient+2 hMultiplicand+2
-;  hDivisor hMultiplier hRemainder
-hDividend          EQU $ffb3 ; length in b register, before 'call Divide' (max 4 bytes)
-hDivisor           EQU $ffb7 ; 1 byte long
-hQuotient          EQU $ffb4 ; result (3 bytes long)
-hRemainder         EQU $ffb7
+UNION
+hGraphicStartTile:: db
+hMoveMon:: db
+hMapObjectIndexBuffer:: db
+hObjectStructIndexBuffer:: db
+NEXTU
+hMapBorderBlock:: db
+hMapWidthPlus6:: db
+hConnectionStripLength:: db
+hConnectedMapWidth:: db
+ENDU
 
-hMultiplicand      EQU $ffb4 ; 3 bytes long
-hMultiplier        EQU $ffb7 ; 1 byte long
-hProduct           EQU $ffb3 ; result (4 bytes long)
-hPrintNum          EQU $ffb3 ; used by PrintNum (5 bytes)
+; can only use the bytes reserved for hPredefTemp in contained functions,
+; unless you know what you're doing
+hPredefTemp::
+hLZAddress::
+	dw
 
-hMathBuffer        EQU $ffb8
+UNION
+; math-related values
 
-hTilesetPalettesHigh   EQU $ffb3
+UNION
+; inputs to Multiply
+	ds 1
+hMultiplicand:: ds 3
+hMultiplier::   db
+NEXTU
+; result of Multiply
+hProduct::      ds 4
+NEXTU
+; inputs to Divide
+hDividend::     ds 4
+hDivisor::      db
+NEXTU
+; results of Divide
+	ds 1
+hQuotient::     ds 3
+hRemainder::    db
+ENDU
 
-hMetatileCountWidth    EQU $ffb3
-hMetatileCountHeight   EQU $ffb4
+hMathBuffer:: ds 5
 
+NEXTU
+; PrintNum scratch space
+hPrintNum:: ds 5
+ENDU
 
-hUsedSpriteIndex   EQU $ffbd
-hUsedSpriteTile    EQU $ffbe
+UNION
+hUsedSpriteIndex:: db
+hUsedSpriteTile::  db
+	ds 4
+NEXTU
+hCurSpriteXCoord::   db
+hCurSpriteYCoord::   db
+hCurSpriteXPixel::   db
+hCurSpriteYPixel::   db
+hCurSpriteTile::     db
+hCurSpriteOAMFlags:: db
+NEXTU
+hChartValues::
+hChartHP::  db
+hChartAtk:: db
+hChartDef:: db
+hChartSpd:: db
+hChartSat:: db
+hChartSdf:: db
+ENDU
 
-hCurSpriteXCoord   EQU $ffbd
-hCurSpriteYCoord   EQU $ffbe
+hMoneyTemp:: ds 3
 
-hCurSpriteXPixel   EQU $ffbf
-hCurSpriteYPixel   EQU $ffc0
-hCurSpriteTile     EQU $ffc1
-hCurSpriteOAMFlags EQU $ffc2
+hLCDCPointer::     db
+hLYOverrideStart:: db
+hLYOverrideEnd::   db
 
-hMoneyTemp         EQU $ffc3
+hSerialReceivedNewData::     db
+hSerialConnectionStatus::    db
+hSerialIgnoringInitialData:: db
+hSerialSend::                db
+hSerialReceive::             db
 
-hLCDCPointer       EQU $ffc6
-hLYOverrideStart   EQU $ffc7
-hLYOverrideEnd     EQU $ffc8
+hSCX:: db
+hSCY:: db
+hWX::  db
+hWY::  db
 
-hSerialReceivedNewData     EQU $ffca
-hSerialConnectionStatus    EQU $ffcb
-hSerialIgnoringInitialData EQU $ffcc
-hSerialSend                EQU $ffcd
-hSerialReceive             EQU $ffce
-
-hSCX               EQU $ffcf
-hSCY               EQU $ffd0
-hWX                EQU $ffd1
-hWY                EQU $ffd2
-hTilesPerCycle     EQU $ffd3
+hTilesPerCycle::
 ; 0 - no update
-; 1 - VBGMap0 tiles
-; 2 - VBGMap0 attributes
-; 3 - VBGMap0 tiles
-; 4 - VBGMap0 attributes
-hBGMapMode         EQU $ffd4
+; 1 - vBGMap0 tiles
+; 2 - vBGMap0 attributes
+; 3 - vBGMap0 tiles
+; 4 - vBGMap0 attributes
+	db
+hBGMapMode::
 ; 0 - top third
 ; 1 - middle third
 ; 2 - bottom third
-hBGMapHalf         EQU $ffd5
-hBGMapAddress      EQU $ffd6
+	db
+hBGMapHalf::     db
+hBGMapAddress::  dw
 
-hOAMUpdate         EQU $ffd8
-hSPBuffer          EQU $ffd9
+hOAMUpdate:: db
 
-hBGMapUpdate       EQU $ffdb
-hBGMapTileCount    EQU $ffdc
+hSPBuffer:: dw
 
-hMapAnims          EQU $ffde
-hTileAnimFrame     EQU $ffdf
+hBGMapUpdate::    db
+hBGMapTileCount:: db
 
-hLastTalked        EQU $ffe0
+hMapAnims::      db
+hTileAnimFrame:: db
 
-hRandom            EQU $ffe1
-hRandomAdd         EQU $ffe1
-hRandomSub         EQU $ffe2
-hSecondsBackup     EQU $ffe3
-hBattleTurn        EQU $ffe4 ; Which trainers turn is it? 0: Player, 1: Opponent Trainer
+hLastTalked:: db
 
-hCGBPalUpdate      EQU $ffe5
-hCGB               EQU $ffe6
+hRandom::
+hRandomAdd:: db
+hRandomSub:: db
 
-hDMATransfer       EQU $ffe8
+hSecondsBackup:: db
 
-hFarCallSavedA     EQU $ffe9
+hChartScreen::
+; 0 - player
+; 1 - opponent trainer
+hBattleTurn:: db
 
-hDelayFrameLY      EQU $ffea
+hBattlePalFadeMode:: db
 
-hClockResetTrigger EQU $ffeb
+hCGBPalUpdate:: db
+hCGB::          db
 
-hMPState           EQU $ffed
-hMPBuffer          EQU $ffee
+hDMATransfer:: db
 
-hRequested2bpp         EQU $fff1
-hRequested1bpp         EQU $fff2
-hRequestedVTileDest    EQU $fff3
-hRequestedVTileSource  EQU $fff5
+hFarCallSavedA:: db
 
-hTmpd              EQU $fff7
-hTmpe              EQU $fff8
+hDelayFrameLY:: db
 
-hFastMusicUpdate   EQU $fff9
+hClockResetTrigger:: db
 
-hRequestOpaque1bpp EQU $fffb
+hMPState::  db
+hMPBuffer:: db
 
-HRAM_END EQU $ffff
+hRequested2bpp::        db
+hRequested1bpp::        db
+hRequestedVTileDest::   dw
+hRequestedVTileSource:: dw
+hRequestOpaque1bpp::    db
+
+hTimeOfDayPalOffset:: db
+
+UNION
+hTmpd:: db
+hTmpe:: db
+	ds 1
+NEXTU
+hDX::  db
+hDY::  db
+hErr:: db
+NEXTU
+hVWFFlags:: db
+ENDU
+
+hCrashCode:: db
+
+	ds 12
+
+hFunction::
+hFunctionJump::     db ; $c3 jp
+hFunctionTarget::
+hFunctionTargetLo:: db ; LOW(target)
+hFunctionTargetHi:: db ; HIGH(target)
+
+hBitwiseOperation::
+hBitwisePrefix:: db ; $cb prefix
+hBitwiseOpcode:: db ; opcode
+hBitwiseRet::    db ; $c9 ret
+
+hSingleOperation::
+hSingleOpcode:: db ; opcode
+hSingleRet::    db ; $c9 ret
+
+HRAM_END::

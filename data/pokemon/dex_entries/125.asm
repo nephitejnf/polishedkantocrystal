@@ -1,4 +1,3 @@
-; ElectabuzzPokedexEntry: ; 0x1b992a
 	db "Electric@" ; species name
 	dw 307, 660 ; height, width
 

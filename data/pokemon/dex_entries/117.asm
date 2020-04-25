@@ -1,4 +1,3 @@
-; SeadraPokedexEntry: ; 0x1b95b8
 	db "Dragon@" ; species name
 	dw 311, 550 ; height, width
 

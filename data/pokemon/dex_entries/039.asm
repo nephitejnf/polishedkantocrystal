@@ -1,4 +1,3 @@
-; JigglypuffPokedexEntry: ; 0x182673
 	db "Balloon@" ; species name
 	dw 108, 120 ; height, width
 

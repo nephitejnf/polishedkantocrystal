@@ -1,4 +1,4 @@
-ReinitBattleAnimFrameset: ; ce7bf (33:67bf)
+ReinitBattleAnimFrameset:
 	ld hl, BATTLEANIMSTRUCT_FRAMESET_ID
 	add hl, bc
 	ld [hl], a
@@ -10,7 +10,7 @@ ReinitBattleAnimFrameset: ; ce7bf (33:67bf)
 	ld [hl], -1
 	ret
 
-GetBattleAnimFrame: ; ce7d1
+GetBattleAnimFrame:
 .loop
 	ld hl, BATTLEANIMSTRUCT_DURATION
 	add hl, bc
@@ -72,9 +72,7 @@ GetBattleAnimFrame: ; ce7d1
 	ld [hl], a
 	jr .loop
 
-; ce823
-
-.GetPointer: ; ce823
+.GetPointer:
 	ld hl, BATTLEANIMSTRUCT_FRAMESET_ID
 	add hl, bc
 	ld e, [hl]
@@ -93,9 +91,7 @@ GetBattleAnimFrame: ; ce7d1
 	add hl, de
 	ret
 
-; ce83c
-
-GetBattleAnimOAMPointer: ; ce83c
+GetBattleAnimOAMPointer:
 	ld l, a
 	ld h, 0
 	ld de, BattleAnimOAMData
@@ -104,9 +100,7 @@ GetBattleAnimOAMPointer: ; ce83c
 	add hl, de
 	ret
 
-; ce846
-
-LoadBattleAnimObj: ; ce846 (33:6846)
+LoadBattleAnimObj:
 	push hl
 	ld l, a
 	ld h, 0
@@ -116,7 +110,11 @@ LoadBattleAnimObj: ; ce846 (33:6846)
 	add hl, de
 	ld c, [hl]
 	inc hl
+.got_ball
 	ld b, [hl]
+	ld a, b
+	and a ; bank 0 means it's a poke ball
+	jr z, .ball
 	inc hl
 	ld a, [hli]
 	ld h, [hl]
@@ -127,4 +125,67 @@ LoadBattleAnimObj: ; ce846 (33:6846)
 	pop bc
 	ret
 
-; ce85e (33:685e)
+.ball
+	ldh a, [rSVBK]
+	push af
+
+	; which ball?
+	ld a, BANK(wCurItem)
+	ldh [rSVBK], a
+	ld a, [wCurItem]
+	dec a
+	ld e, a
+	ld d, 0
+	; get the palette
+	push bc
+	push de
+	ld a, BANK(wOBPals1)
+	ldh [rSVBK], a
+	ld hl, CaughtBallPals + 4 ; skip NO_ITEM
+rept 4
+	add hl, de
+endr
+	ld de, wOBPals1 palette PAL_BATTLE_OB_RED + 2 ; see GetBallAnimPal
+	ld bc, 4
+	ld a, BANK(CaughtBallPals)
+	call FarCopyBytes
+	ld b, 2
+	call SafeCopyTilemapAtOnce
+	pop de
+	pop bc
+	pop af
+	ldh [rSVBK], a
+	; get the gfx pointer
+	ld hl, .ball_gfx
+	add hl, de
+	add hl, de
+	add hl, de
+	jr .got_ball
+
+.ball_gfx:
+	dba AnimObjPokeBallGFX
+	dba AnimObjGreatBallGFX
+	dba AnimObjUltraBallGFX
+	dba AnimObjMasterBallGFX
+	dba AnimObjSafariBallGFX
+	dba AnimObjLevelBallGFX
+	dba AnimObjLureBallGFX
+	dba AnimObjMoonBallGFX
+	dba AnimObjFriendBallGFX
+	dba AnimObjFastBallGFX
+	dba AnimObjHeavyBallGFX
+	dba AnimObjLoveBallGFX
+	dba AnimObjParkBallGFX
+	dba AnimObjRepeatBallGFX
+	dba AnimObjTimerBallGFX
+	dba AnimObjNestBallGFX
+	dba AnimObjNetBallGFX
+	dba AnimObjDiveBallGFX
+	dba AnimObjLuxuryBallGFX
+	dba AnimObjHealBallGFX
+	dba AnimObjQuickBallGFX
+	dba AnimObjDuskBallGFX
+	dba AnimObjDreamBallGFX
+	dba AnimObjPremierBallGFX
+	dba AnimObjCherishBallGFX
+

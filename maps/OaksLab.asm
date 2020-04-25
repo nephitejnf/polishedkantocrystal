@@ -29,7 +29,7 @@ OaksLab_MapScriptHeader:
 
 	db 6 ; object events
 	object_event  4,  2, SPRITE_OAK, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, PERSONTYPE_SCRIPT, 0, Oak, -1
-	object_event  7,  3, SPRITE_EEVEE, SPRITEMOVEDATA_DOLL, 0, 0, -1, -1, 0, PERSONTYPE_SCRIPT, 0, EeveeDollScript, EVENT_DECO_EEVEE_DOLL
+	object_event  7,  3, SPRITE_MON_ICON, SPRITEMOVEDATA_DOLL, 0, EEVEE, -1, -1, PAL_NPC_BROWN, PERSONTYPE_SCRIPT, 0, EeveeDollScript, EVENT_DECO_EEVEE_DOLL
 	object_event  1,  8, SPRITE_AROMA_LADY, SPRITEMOVEDATA_WALK_LEFT_RIGHT, 0, 1, -1, -1, PAL_NPC_GREEN, PERSONTYPE_COMMAND, jumptextfaceplayer, OaksAssistant1Text, -1
 	object_event  8,  9, SPRITE_SCIENTIST, SPRITEMOVEDATA_WALK_UP_DOWN, 1, 0, -1, -1, PAL_NPC_RED, PERSONTYPE_COMMAND, jumptextfaceplayer, OaksAssistant2Text, -1
 	object_event  1,  4, SPRITE_SCIENTIST, SPRITEMOVEDATA_WANDER, 1, 1, -1, -1, PAL_NPC_RED, PERSONTYPE_COMMAND, jumptextfaceplayer, OaksAssistant3Text, -1
@@ -68,7 +68,7 @@ Oak:
 	playsound SFX_CAUGHT_MON
 	waitsfx
 	buttonsound
-	givepoke BULBASAUR, 10, SITRUS_BERRY
+	givepoke BULBASAUR, NO_FORM, 10, SITRUS_BERRY
 	setevent EVENT_GOT_A_POKEMON_FROM_OAK
 	jump .CheckBadges
 
@@ -78,7 +78,7 @@ Oak:
 	playsound SFX_CAUGHT_MON
 	waitsfx
 	buttonsound
-	givepoke CHARMANDER, 10, SITRUS_BERRY
+	givepoke CHARMANDER, NO_FORM, 10, SITRUS_BERRY
 	setevent EVENT_GOT_A_POKEMON_FROM_OAK
 	jump .CheckBadges
 
@@ -88,7 +88,7 @@ Oak:
 	playsound SFX_CAUGHT_MON
 	waitsfx
 	buttonsound
-	givepoke SQUIRTLE, 10, SITRUS_BERRY
+	givepoke SQUIRTLE, NO_FORM, 10, SITRUS_BERRY
 	setevent EVENT_GOT_A_POKEMON_FROM_OAK
 	jump .CheckBadges
 

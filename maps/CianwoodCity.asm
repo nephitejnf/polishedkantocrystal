@@ -11,7 +11,7 @@ CianwoodCity_MapScriptHeader:
 	warp_event 15, 47, CIANWOOD_PHARMACY, 1
 	warp_event  9, 31, CIANWOOD_CITY_PHOTO_STUDIO, 1
 	warp_event 15, 37, CIANWOOD_LUGIA_SPEECH_HOUSE, 1
-	warp_event  5, 17, STATS_JUDGES_HOUSE, 1
+	warp_event  5, 17, MOVE_MANIACS_HOUSE, 1
 	warp_event  4, 25, CLIFF_EDGE_GATE, 1
 
 	db 1 ; coord events
@@ -23,13 +23,13 @@ CianwoodCity_MapScriptHeader:
 	bg_event 19, 47, SIGNPOST_JUMPTEXT, CianwoodPharmacySignText
 	bg_event  8, 32, SIGNPOST_JUMPTEXT, CianwoodPhotoStudioSignText
 	bg_event  6, 26, SIGNPOST_JUMPTEXT, CianwoodCliffEdgeGateSignText
-	bg_event  8, 22, SIGNPOST_JUMPTEXT, CianwoodStatsJudgeSignText
+	bg_event  8, 22, SIGNPOST_JUMPTEXT, CianwoodMoveManiacSignText
 	bg_event  4, 19, SIGNPOST_ITEM + REVIVE, EVENT_CIANWOOD_CITY_HIDDEN_REVIVE
 	bg_event  5, 29, SIGNPOST_ITEM + MAX_ETHER, EVENT_CIANWOOD_CITY_HIDDEN_MAX_ETHER
 
 	db 15 ; object events
 	object_event 11, 21, SPRITE_EUSINE, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, PERSONTYPE_SCRIPT, 0, ObjectEvent, EVENT_CIANWOOD_CITY_EUSINE
-	object_event 10, 14, SPRITE_SUICUNE, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, PAL_NPC_BLUE, PERSONTYPE_SCRIPT, 0, ObjectEvent, EVENT_SAW_SUICUNE_AT_CIANWOOD_CITY
+	object_event 10, 14, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, SUICUNE, -1, -1, PAL_NPC_BLUE, PERSONTYPE_SCRIPT, 0, ObjectEvent, EVENT_SAW_SUICUNE_AT_CIANWOOD_CITY
 	object_event 21, 37, SPRITE_CAMPER, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, PERSONTYPE_COMMAND, jumptextfaceplayer, UnknownText_0x1a02df, -1
 	object_event 16, 33, SPRITE_POKEFAN_M, SPRITEMOVEDATA_WALK_LEFT_RIGHT, 0, 1, -1, -1, PAL_NPC_BROWN, PERSONTYPE_COMMAND, jumptextfaceplayer, UnknownText_0x1a0319, -1
 	object_event 14, 42, SPRITE_CUTE_GIRL, SPRITEMOVEDATA_WALK_UP_DOWN, 2, 0, -1, -1, PAL_NPC_RED, PERSONTYPE_COMMAND, jumptextfaceplayer, UnknownText_0x1a0394, -1
@@ -79,7 +79,7 @@ UnknownScript_0x1a001e:
 	setmapscene ROUTE_42, $2
 .Continue
 	checkevent EVENT_BEAT_EUSINE
-	iftrue .Done
+	iftrue DoNothingScript
 	setevent EVENT_BEAT_EUSINE
 	playmusic MUSIC_MYSTICALMAN_ENCOUNTER
 	appear CIANWOODCITY_EUSINE
@@ -100,7 +100,6 @@ UnknownScript_0x1a001e:
 	special Special_FadeOutMusic
 	playmapmusic
 	pause 10
-.Done:
 	end
 
 PokefanFScript_0x1a0084:
@@ -342,7 +341,7 @@ CianwoodCliffEdgeGateSignText:
 	line "just ahead!"
 	done
 
-CianwoodStatsJudgeSignText:
-	text "The Stats Judge"
+CianwoodMoveManiacSignText:
+	text "The Move Maniac"
 	line "Ahead"
 	done

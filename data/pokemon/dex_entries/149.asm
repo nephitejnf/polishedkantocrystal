@@ -1,4 +1,3 @@
-; DragonitePokedexEntry: ; 0x1cc843
 	db "Dragon@" ; species name
 	dw 703, 4630 ; height, width
 

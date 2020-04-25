@@ -1,4 +1,3 @@
-; HoundourPokedexEntry: ; 0x1d0eff
 	db "Dark@" ; species name
 	dw 200, 240 ; height, width
 

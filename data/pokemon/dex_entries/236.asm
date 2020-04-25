@@ -1,4 +1,3 @@
-; TyroguePokedexEntry: ; 0x1d124b
 	db "Scuffle@" ; species name
 	dw 204, 460 ; height, width
 

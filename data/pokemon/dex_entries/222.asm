@@ -1,4 +1,3 @@
-; CorsolaPokedexEntry: ; 0x1d0c68
 	db "Coral@" ; species name
 	dw 200, 110 ; height, width
 

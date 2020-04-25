@@ -58,6 +58,24 @@ RETVAR_EXECUTE EQU (2 << 6)
 	const PLAYEREVENT_KEYITEMBALL
 NUM_PLAYER_EVENTS EQU const_value
 
+; PlayerMovement.pointers indexes (see engine/overworld/events.asm)
+	const_def
+	const PLAYERMOVEMENT_NORMAL
+	const PLAYERMOVEMENT_WARP
+	const PLAYERMOVEMENT_TURN
+	const PLAYERMOVEMENT_FORCE_TURN
+	const PLAYERMOVEMENT_FINISH
+	const PLAYERMOVEMENT_CONTINUE
+	const PLAYERMOVEMENT_EXIT_WATER
+	const PLAYERMOVEMENT_JUMP
+
+; script data sizes (see macros/scripts/maps.asm)
+SCENE_SCRIPT_SIZE EQU 2  ; scene_script
+CALLBACK_SIZE     EQU 3  ; callback
+WARP_EVENT_SIZE   EQU 5  ; warp_event
+COORD_EVENT_SIZE  EQU 5  ; coord_event
+BG_EVENT_SIZE     EQU 5  ; bg_event
+OBJECT_EVENT_SIZE EQU 13 ; object_event
 
 ; see engine/events.asm:TryReadSign.signs
 	const_def
@@ -133,24 +151,26 @@ EMOTE_MEM EQU -1
 ; fruit trees
 ; see engine/events/fruit_trees.asm
 	const_def 1
-	const FRUITTREE_ROUTE_29        ; 01
-	const FRUITTREE_ROUTE_30_1      ; 02
-	const FRUITTREE_ROUTE_30_2      ; 03
-	const FRUITTREE_ROUTE_31        ; 04
-	const FRUITTREE_VIOLET_CITY     ; 05
-	const FRUITTREE_ROUTE_32_COAST  ; 06
-	const FRUITTREE_ROUTE_33        ; 07
-	const FRUITTREE_AZALEA_TOWN     ; 08
-	const FRUITTREE_ROUTE_35        ; 09
-	const FRUITTREE_ROUTE_36        ; 0a
-	const FRUITTREE_ROUTE_37_1      ; 0b
-	const FRUITTREE_ROUTE_37_2      ; 0c
-	const FRUITTREE_ROUTE_37_3      ; 0d
-	const FRUITTREE_ROUTE_38        ; 0e
-	const FRUITTREE_ROUTE_39        ; 0f
-	const FRUITTREE_ROUTE_42_1      ; 10
-	const FRUITTREE_ROUTE_42_2      ; 11
-	const FRUITTREE_ROUTE_42_3      ; 12
+; Apricorn trees come first, then Berry trees
+	const FRUITTREE_AZALEA_TOWN     ; 01
+	const FRUITTREE_ROUTE_37_1      ; 02
+	const FRUITTREE_ROUTE_37_2      ; 03
+	const FRUITTREE_ROUTE_37_3      ; 04
+	const FRUITTREE_ROUTE_42_1      ; 05
+	const FRUITTREE_ROUTE_42_2      ; 06
+	const FRUITTREE_ROUTE_42_3      ; 07
+FIRST_BERRY_TREE EQU const_value
+	const FRUITTREE_ROUTE_29        ; 08
+	const FRUITTREE_ROUTE_30_1      ; 09
+	const FRUITTREE_ROUTE_30_2      ; 0a
+	const FRUITTREE_ROUTE_31        ; 0b
+	const FRUITTREE_VIOLET_CITY     ; 0c
+	const FRUITTREE_ROUTE_32_COAST  ; 0d
+	const FRUITTREE_ROUTE_33        ; 0e
+	const FRUITTREE_ROUTE_35        ; 0f
+	const FRUITTREE_ROUTE_36        ; 10
+	const FRUITTREE_ROUTE_38        ; 11
+	const FRUITTREE_ROUTE_39        ; 12
 	const FRUITTREE_ROUTE_43        ; 13
 	const FRUITTREE_ROUTE_44        ; 14
 	const FRUITTREE_ROUTE_45        ; 15
@@ -168,7 +188,7 @@ EMOTE_MEM EQU -1
 	const FRUITTREE_LUCKY_ISLAND    ; 21
 	const FRUITTREE_SHAMOUTI_ISLAND ; 22
 	const FRUITTREE_ROUTE_49        ; 23
-NUM_FRUIT_TREES EQU const_value +- 1
+NUM_FRUIT_TREES EQU const_value - 1
 
 ; hidden grottoes
 ; see engine/hidden_grottoes.asm:HiddenGrottoData
@@ -196,7 +216,7 @@ NUM_FRUIT_TREES EQU const_value +- 1
 	const HIDDENGROTTO_15                 ; 15
 	const HIDDENGROTTO_16                 ; 16
 	const HIDDENGROTTO_17                 ; 17
-NUM_HIDDEN_GROTTOES EQU const_value +- 1
+NUM_HIDDEN_GROTTOES EQU const_value - 1
 
 ; swarm arguments
 ; StoreSwarmMapIndices arguments

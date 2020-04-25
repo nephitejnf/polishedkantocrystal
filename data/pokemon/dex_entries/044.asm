@@ -1,4 +1,3 @@
-; GloomPokedexEntry: ; 0x1828a6
 	db "Weed@" ; species name
 	dw 207, 190 ; height, width
 

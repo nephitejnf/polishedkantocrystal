@@ -1,4 +1,3 @@
-; VileplumePokedexEntry: ; 0x182918
 	db "Flower@" ; species name
 	dw 311, 410 ; height, width
 

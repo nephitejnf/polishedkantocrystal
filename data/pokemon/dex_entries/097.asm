@@ -1,4 +1,3 @@
-; HypnoPokedexEntry: ; 0x1b8d80
 	db "Hypnosis@" ; species name
 	dw 503, 1670 ; height, width
 

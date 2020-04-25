@@ -1,9 +1,9 @@
-Special_BattleTower_FindChallengeLevel: ; 1700b0
+Special_BattleTower_FindChallengeLevel:
 	; e = maximum party level [1-100]
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $1
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, wPartyMon1Level
 	ld bc, PARTYMON_STRUCT_LENGTH
 	ld a, [wPartyCount]
@@ -20,7 +20,7 @@ Special_BattleTower_FindChallengeLevel: ; 1700b0
 	ld a, d
 	jr nz, .loop
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	; wBTChoiceOfLvlGroup = (e + 9) / 10 [1-10]
 	ld a, 9
@@ -28,49 +28,29 @@ Special_BattleTower_FindChallengeLevel: ; 1700b0
 	ld c, 10
 	call SimpleDivide
 
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $3
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld a, b
 	ld [wBTChoiceOfLvlGroup], a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
-; 1700ba
 
-Special_BattleTower_Battle: ; 170215
+Special_BattleTower_Battle:
 	xor a
 	ld [wBattleTowerBattleEnded], a
 .loop
-	call .do_dw
+	call RunBattleTowerTrainer
 	call DelayFrame
 	ld a, [wBattleTowerBattleEnded]
-	cp $1
-	jr nz, .loop
-	ret
-; 17023a
+	and a
+	ret nz
+	jr .loop
 
-.do_dw ; 17023a
-	ld a, [wBattleTowerBattleEnded]
-	ld e, a
-	ld d, 0
-	ld hl, .dw
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
-; 170249
-
-.dw ; 170249
-	dw RunBattleTowerTrainer
-	dw SkipBattleTowerTrainer
-; 17024d
-
-RunBattleTowerTrainer: ; 17024d
+RunBattleTowerTrainer:
 	ld a, [wOptions2]
 	push af
 	; force Set mode
@@ -94,7 +74,7 @@ RunBattleTowerTrainer: ; 17024d
 	farcall LoadPokemonData
 	farcall HealPartyEvenForNuzlocke
 	ld a, [wBattleResult]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	and a
 	jr nz, .lost
 	ld a, BANK(sNrOfBeatenBattleTowerTrainers)
@@ -106,8 +86,7 @@ RunBattleTowerTrainer: ; 17024d
 	ld a, [wNrOfBeatenBattleTowerTrainers]
 	add "1"
 	ld [hli], a
-	ld a, "@"
-	ld [hl], a
+	ld [hl], "@"
 
 .lost
 	pop af
@@ -116,14 +95,13 @@ RunBattleTowerTrainer: ; 17024d
 	ld [wOptions2], a
 	ld a, $1
 	ld [wBattleTowerBattleEnded], a
-SkipBattleTowerTrainer: ; 1704c9
 	ret
 
-ReadBTTrainerParty: ; 1702b7
+ReadBTTrainerParty:
 ; Initialise the BattleTower-Trainer and his Pkmn
 	call CopyBTTrainerToTemp
 
-	ld hl, wBT_OTTempName ; 0xc608
+	ld hl, wBT_OTTempName
 	ld de, wOTPlayerName
 	ld bc, NAME_LENGTH - 1
 	rst CopyBytes
@@ -133,9 +111,9 @@ ReadBTTrainerParty: ; 1702b7
 	ld hl, wBT_OTTempTrainerClass
 	ld a, [hli]
 	ld [wOtherTrainerClass], a
-	ld a, wOTPartyMonNicknames % $100
+	ld a, LOW(wOTPartyMonNicknames)
 	ld [wBGMapBuffer], a
-	ld a, wOTPartyMonNicknames / $100
+	ld a, HIGH(wOTPartyMonNicknames)
 	ld [wBGMapBuffer + 1], a
 
 	; Copy Pkmn into Memory from the address in hl
@@ -157,7 +135,7 @@ ReadBTTrainerParty: ; 1702b7
 	ld e, a
 	ld a, [wBGMapBuffer + 1]
 	ld d, a
-	ld bc, PKMN_NAME_LENGTH
+	ld bc, MON_NAME_LENGTH
 	rst CopyBytes
 	ld a, e
 	ld [wBGMapBuffer], a
@@ -172,22 +150,21 @@ ReadBTTrainerParty: ; 1702b7
 	ld a, -1
 	ld [bc], a
 	ret
-; 170394
 
-CopyBTTrainerToTemp: ; 1704a2
+CopyBTTrainerToTemp:
 ; copy the BattleTower-Trainer data that lies at 'wBT_OTTrainer' to 'wBT_OTTemp'
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBT_OTTrainer)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
-	ld hl, wBT_OTTrainer ; $d100
+	ld hl, wBT_OTTrainer
 	ld de, wBT_OTTemp ; wMisc
 	ld bc, BATTLE_TOWER_STRUCT_LENGTH
 	rst CopyBytes
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	ld a, BANK(sBattleTowerChallengeState)
 	call GetSRAMBank
@@ -196,42 +173,41 @@ CopyBTTrainerToTemp: ; 1704a2
 	ld hl, sNrOfBeatenBattleTowerTrainers
 	inc [hl]
 	jp CloseSRAM
-; 1704ca
 
-Special_BattleTower_ResetTrainersSRAM: ; 1706d6 (5c:46d6)
+Special_BattleTower_ResetTrainersSRAM:
 	ld a, BANK(sBTTrainers)
 	call GetSRAMBank
 	ld a, $ff
 	ld hl, sBTTrainers
 	ld bc, BATTLETOWER_NROFTRAINERS
-	call ByteFill
+	rst ByteFill
 	xor a
 	ld [sNrOfBeatenBattleTowerTrainers], a
 	jp CloseSRAM
 
-Special_BattleTower_CheckNewSaveFile: ; 17075f (5c:475f)
+Special_BattleTower_CheckNewSaveFile:
 	call Special_BattleTower_CheckSaveFileExistsAndIsYours
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	ret z
 
-	ld a, BANK(sBattleTowerNewSaveFile)
+	ld a, BANK(sBattleTowerSaveFileFlags)
 	call GetSRAMBank
-	ld a, [sBattleTowerNewSaveFile]
+	ld a, [sBattleTowerSaveFileFlags]
 	and $2
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	jp CloseSRAM
 
-Special_BattleTower_GetChallengeState: ; 170778 (5c:4778)
+Special_BattleTower_GetChallengeState:
 	ld hl, sBattleTowerChallengeState
 	ld a, BANK(sBattleTowerChallengeState)
 	call GetSRAMBank
 	ld a, [hl]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	jp CloseSRAM
 
 Special_BattleTower_SetChallengeState:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld c, a
 	ld a, BANK(sBattleTowerChallengeState)
 	call GetSRAMBank
@@ -239,41 +215,41 @@ Special_BattleTower_SetChallengeState:
 	ld [sBattleTowerChallengeState], a
 	jp CloseSRAM
 
-Special_BattleTower_MarkNewSaveFile: ; 170788 (5c:4788)
-	ld a, BANK(sBattleTowerNewSaveFile)
+Special_BattleTower_MarkNewSaveFile:
+	ld a, BANK(sBattleTowerSaveFileFlags)
 	call GetSRAMBank
-	ld a, [sBattleTowerNewSaveFile]
+	ld a, [sBattleTowerSaveFileFlags]
 	or $2
-	ld [sBattleTowerNewSaveFile], a
+	ld [sBattleTowerSaveFileFlags], a
 	jp CloseSRAM
 
-Special_BattleTower_SaveLevelGroup: ; 170868 (5c:4868)
+Special_BattleTower_SaveLevelGroup:
 	ld a, BANK(sBTChoiceOfLevelGroup)
 	call GetSRAMBank
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $3
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld a, [wBTChoiceOfLvlGroup]
 	ld [sBTChoiceOfLevelGroup], a
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	jp CloseSRAM
 
-Special_BattleTower_LoadLevelGroup: ; 170881 (5c:4881)
+Special_BattleTower_LoadLevelGroup:
 	ld a, BANK(sBTChoiceOfLevelGroup)
 	call GetSRAMBank
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $3
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld a, [sBTChoiceOfLevelGroup]
 	ld [wBTChoiceOfLvlGroup], a
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	jp CloseSRAM
 
-Special_BattleTower_CheckSaveFileExistsAndIsYours: ; 17089a
+Special_BattleTower_CheckSaveFileExistsAndIsYours:
 	ld a, [wSaveFileExists]
 	and a
 	jr z, .nope
@@ -284,16 +260,15 @@ Special_BattleTower_CheckSaveFileExistsAndIsYours: ; 17089a
 .yes
 	ld a, $1
 .nope
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; 1708b1
 
-Special_BattleTower_MaxVolume: ; 1708b1 (5c:48b1)
+Special_BattleTower_MaxVolume:
 	xor a
 	ld [wMusicFade], a
 	jp MaxVolume
 
-Special_BattleTower_BeginChallenge: ; 170a9c (5c:4a9c)
+Special_BattleTower_BeginChallenge:
 	xor a
 	ld [wBattleTowerBattleEnded], a
 	ld [wNrOfBeatenBattleTowerTrainers], a
@@ -301,19 +276,19 @@ Special_BattleTower_BeginChallenge: ; 170a9c (5c:4a9c)
 	ld [wcf66], a
 	ret
 
-Special_BattleTower_LoadOpponentTrainerAndPokemonsWithOTSprite: ; 0x170b44
+Special_BattleTower_LoadOpponentTrainerAndPokemonsWithOTSprite:
 	farcall Function_LoadOpponentTrainer
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBT_OTTrainerClass)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, wBT_OTTrainerClass
 	ld a, [hl]
 	dec a
 	ld c, a
 	ld b, $0
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, BTTrainerClassSprites
 	add hl, bc
 	ld a, [hl]
@@ -321,17 +296,15 @@ Special_BattleTower_LoadOpponentTrainerAndPokemonsWithOTSprite: ; 0x170b44
 
 ; Load sprite of the opponent trainer
 ; because s/he is chosen randomly and appears out of nowhere
-	ld a, [wBTTempOTSprite]
 	ld [wMap1ObjectSprite], a
-	ld [hUsedSpriteIndex], a
+	ldh [hUsedSpriteIndex], a
 	ld a, 24
-	ld [hUsedSpriteTile], a
+	ldh [hUsedSpriteTile], a
 	farjp GetUsedSprite
-; 170b90
 
 INCLUDE "data/trainers/sprites.asm"
 
-Special_BattleTower_CheckForRules: ; 170bd3
+Special_BattleTower_CheckForRules:
 	farcall CheckForBattleTowerRules
 	jr c, .yes
 	xor a
@@ -339,23 +312,21 @@ Special_BattleTower_CheckForRules: ; 170bd3
 .yes
 	ld a, 1
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; 170c06
 
-Special_BattleTower_MainMenu: ; 17d224
+Special_BattleTower_MainMenu:
 	ld a, $4
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld hl, MenuDataHeader_ChallengeExplanationCancel
 	call LoadMenuDataHeader
 	call ChallengeExplanationCancelMenu
 	jp CloseWindow
-; 17d246
 
-ChallengeExplanationCancelMenu: ; 17d246
+ChallengeExplanationCancelMenu:
 	call VerticalMenu
 	jr c, .Exit
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	cp $5
 	jr nz, .UsewMenuCursorY
 	ld a, [wMenuCursorY]
@@ -369,108 +340,96 @@ ChallengeExplanationCancelMenu: ; 17d246
 	ld a, [wMenuCursorY]
 
 .LoadToScriptVar:
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .Exit:
 	ld a, $4
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; 17d26a
 
-MenuDataHeader_ChallengeExplanationCancel: ; 17d28f
+MenuDataHeader_ChallengeExplanationCancel:
 	db $40 ; flags
 	db  0,  0 ; start coords
 	db  7, 14 ; end coords
 	dw MenuData2_ChallengeExplanationCancel
 	db 1 ; default option
 
-MenuData2_ChallengeExplanationCancel: ; 17d297
+MenuData2_ChallengeExplanationCancel:
 	db $a0 ; flags
 	db 3
 	db "Challenge@"
 	db "Explanation@"
 	db "Cancel@"
-; 17d2b6
 
-CheckForBattleTowerRules: ; 8b201
+CheckForBattleTowerRules:
 	ld de, .PointerTables
 	call BattleTower_ExecuteJumptable
 	ret z
 	call BattleTower_PleaseReturnWhenReady
 	scf
 	ret
-; 8b215
 
-.PointerTables: ; 8b215
+.PointerTables:
 	db 5
 	dw .Functions
 	dw .TextPointers
 
-.Functions: ; 8b21a
+.Functions:
 	dw Function_PartyCountEq3
 	dw Function_HasPartyAnEgg
 	dw Function_PartySpeciesAreUnique
 	dw Function_PartyItemsAreUnique
 	dw Function_UberRestriction
-; 8b222
 
-.TextPointers: ; 8b222
+.TextPointers:
 	dw JumpText_ExcuseMeYoureNotReady
 	dw JumpText_OnlyThreePkmnMayBeEntered
 	dw JumpText_YouCantTakeAnEgg
 	dw JumpText_ThePkmnMustAllBeDifferentKinds
 	dw JumpText_ThePkmnMustNotHoldTheSameItems
 	dw JumpText_UberRestriction
-; 8b22c
 
-JumpText_ExcuseMeYoureNotReady: ; 0x8b22c
+JumpText_ExcuseMeYoureNotReady:
 	; Excuse me. You're not ready.
 	text_jump Text_ExcuseMeYoureNotReady
-	db "@"
-; 0x8b231
+	text_end
 
-BattleTower_PleaseReturnWhenReady: ; 8b231
+BattleTower_PleaseReturnWhenReady:
 	ld hl, .PleaseReturnWhenReady
 	jp PrintText
-; 8b238
 
-.PleaseReturnWhenReady: ; 0x8b238
+.PleaseReturnWhenReady:
 	; Please return when you're ready.
 	text_jump UnknownText_0x1c5962
-	db "@"
-; 0x8b23d
+	text_end
 
-JumpText_OnlyThreePkmnMayBeEntered: ; 0x8b247
+JumpText_OnlyThreePkmnMayBeEntered:
 	; Three #MON must be entered.
 	text_jump Text_OnlyThreePkmnMayBeEntered
-	db "@"
-; 0x8b24c
+	text_end
 
-JumpText_ThePkmnMustAllBeDifferentKinds: ; 0x8b24c
+JumpText_ThePkmnMustAllBeDifferentKinds:
 	; The @  #MON must all be different kinds.
 	text_jump Text_ThePkmnMustAllBeDifferentKinds
-	db "@"
-; 0x8b251
+	text_end
 
-JumpText_ThePkmnMustNotHoldTheSameItems: ; 0x8b251
+JumpText_ThePkmnMustNotHoldTheSameItems:
 	; The @  #MON must not hold the same items.
 	text_jump Text_ThePkmnMustNotHoldTheSameItems
-	db "@"
-; 0x8b256
+	text_end
 
-JumpText_YouCantTakeAnEgg: ; 0x8b256
+JumpText_YouCantTakeAnEgg:
 	; You can't take an EGG!
 	text_jump Text_YouCantTakeAnEgg
-	db "@"
-; 0x8b25b
+	text_end
 
 JumpText_UberRestriction:
 	; @  must be <LV>70 or higher.
 	text_jump Text_UberRestriction
-	db "@"
+	text_end
 
-BattleTower_ExecuteJumptable: ; 8b25b
+BattleTower_ExecuteJumptable:
 	ld bc, 0
 .loop
 	call .DoJumptableFunction
@@ -480,27 +439,24 @@ BattleTower_ExecuteJumptable: ; 8b25b
 	ld a, b
 	and a
 	ret
-; 8b26c
 
-.DoJumptableFunction: ; 8b26c
+.DoJumptableFunction:
 	push de
 	push bc
 	call .GetFunctionPointer
 	ld a, c
-	rst JumpTable
+	call JumpTable
 	pop bc
 	pop de
 	ret
-; 8b276
 
-.Next_CheckReachedEnd: ; 8b276
+.Next_CheckReachedEnd:
 	inc c
 	ld a, [de]
 	cp c
 	ret
-; 8b27a
 
-.GetFunctionPointer: ; 8b27a
+.GetFunctionPointer:
 	inc de
 	ld a, [de]
 	ld l, a
@@ -508,9 +464,8 @@ BattleTower_ExecuteJumptable: ; 8b25b
 	ld a, [de]
 	ld h, a
 	ret
-; 8b281
 
-.GetTextPointers: ; 8b281
+.GetTextPointers:
 	inc de
 	inc de
 	inc de
@@ -520,16 +475,14 @@ BattleTower_ExecuteJumptable: ; 8b25b
 	ld a, [de]
 	ld h, a
 	ret
-; 8b28a
 
-.LoadTextPointer: ; 8b28a
+.LoadTextPointer:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	ret
-; 8b28e
 
-.PrintFailureText: ; 8b28e
+.PrintFailureText:
 	push de
 	push bc
 	ld a, b
@@ -540,18 +493,16 @@ BattleTower_ExecuteJumptable: ; 8b25b
 	ld b, $1
 	pop de
 	ret
-; 8b29d
 
-.PrintFirstText: ; 8b29d
+.PrintFirstText:
 	push de
 	call .GetTextPointers
 	call .LoadTextPointer
 	call PrintText
 	pop de
 	ret
-; 8b2a9
 
-.PrintNthText: ; 8b2a9
+.PrintNthText:
 	push bc
 	call .GetTextPointers
 	inc hl
@@ -563,25 +514,23 @@ BattleTower_ExecuteJumptable: ; 8b25b
 	call PrintText
 	pop bc
 	ret
-; 8b2bb
 
-Function_PartyCountEq3: ; 8b2da
+Function_PartyCountEq3:
 	ld a, [wPartyCount]
 	cp 3
 	ret z
 	scf
 	ret
-; 8b2e2
 
-Function_PartySpeciesAreUnique: ; 8b2e2
+Function_PartySpeciesAreUnique:
 	ld hl, wPartyMon1Species
 	jr VerifyUniqueness
 
-Function_PartyItemsAreUnique: ; 8b32a
+Function_PartyItemsAreUnique:
 	ld hl, wPartyMon1Item
 	; fallthrough
 
-VerifyUniqueness: ; 8b2e9
+VerifyUniqueness:
 	ld de, wPartyCount
 	ld a, [de]
 	inc de
@@ -620,9 +569,8 @@ VerifyUniqueness: ; 8b2e9
 	pop hl
 	scf
 	ret
-; 8b31a
 
-.nextmon ; 8b31a
+.nextmon
 	push bc
 	ld bc, PARTYMON_STRUCT_LENGTH
 	add hl, bc

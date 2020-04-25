@@ -1,4 +1,3 @@
-; VoltorbPokedexEntry: ; 0x1b8eb0
 	db "Ball@" ; species name
 	dw 108, 230 ; height, width
 

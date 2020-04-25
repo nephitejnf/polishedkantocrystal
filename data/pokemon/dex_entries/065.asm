@@ -1,4 +1,3 @@
-; AlakazamPokedexEntry: ; 0x1b8000
 	db "Psi@" ; species name
 	dw 411, 1060 ; height, width
 

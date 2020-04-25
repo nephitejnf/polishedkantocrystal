@@ -1,7 +1,7 @@
 GetTrademonFrontpic:
 	ld a, [wOTTrademonSpecies]
 	ld hl, wOTTrademonForm
-	ld de, VTiles2
+	ld de, vTiles2
 	push de
 	push af
 	predef GetVariant
@@ -10,8 +10,7 @@ GetTrademonFrontpic:
 	ld [wCurSpecies], a
 	call GetBaseData
 	pop de
-	predef FrontpicPredef
-	ret
+	predef_jump FrontpicPredef
 
 AnimateTrademonFrontpic:
 	ld a, [wOTTrademonSpecies]
@@ -24,7 +23,7 @@ AnimateTrademonFrontpic:
 	ld [wTempMonPersonality], a
 	ld a, [wOTTrademonPersonality + 1]
 	ld [wTempMonPersonality + 1], a
-	ld b, CGB_PLAYER_OR_MON_FRONTPIC_PALS
+	ld a, CGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
 	ld a, %11100100 ; 3,2,1,0
 	call DmgToCgbBGPals
@@ -33,5 +32,4 @@ AnimateTrademonFrontpic:
 	ld [wCurPartySpecies], a
 	hlcoord 7, 2
 	lb de, $0, ANIM_MON_TRADE
-	predef AnimateFrontpic
-	ret
+	predef_jump AnimateFrontpic

@@ -1,4 +1,3 @@
-; GolduckPokedexEntry: ; 0x182d55
 	db "Duck@" ; species name
 	dw 507, 1690 ; height, width
 

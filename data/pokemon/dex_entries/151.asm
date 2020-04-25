@@ -1,4 +1,3 @@
-; MewPokedexEntry: ; 0x1cc915
 	db "New Species@" ; species name
 	dw 104, 90 ; height, width
 

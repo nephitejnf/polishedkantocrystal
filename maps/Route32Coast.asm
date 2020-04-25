@@ -9,11 +9,12 @@ Route32Coast_MapScriptHeader:
 
 	db 0 ; coord events
 
-	db 4 ; bg events
+	db 5 ; bg events
 	bg_event 15, 29, SIGNPOST_JUMPTEXT, Route32CoastTrainerTipsText
 	bg_event  5, 59, SIGNPOST_JUMPTEXT, Route32CoastUnionCaveSignText
 	bg_event 17, 34, SIGNPOST_ITEM + LEVEL_BALL, EVENT_ROUTE_32_COAST_HIDDEN_LEVEL_BALL
 	bg_event  5, 45, SIGNPOST_ITEM + HYPER_POTION, EVENT_ROUTE_32_COAST_HIDDEN_HYPER_POTION
+	bg_event 14,  8, SIGNPOST_ITEM + HYPER_POTION, EVENT_ROUTE_32_COAST_HIDDEN_ELIXIR
 
 	db 15 ; object events
 	object_event  9,  5, SPRITE_SWIMMER_GUY, SPRITEMOVEDATA_SPINCLOCKWISE, 0, 0, -1, -1, 0, PERSONTYPE_GENERICTRAINER, 4, GenericTrainerSwimmermMichel, -1
@@ -28,7 +29,7 @@ Route32Coast_MapScriptHeader:
 	object_event 25, 35, SPRITE_COOL_DUDE, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, PAL_NPC_BLUE, PERSONTYPE_GENERICTRAINER, 1, GenericTrainerCoupleFoxandrae1, -1
 	object_event 25, 36, SPRITE_CUTE_GIRL, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, PAL_NPC_BLUE, PERSONTYPE_GENERICTRAINER, 1, GenericTrainerCoupleFoxandrae2, -1
 	object_event  6, 61, SPRITE_LASS, SPRITEMOVEDATA_WANDER, 1, 1, -1, -1, PAL_NPC_GREEN, PERSONTYPE_COMMAND, jumptextfaceplayer, Route32CoastLassText, -1
-	fruittree_event 21, 51, FRUITTREE_ROUTE_32_COAST, ASPEAR_BERRY
+	fruittree_event 21, 51, FRUITTREE_ROUTE_32_COAST, ASPEAR_BERRY, PAL_NPC_BROWN
 	itemball_event  5, 18, WHITE_HERB, 1, EVENT_ROUTE_32_COAST_WHITE_HERB
 	itemball_event 22, 63, SOFT_SAND, 1, EVENT_ROUTE_32_COAST_SOFT_SAND
 

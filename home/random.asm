@@ -2,8 +2,8 @@ Random::
 	; just like the stock RNG, this exits with the value in [hRandomSub]
 	; it also stores a random value in [hRandomAdd]
 	push hl
-	push bc
 	push de
+	push bc
 	call UpdateDividerCounters
 	ld hl, wRNGState
 	ld a, [hli]
@@ -14,7 +14,7 @@ Random::
 	ld d, a
 	ld e, [hl]
 	ld a, e
-	add a, a
+	add a
 	xor b
 	ld b, a
 	ld a, d
@@ -62,25 +62,22 @@ endr
 	ld a, d
 	ld [hli], a
 	ld [hl], e
-	ld a, [rDIV]
-	add a, [hl]
-	ld [hRandomAdd], a
+	ldh a, [rDIV]
+	add [hl]
+	ldh [hRandomAdd], a
 	ld a, [hli]
 	inc hl
 	inc hl
 	sub [hl]
-	ld [hRandomSub], a
-	pop de
-	pop bc
-	pop hl
-	ret
+	ldh [hRandomSub], a
+	jp PopBCDEHL
 
 UpdateDividerCounters::
-	ld a, [rDIV]
+	ldh a, [rDIV]
 	ld hl, wRNGCumulativeDividerMinus
 	sbc [hl]
 	ld [hld], a
-	ld a, [rDIV]
+	ldh a, [rDIV]
 	adc [hl]
 	ld [hld], a
 	ret nc
@@ -100,7 +97,7 @@ AdvanceRNGState::
 	ld a, [hli]
 	ld l, [hl] ; wRNGCumulativeDividerPlus[1]
 	ld h, a ; wRNGCumulativeDividerPlus[0]
-	ld a, [rDIV]
+	ldh a, [rDIV]
 	rra
 	jr nc, .try_upper
 .try_lower
@@ -140,8 +137,12 @@ AdvanceRNGState::
 	ld [hl], e ; wRNGState[3]
 	ret
 
+BattleRandom::
+; Handles all RNG calls in the battle engine, allowing
+; link battles to remain in sync using a shared PRNG.
+	farjp _BattleRandom
 
-RandomRange:: ; 2fb1
+RandomRange::
 ; Return a random number between 0 and a (non-inclusive).
 
 	push bc
@@ -161,7 +162,7 @@ RandomRange:: ; 2fb1
 	push bc
 .loop
 	call Random
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	ld c, a
 	add b
 	jr c, .loop
@@ -172,7 +173,6 @@ RandomRange:: ; 2fb1
 
 	pop bc
 	ret
-; 2fcb
 
 BattleRandomRange::
 ; battle friendly RandomRange

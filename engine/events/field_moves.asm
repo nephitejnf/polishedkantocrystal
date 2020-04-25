@@ -1,25 +1,24 @@
-BlindingFlash:: ; 8c7e1
+BlindingFlash::
 	farcall FadeOutPalettes
 	ld hl, wStatusFlags
 	set 2, [hl] ; Flash
 	farcall ReplaceTimeOfDayPals
 	farcall UpdateTimeOfDayPal
-	ld b, CGB_MAPPALS
+	ld a, CGB_MAPPALS
 	call GetCGBLayout
 	farcall LoadBlindingFlashPalette
 	farjp FadeInPalettes
-; 8c80a
 
-ShakeHeadbuttTree: ; 8c80a
-	farcall ClearSpriteAnims
+ShakeHeadbuttTree:
+	call ClearSpriteAnims
 	ld de, CutGrassGFX
-	ld hl, VTiles1
+	ld hl, vTiles1
 	lb bc, BANK(CutGrassGFX), 4
 	call Request2bpp
-	ld de, HeadbuttTreeGFX
-	ld hl, VTiles1 tile $04
+	ld hl, HeadbuttTreeGFX
+	ld de, vTiles1 tile $04
 	lb bc, BANK(HeadbuttTreeGFX), 8
-	call Request2bpp
+	call DecompressRequest2bpp
 	call Cut_Headbutt_GetPixelFacing
 	ld a, SPRITE_ANIM_INDEX_HEADBUTT
 	call _InitSpriteAnimStruct
@@ -27,7 +26,7 @@ ShakeHeadbuttTree: ; 8c80a
 	add hl, bc
 	ld [hl], $84
 	ld a, 36 * 4
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call HideHeadbuttTree
 	ld a, $20
@@ -42,7 +41,7 @@ ShakeHeadbuttTree: ; 8c80a
 	jr z, .done
 	dec [hl]
 	ld a, 36 * 4
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call DelayFrame
 	jr .loop
@@ -51,28 +50,21 @@ ShakeHeadbuttTree: ; 8c80a
 	call LoadMapPart
 	call ApplyTilemapInVBlank
 	xor a
-	ld [hBGMapMode], a
-	farcall ClearSpriteAnims
-	ld hl, wSprites + 36 * 4
-	ld bc, wSpritesEnd - (wSprites + 36 * 4)
+	ldh [hBGMapMode], a
+	call ClearSpriteAnims
+	ld hl, wVirtualOAM + 36 * 4
+	ld bc, wVirtualOAMEnd - (wVirtualOAM + 36 * 4)
 	xor a
-	call ByteFill
-	farcall LoadStandardFontPointer
-	ld d, h
-	ld e, l
-	ld hl, VTiles1
-	lb bc, BANK(FontNormal), 12
-	call Get1bpp
+	rst ByteFill
+	call DelayFrame
 	jp ReplaceKrisSprite
-; 8c893
 
-HeadbuttTreeGFX: ; 8c893
-INCBIN "gfx/overworld/headbutt_tree.2bpp"
-; 8c913
+HeadbuttTreeGFX:
+INCBIN "gfx/overworld/headbutt_tree.2bpp.lz"
 
-HideHeadbuttTree: ; 8c913
+HideHeadbuttTree:
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld a, [wPlayerDirection]
 	and %00001100
 	srl a
@@ -93,18 +85,16 @@ HideHeadbuttTree: ; 8c913
 	ld [hld], a
 	call ApplyTilemapInVBlank
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
-; 8c938
 
-TreeRelativeLocationTable: ; 8c938
+TreeRelativeLocationTable:
 	dwcoord 8,     8 + 2 ; RIGHT
 	dwcoord 8,     8 - 2 ; LEFT
 	dwcoord 8 - 2, 8     ; DOWN
 	dwcoord 8 + 2, 8     ; UP
-; 8c940
 
-OWCutAnimation: ; 8c940
+OWCutAnimation:
 	; Animation index in e
 	; 0: Split tree in half
 	; 1: Mow the lawn
@@ -120,55 +110,39 @@ OWCutAnimation: ; 8c940
 	bit 7, a
 	ret nz
 	ld a, 36 * 4
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call OWCutJumptable
 	call DelayFrame
 	jr .loop
-; 8c96d
 
-.LoadCutGFX: ; 8c96d
+.LoadCutGFX:
 	call ClearSpriteAnims
 	ld de, CutGrassGFX
-	ld hl, VTiles1
+	ld hl, vTiles1
 	lb bc, BANK(CutGrassGFX), 4
 	call Request2bpp
 	ld de, CutTreeGFX
-	ld hl, VTiles1 tile $4
+	ld hl, vTiles1 tile $4
 	lb bc, BANK(CutTreeGFX), 4
 	jp Request2bpp
-; 8c98c
 
-CutTreeGFX: ; c898c
+CutTreeGFX:
 INCBIN "gfx/overworld/cut_tree.2bpp"
-; c89cc
 
-CutGrassGFX: ; 8c9cc
+CutGrassGFX:
 INCBIN "gfx/overworld/cut_grass.2bpp"
-; 8ca0c
 
-OWCutJumptable: ; 8ca0c
-	ld a, [wJumptableIndex]
-	ld e, a
-	ld d, 0
-	ld hl, .dw
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
-; 8ca1b
+OWCutJumptable:
+	call StandardStackJumpTable
 
-
-.dw ; 8ca1b (23:4a1b)
+.Jumptable:
 	dw Cut_SpawnAnimateTree
 	dw Cut_SpawnAnimateLeaves
 	dw Cut_StartWaiting
 	dw Cut_WaitAnimSFX
 
-
-Cut_SpawnAnimateTree: ; 8ca23 (23:4a23)
+Cut_SpawnAnimateTree:
 	call Cut_Headbutt_GetPixelFacing
 	ld a, SPRITE_ANIM_INDEX_CUT_TREE ; cut tree
 	call _InitSpriteAnimStruct
@@ -183,7 +157,7 @@ Cut_SpawnAnimateTree: ; 8ca23 (23:4a23)
 	inc [hl]
 	ret
 
-Cut_SpawnAnimateLeaves: ; 8ca3c (23:4a3c)
+Cut_SpawnAnimateLeaves:
 	call Cut_GetLeafSpawnCoords
 	xor a
 	call Cut_SpawnLeaf
@@ -200,14 +174,14 @@ Cut_SpawnAnimateLeaves: ; 8ca3c (23:4a3c)
 	inc [hl]
 	ret
 
-Cut_StartWaiting: ; 8ca5c (23:4a5c)
+Cut_StartWaiting:
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 ; Cut_WaitAnimSFX
 	ld hl, wJumptableIndex
 	inc [hl]
 
-Cut_WaitAnimSFX: ; 8ca64 (23:4a64)
+Cut_WaitAnimSFX:
 	ld hl, wcf64
 	ld a, [hl]
 	and a
@@ -220,7 +194,7 @@ Cut_WaitAnimSFX: ; 8ca64 (23:4a64)
 	set 7, [hl]
 	ret
 
-Cut_SpawnLeaf: ; 8ca73 (23:4a73)
+Cut_SpawnLeaf:
 	push de
 	push af
 	ld a, SPRITE_ANIM_INDEX_LEAF ; leaf
@@ -238,7 +212,7 @@ Cut_SpawnLeaf: ; 8ca73 (23:4a73)
 	pop de
 	ret
 
-Cut_GetLeafSpawnCoords: ; 8ca8e (23:4a8e)
+Cut_GetLeafSpawnCoords:
 	ld de, 0
 	ld a, [wMetatileStandingX]
 	bit 0, a
@@ -261,9 +235,8 @@ Cut_GetLeafSpawnCoords: ; 8ca8e (23:4a8e)
 	inc hl
 	ld d, [hl]
 	ret
-; 8cab3 (23:4ab3)
 
-.Coords: ; 8cab3
+.Coords:
 	dbpixel 11, 12 ; facing down,  top left
 	dbpixel  9, 12 ; facing down,  top right
 	dbpixel 11, 14 ; facing down,  bottom left
@@ -283,9 +256,8 @@ Cut_GetLeafSpawnCoords: ; 8ca8e (23:4a8e)
 	dbpixel 13, 12 ; facing right, top right
 	dbpixel 11, 10 ; facing right, bottom left
 	dbpixel 13, 10 ; facing right, bottom right
-; 8cad3
 
-Cut_Headbutt_GetPixelFacing: ; 8cad3 (23:4ad3)
+Cut_Headbutt_GetPixelFacing:
 	ld a, [wPlayerDirection]
 	and %00001100
 	srl a
@@ -297,17 +269,14 @@ Cut_Headbutt_GetPixelFacing: ; 8cad3 (23:4ad3)
 	inc hl
 	ld d, [hl]
 	ret
-; 8cae5 (23:4ae5)
 
-.Coords: ; 8cae5
+.Coords:
 	dbpixel 10, 13
 	dbpixel 10,  9
 	dbpixel  8, 11
 	dbpixel 12, 11
-; 8caed
 
-
-FlyFromAnim: ; 8caed
+FlyFromAnim:
 	call DelayFrame
 	ld a, [wVramState]
 	push af
@@ -330,7 +299,7 @@ FlyFromAnim: ; 8caed
 	bit 7, a
 	jr nz, .exit
 	xor a
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call FlyFunction_FrameTimer
 	call DelayFrame
@@ -340,9 +309,8 @@ FlyFromAnim: ; 8caed
 	pop af
 	ld [wVramState], a
 	ret
-; 8cb33
 
-FlyToAnim: ; 8cb33
+FlyToAnim:
 	call DelayFrame
 	ld a, [wVramState]
 	push af
@@ -368,7 +336,7 @@ FlyToAnim: ; 8cb33
 	bit 7, a
 	jr nz, .exit
 	xor a
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call FlyFunction_FrameTimer
 	call DelayFrame
@@ -377,7 +345,7 @@ FlyToAnim: ; 8cb33
 .exit
 	pop af
 	ld [wVramState], a
-	ld hl, wSprites + 2 ; Tile ID
+	ld hl, wVirtualOAM + 2 ; Tile ID
 	xor a
 	ld c, $4
 .loop2
@@ -388,31 +356,25 @@ FlyToAnim: ; 8cb33
 	inc a
 	dec c
 	jr nz, .loop2
-	ld hl, wSprites + 4 * 4
-	ld bc, wSpritesEnd - (wSprites + 4 * 4)
+	ld hl, wVirtualOAM + 4 * 4
+	ld bc, wVirtualOAMEnd - (wVirtualOAM + 4 * 4)
 	xor a
-	jp ByteFill
+	rst ByteFill
+	ret
 
-FlyFunction_InitGFX: ; 8cb9b (23:4b9b)
-	farcall ClearSpriteAnims
+FlyFunction_InitGFX:
+	call ClearSpriteAnims
 	ld de, CutGrassGFX
-	ld hl, VTiles1 tile $00
+	ld hl, vTiles1 tile $00
 	lb bc, BANK(CutGrassGFX), 4
 	call Request2bpp
-	ld a, [wCurPartyMon]
-	ld hl, wPartySpecies
-	ld e, a
-	ld d, 0
-	add hl, de
-	ld a, [hl]
-	ld [wd265], a
 	ld e, $84
 	farcall FlyFunction_GetMonIcon
 	xor a
 	ld [wJumptableIndex], a
 	ret
 
-FlyFunction_FrameTimer: ; 8cbc8 (23:4bc8)
+FlyFunction_FrameTimer:
 	call .SpawnLeaf
 	ld hl, wcf64
 	ld a, [hl]
@@ -431,7 +393,7 @@ FlyFunction_FrameTimer: ; 8cbc8 (23:4bc8)
 	set 7, [hl]
 	ret
 
-.SpawnLeaf: ; 8cbe6 (23:4be6)
+.SpawnLeaf:
 	ld hl, wcf65
 	ld a, [hl]
 	inc [hl]

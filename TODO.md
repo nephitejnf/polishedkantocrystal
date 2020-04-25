@@ -32,13 +32,23 @@ The final, non-beta 3.0 release should include all of these.
 * Finish wild rosters
 * DVs to vary palettes for trainers' duplicate Pokémon (e.g. Clair's Dragonairs)
 * Encounter both kinds of regional Arboks in Route 28 + Mt. Silver
+* Complete Alolan and Galarian forms
+   * Persian as a one-time trade from an Alolan tourist (you can breed it for more)
+   * Rattata/Raticate in Kanto
+   * Grimer/Muk in Goldenrod City (Celadon's Muk are a sign of its pollution, Goldenrod's Alolan Muk would be a sign that they manage pollution better)
+   * Sandshrew/Sandslash and Vulpix/Ninetales in the Ice Path and/or Seafoam Islands
+   * Diglett/Dugtrio on Cinnabar Island (right now I replaced all Diglett with the Alolan ones, with the explanation that the volcano affected climate everywhere, but I'd rather have the ones in Diglett's Cave be normal)
+   * Geodude/Graveler/Golem in Rock Tunnel (the Lodestone there is already used to evolve Magnezone)
+   * Marowak, Exeggutor, and Raichu evolve while holding the Odd Souvenir (bought on Shamouti Island)
+   * Ponyta/Rapidash on Shamouti Island
+   * Corsola/Cursola in Scary Cave
+   * Farfetch'd/Sirfetch'd instead of non-faithful Farfetch'd
 
 
 ### Aesthetics
 
 * Play a shiny flash when Pokémon are caught (from Prism)
 * "make hgss" to use HGSS-based palettes
-* Lance should hold up his cape
 
 
 ### Events
@@ -52,7 +62,6 @@ The final, non-beta 3.0 release should include all of these.
 * Acquire dolls from NPCs throughout the regions
 * Red goes back home after you battle him, and returns to Mt. Silver after you battle Green
 * Clarify that Silver dropped his trainer card, like in HGSS
-* Use Team Rocket music for Route 47 and 48 during their mission
 * Oak tells you to meet him in his lab after the Lance rematch to unlock Mt. Silver
 * Replace Skyla with Marlon (team: Politoed, Tentacruel, Blastoise, Starmie, Mantine, Cloyster, Vaporeon)
 * Nurse trainer class (heals you afterwards)
@@ -90,7 +99,6 @@ Shamouti Island:
 
 ### Optimizations
 
-* Optimize battle command engine, including parameterized commands
 * Optimize map scripts with the various new commands and PERSONTYPE_GENERICTRAINER
 
 
@@ -98,17 +106,6 @@ Shamouti Island:
 
 Some of these may never be added; they're just suggestions.
 
-* Alolan and Galarian forms (update GetBaseData and everything that refers to EvosAttacksPointers)
-   * Persian as a one-time trade from an Alolan tourist (you can breed it for more)
-   * Rattata/Raticate in Kanto
-   * Grimer/Muk in Goldenrod City (Celadon's Muk are a sign of its pollution, Goldenrod's Alolan Muk would be a sign that they manage pollution better)
-   * Sandshrew/Sandslash and Vulpix/Ninetales in the Ice Path and/or Seafoam Islands
-   * Diglett/Dugtrio on Cinnabar Island (right now I replaced all Diglett with the Alolan ones, with the explanation that the volcano affected climate everywhere, but I'd rather have the ones in Diglett's Cave be normal)
-   * Geodude/Graveler/Golem in Rock Tunnel (the Lodestone there is already used to evolve Magnezone)
-   * Marowak, Exeggutor, and Raichu evolve while holding the Odd Souvenir (bought on Shamouti Island)
-   * Ponyta/Rapidash on Shamouti Island
-   * Corsola/Cursola in Scary Cave
-   * Farfetch'd/Sirfetch'd instead of non-faithful Farfetch'd
 * More Pokémon
    * Rewrite everything to use two-byte IDs, allowing 65,534 Pokémon
    * Restore Stantler as a Normal/Psychic type, and make Girafarig Psychic/Dark
@@ -213,7 +210,6 @@ Some of these may never be added; they're just suggestions.
    * "Your attack was great! Let's battle again sometime!"
 * Select reorders Pokémon in party menu
 * Use Mart interface for selling decorations, with a red sidebar
-* Add separate throwing animation graphics for more Poké Ball designs
 * Make Eggs use their Pokémon's palette
 
 There are some features that I do *not* ever plan to add to Polished Crystal:

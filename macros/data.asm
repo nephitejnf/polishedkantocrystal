@@ -41,18 +41,17 @@ dbbwww: MACRO
 ENDM
 
 dn: MACRO
-	rept _NARG / 2
+rept _NARG / 2
 	db (\1) << 4 + (\2)
-	shift
-	shift
-	endr
+	shift 2
+endr
 ENDM
 
 dx: MACRO
 x = 8 * ((\1) - 1)
 	rept \1
-	db ((\2) >> x) & $ff
-x = x + -8
+	db LOW((\2) >> x)
+x = x - 8
 	endr
 ENDM
 
@@ -69,17 +68,17 @@ bigdw: MACRO ; big-endian word
 ENDM
 
 dba: MACRO ; dbw bank, address
-	rept _NARG
+rept _NARG
 	dbw BANK(\1), \1
 	shift
-	endr
+endr
 ENDM
 
 dab: MACRO ; dwb address, bank
-	rept _NARG
+rept _NARG
 	dwb \1, BANK(\1)
 	shift
-	endr
+endr
 ENDM
 
 dbba: MACRO
@@ -101,25 +100,14 @@ endc
 ENDM
 
 dsprite: MACRO
-	db (\1 * 8) % $100 + \2, (\3 * 8) % $100 + \4, \5, \6
+	db LOW(\1 * 8) + \2, LOW(\3 * 8) + \4, \5, \6
 ENDM
 
 bcd: MACRO
-	rept _NARG
+rept _NARG
 	dn ((\1) % 100) / 10, (\1) % 10
 	shift
-	endr
-ENDM
-
-
-sine_wave: MACRO
-; \1: amplitude
-x = 0
-	rept $20
-	; Round up.
-	dw (sin(x) + (sin(x) & $ff)) >> 8
-x = x + (\1) * $40000
-	endr
+endr
 ENDM
 
 

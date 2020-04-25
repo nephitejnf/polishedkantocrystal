@@ -1,4 +1,3 @@
-; GengarPokedexEntry: ; 0x1b8c25
 	db "Shadow@" ; species name
 	dw 411, 890 ; height, width
 

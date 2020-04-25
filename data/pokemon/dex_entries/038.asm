@@ -1,4 +1,3 @@
-; NinetalesPokedexEntry: ; 0x18260c
 	db "Fox@" ; species name
 	dw 307, 440 ; height, width
 

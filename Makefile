@@ -5,7 +5,7 @@ TITLE := PKPCRYSTAL
 MCODE := PKPC
 ROMVERSION := 0x30
 
-FILLER = 0x00
+FILLER = 0xff
 
 ifneq ($(wildcard rgbds/.*),)
 RGBDS_DIR = rgbds/
@@ -40,25 +40,29 @@ endif
 
 
 .SUFFIXES:
-.PHONY: all clean crystal faithful nortc debug monochrome bankfree freespace compare tools
+.PHONY: all clean crystal faithful nortc debug monochrome freespace compare tools
 .SECONDEXPANSION:
 .PRECIOUS: %.2bpp %.1bpp %.lz %.o
 
 
 roms_md5      = roms.md5
 bank_ends_txt = contents/bank_ends.txt
-sorted_sym    = contents/$(NAME).sym
+copied_sym    = contents/$(NAME).sym
+copied_map    = contents/$(NAME).map
+copied_gbc    = contents/$(NAME).gbc
 
 PYTHON = python2
 CC     = gcc
 RM     = rm -f
 GFX    = $(PYTHON) gfx.py
-MD5    = md5sum
+MD5    = md5sum -b
 
-LZ            = tools/lzcomp
-SCAN_INCLUDES = tools/scan_includes
+LZ                = tools/lzcomp
+SCAN_INCLUDES     = tools/scan_includes
+SUB_2BPP          = tools/sub_2bpp.sh
+COLLISION_ASM2BIN = tools/collision_asm2bin.sh
 
-bank_ends := $(PYTHON) contents/bank_ends.py $(NAME)-$(VERSION)
+BANK_ENDS := utils/bankends
 
 
 crystal_obj := \
@@ -73,15 +77,15 @@ data/pokemon/evos_attacks.o \
 data/maps/map_data.o \
 data/text/common.o \
 data/tilesets.o \
-engine/credits.o \
+engine/movie/credits.o \
 engine/overworld/events.o \
 gfx/pics.o \
-gfx/sprites.o
+gfx/sprites.o \
+gfx/misc.o
 
 
-all: crystal
+all: crystal freespace
 
-crystal: FILLER = 0x00
 crystal: ROM_NAME = $(NAME)-$(VERSION)
 crystal: $(NAME)-$(VERSION).gbc
 
@@ -92,11 +96,7 @@ noir: crystal
 hgss: crystal
 debug: crystal
 
-bankfree: FILLER = 0xff
-bankfree: ROM_NAME = $(NAME)-$(VERSION)-0xff
-bankfree: $(NAME)-$(VERSION)-0xff.gbc
-
-freespace: $(bank_ends_txt) $(roms_md5) $(sorted_sym)
+freespace: $(bank_ends_txt) $(roms_md5) $(copied_sym) $(copied_map) $(copied_gbc)
 
 
 # Build tools when building the rom
@@ -120,14 +120,25 @@ compare: crystal
 	$(MD5) -c $(roms_md5)
 
 
-$(bank_ends_txt): crystal bankfree ; $(bank_ends) > $@
+$(bank_ends_txt): ROM_NAME = $(NAME)-$(VERSION)
+$(bank_ends_txt): crystal $(BANK_ENDS)
+	$(BANK_ENDS) $(ROM_NAME).map > $@
+
+$(BANK_ENDS): utils/bankends.c utils/parsemap.o
+	$(CC) $(CFLAGS) $^ -o $@
+
+utils/parsemap.o: utils/parsemap.c utils/parsemap.h
+	cd utils && $(CC) $(CFLAGS) -c parsemap.c
+
 $(roms_md5): crystal ; $(MD5) $(NAME)-$(VERSION).gbc > $@
-$(sorted_sym): crystal ; tail -n +3 $(NAME)-$(VERSION).sym | sort -o $@
+$(copied_sym): crystal ; cp $(NAME)-$(VERSION).sym $@
+$(copied_map): crystal ; cp $(NAME)-$(VERSION).map $@
+$(copied_gbc): crystal ; cp $(NAME)-$(VERSION).gbc $@
 
 
 %.o: dep = $(shell $(SCAN_INCLUDES) $(@D)/$*.asm)
 %.o: %.asm $$(dep)
-	$(RGBDS_DIR)rgbasm $(RGBASM_FLAGS) -o $@ $<
+	$(RGBDS_DIR)rgbasm $(RGBASM_FLAGS) -L -o $@ $<
 
 .gbc:
 %.gbc: $(crystal_obj)
@@ -135,12 +146,13 @@ $(sorted_sym): crystal ; tail -n +3 $(NAME)-$(VERSION).sym | sort -o $@
 	$(RGBDS_DIR)rgbfix $(RGBFIX_FLAGS) $@
 
 %.2bpp.vram0: %.2bpp
-# take the first 128 tiles (= 8192 px = 16384 bits = 2048 bytes)
-	head -c 2048 $< > $@
+	$(SUB_2BPP) $< 128 > $@
 
 %.2bpp.vram1: %.2bpp
-# skip the first 128 tiles
-	tail -c +2049 $< > $@
+	$(SUB_2BPP) $< 128 128 > $@
+
+%.2bpp.vram2: %.2bpp
+	$(SUB_2BPP) $< 256 128 > $@
 
 %.2bpp: %.png ; $(GFX) 2bpp $<
 %.1bpp: %.png ; $(GFX) 1bpp $<
@@ -148,15 +160,7 @@ $(sorted_sym): crystal ; tail -n +3 $(NAME)-$(VERSION).sym | sort -o $@
 gfx/pokemon/%/bitmask.asm gfx/pokemon/%/frames.asm: gfx/pokemon/%/front.2bpp
 
 data/tilesets/%_collision.bin: data/tilesets/%_collision.asm
-	@ TEMP_ASM=`mktemp -p /tmp collision.asm.XXX` ; \
-	TEMP_O=`mktemp -p /tmp collision.o.XXX` ; \
-	echo 'INCLUDE "constants/collision_constants.asm"' > "$$TEMP_ASM" ; \
-	echo 'INCLUDE "macros/collision.asm"' >> "$$TEMP_ASM" ; \
-	echo 'SECTION "C", ROM0[$$0]' >> "$$TEMP_ASM" ; \
-	echo 'INCLUDE "$<"' >> "$$TEMP_ASM" ; \
-	$(RGBDS_DIR)rgbasm -o "$$TEMP_O" "$$TEMP_ASM" ; \
-	tail -c +32 "$$TEMP_O" | head -c -4 > $@ ; \
-	$(RM) "$$TEMP_ASM" "$$TEMP_O"
+	RGBDS_DIR=$(RGBDS_DIR) $(COLLISION_ASM2BIN) $< $@
 
 %.lz: % ; $(LZ) $< $@
 

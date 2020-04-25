@@ -1,4 +1,3 @@
-; TentacoolPokedexEntry: ; 0x1b82d1
 	db "Jellyfish@" ; species name
 	dw 211, 1000 ; height, width
 

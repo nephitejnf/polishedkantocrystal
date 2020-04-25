@@ -20,7 +20,7 @@
 	const DAYCARETEXT_COME_AGAIN
 	const DAYCARETEXT_13
 
-Special_DayCareMan: ; 166d6
+Special_DayCareMan:
 	ld hl, wDaycareMan
 	bit 0, [hl]
 	jr nz, .AskWithdrawMon
@@ -55,9 +55,8 @@ Special_DayCareMan: ; 166d6
 .cancel
 	ld a, DAYCARETEXT_13
 	jp PrintDayCareText
-; 1672a
 
-Special_DayCareLady: ; 1672a
+Special_DayCareLady:
 	ld hl, wDaycareLady
 	bit 0, [hl]
 	jr nz, .AskWithdrawMon
@@ -93,20 +92,18 @@ Special_DayCareLady: ; 1672a
 .cancel
 	ld a, DAYCARETEXT_13
 	jp PrintDayCareText
-; 16781
 
-DayCareLadyIntroText: ; 16781
+DayCareLadyIntroText:
 	bit 7, [hl]
 	jr nz, DayCarePersonIntroText
 	inc a
-DayCareManIntroText: ; 1678f
+DayCareManIntroText:
 	set 7, [hl]
 DayCarePersonIntroText
 	call PrintDayCareText
 	jp YesNoBox
-; 16798
 
-DayCareAskDepositPokemon: ; 16798
+DayCareAskDepositPokemon:
 	ld a, [wPartyCount]
 	cp 2
 	jr c, .OnlyOneMon
@@ -159,18 +156,16 @@ DayCareAskDepositPokemon: ; 16798
 	ld a, DAYCARETEXT_REMOVE_MAIL
 	scf
 	ret
-; 167f1
 
-DayCare_DepositPokemonText: ; 167f6
+DayCare_DepositPokemonText:
 	ld a, DAYCARETEXT_DEPOSIT
 	call PrintDayCareText
 	ld a, [wCurPartySpecies]
 	call PlayCry
 	ld a, DAYCARETEXT_COME_BACK_LATER
 	jp PrintDayCareText
-; 16807
 
-DayCare_AskWithdrawBreedMon: ; 16807
+DayCare_AskWithdrawBreedMon:
 	ld a, [wStringBuffer2 + 1]
 	and a
 	jr nz, .grew_at_least_one_level
@@ -215,9 +210,8 @@ DayCare_AskWithdrawBreedMon: ; 16807
 	ld a, DAYCARETEXT_NOT_ENOUGH_MONEY
 	scf
 	ret
-; 16850
 
-DayCare_TakeMoney_PlayCry: ; 16850
+DayCare_TakeMoney_PlayCry:
 	ld bc, wStringBuffer2 + 2
 	ld de, wMoney
 	farcall TakeMoney
@@ -227,9 +221,8 @@ DayCare_TakeMoney_PlayCry: ; 16850
 	call PlayCry
 	ld a, DAYCARETEXT_TOO_SOON
 	jp PrintDayCareText
-; 1686d
 
-GetPriceToRetrieveBreedmon: ; 1686d
+GetPriceToRetrieveBreedmon:
 	ld a, b
 	ld [wStringBuffer2], a
 	ld a, d
@@ -250,9 +243,8 @@ GetPriceToRetrieveBreedmon: ; 1686d
 	ld a, l
 	ld [wStringBuffer2 + 4], a
 	ret
-; 1689b
 
-PrintDayCareText: ; 1689b
+PrintDayCareText:
 	ld e, a
 	ld d, 0
 	ld hl, .TextTable
@@ -262,9 +254,8 @@ PrintDayCareText: ; 1689b
 	ld h, [hl]
 	ld l, a
 	jp PrintText
-; 168aa
 
-.TextTable: ; 168aa
+.TextTable:
 	dw .DayCareManIntro ; 00
 	dw .DayCareManOddEgg ; 01
 	dw .DayCareLadyIntro ; 02
@@ -285,142 +276,120 @@ PrintDayCareText: ; 1689b
 	dw .NotEnoughMoney ; 11
 	dw .OhFineThen ; 12
 	dw .ComeAgain ; 13
-; 168d2
 
-.DayCareManIntro: ; 0x168d2
+.DayCareManIntro:
 	; I'm the DAY-CARE MAN. Want me to raise a #MON?
 	text_jump UnknownText_0x1bdaa9
-	db "@"
-; 0x168d7
+	text_end
 
-.DayCareManOddEgg: ; 0x168d7
+.DayCareManOddEgg:
 	; I'm the DAY-CARE MAN. Do you know about EGGS? I was raising #MON with my wife, you see. We were shocked to find an EGG! How incredible is that? So, want me to raise a #MON?
 	text_jump UnknownText_0x1bdad8
-	db "@"
-; 0x168dc
+	text_end
 
-.DayCareLadyIntro: ; 0x168dc
+.DayCareLadyIntro:
 	; I'm the DAY-CARE LADY. Should I raise a #MON for you?
 	text_jump UnknownText_0x1bdb85
-	db "@"
-; 0x168e1
+	text_end
 
-.DayCareLadyOddEgg: ; 0x168e1
+.DayCareLadyOddEgg:
 	; I'm the DAY-CARE LADY. Do you know about EGGS? My husband and I were raising some #MON, you see. We were shocked to find an EGG! How incredible could that be? Should I raise a #MON for you?
 	text_jump UnknownText_0x1bdbbb
-	db "@"
-; 0x168e6
+	text_end
 
-.WhichOne: ; 0x168e6
+.WhichOne:
 	; What should I raise for you?
 	text_jump UnknownText_0x1bdc79
-	db "@"
-; 0x168eb
+	text_end
 
-.JustOneMon: ; 0x168eb
+.JustOneMon:
 	; Oh? But you have just one #MON.
 	text_jump UnknownText_0x1bdc97
-	db "@"
-; 0x168f0
+	text_end
 
-.CantAcceptEgg: ; 0x168f0
+.CantAcceptEgg:
 	; Sorry, but I can't accept an EGG.
 	text_jump UnknownText_0x1bdcb8
-	db "@"
-; 0x168f5
+	text_end
 
-.RemoveMail: ; 0x168f5
+.RemoveMail:
 	; Remove MAIL before you come see me.
 	text_jump UnknownText_0x1bdcda
-	db "@"
-; 0x168fa
+	text_end
 
-.LastHealthyMon: ; 0x168fa
+.LastHealthyMon:
 	; If you give me that, what will you battle with?
 	text_jump UnknownText_0x1bdcff
-	db "@"
-; 0x168ff
+	text_end
 
-.OkayIllRaiseYourMon: ; 0x168ff
+.OkayIllRaiseYourMon:
 	; OK. I'll raise your @ .
 	text_jump UnknownText_0x1bdd30
-	db "@"
-; 0x16904
+	text_end
 
-.ComeBackForItLater: ; 0x16904
+.ComeBackForItLater:
 	; Come back for it later.
 	text_jump UnknownText_0x1bdd4b
-	db "@"
-; 0x16909
+	text_end
 
-.AreWeGeniusesOrWhat: ; 0x16909
+.AreWeGeniusesOrWhat:
 	; Are we geniuses or what? Want to see your @ ?
 	text_jump UnknownText_0x1bdd64
-	db "@"
-; 0x1690e
+	text_end
 
-.AskRetrieveMon: ; 0x1690e
+.AskRetrieveMon:
 	; Your @ has grown a lot. By level, it's grown by @ . If you want your #MON back, it will cost ¥@ .
 	text_jump UnknownText_0x1bdd96
-	db "@"
-; 0x16913
+	text_end
 
-.PerfectHeresYourMon: ; 0x16913
+.PerfectHeresYourMon:
 	; Perfect! Here's your #MON.
 	text_jump UnknownText_0x1bde04
-	db "@"
-; 0x16918
+	text_end
 
-.GotBackMon: ; 0x16918
+.GotBackMon:
 	; got back @ .
 	text_jump UnknownText_0x1bde1f
-	db "@"
-; 0x1691d
+	text_end
 
-.ImmediatelyWithdrawMon: ; 0x1691d
+.ImmediatelyWithdrawMon:
 	; Huh? Back already? Your @ needs a little more time with us. If you want your #MON back, it will cost ¥100.
 	text_jump UnknownText_0x1bde32
-	db "@"
-; 0x16922
+	text_end
 
-.PartyFull: ; 0x16922
+.PartyFull:
 	; You have no room for it.
 	text_jump UnknownText_0x1bdea2
-	db "@"
-; 0x16927
+	text_end
 
-.NotEnoughMoney: ; 0x16927
+.NotEnoughMoney:
 	; You don't have enough money.
 	text_jump UnknownText_0x1bdebc
-	db "@"
-; 0x1692c
+	text_end
 
-.OhFineThen: ; 0x1692c
+.OhFineThen:
 	; Oh, fine then.
 	text_jump UnknownText_0x1bded9
-	db "@"
-; 0x16931
+	text_end
 
-.ComeAgain: ; 0x16931
+.ComeAgain:
 	; Come again.
 	text_jump UnknownText_0x1bdee9
-	db "@"
-; 0x16936
+	text_end
 
-Special_DayCareManOutside: ; 16936
+Special_DayCareManOutside:
 	ld hl, wDaycareMan
 	bit 6, [hl]
 	jr nz, .AskGiveEgg
 	ld hl, .NotYet
 	jp PrintText
 
-.NotYet: ; 0x16944
+.NotYet:
 	; Not yet…
 	text_jump UnknownText_0x1bdef6
-	db "@"
-; 0x16949
+	text_end
 
-.AskGiveEgg: ; 16949
+.AskGiveEgg:
 	ld hl, .IntroText
 	call PrintText
 	call YesNoBox
@@ -447,54 +416,48 @@ Special_DayCareManOutside: ; 16936
 .Load0:
 	call PrintText
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .PartyFull:
 	ld hl, .PartyFullText
 	call PrintText
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; 16993
 
-.IntroText: ; 0x16993
+.IntroText:
 	; Ah, it's you! We were raising your #MON, and my goodness, were we surprised! Your #MON had an EGG! We don't know how it got there, but your #MON had it. You want it?
 	text_jump UnknownText_0x1bdf00
-	db "@"
-; 0x16998
+	text_end
 
-.GotEggText: ; 0x16998
+.GotEggText:
 	; received the EGG!
 	text_jump UnknownText_0x1bdfa5
-	db "@"
-; 0x1699d
+	text_end
 
-.TakeGoodCareOfItText: ; 0x1699d
+.TakeGoodCareOfItText:
 	; Take good care of it.
 	text_jump UnknownText_0x1bdfba
-	db "@"
-; 0x169a2
+	text_end
 
-.IllKeepItThanksText: ; 0x169a2
+.IllKeepItThanksText:
 	; Well then, I'll keep it. Thanks!
 	text_jump UnknownText_0x1bdfd1
-	db "@"
-; 0x169a7
+	text_end
 
-.PartyFullText: ; 0x169a7
+.PartyFullText:
 	; You have no room in your party. Come back later.
 	text_jump UnknownText_0x1bdff2
-	db "@"
-; 0x169ac
+	text_end
 
-DayCare_GiveEgg: ; 169ac
+DayCare_GiveEgg:
 	ld a, [wEggMonLevel]
 	ld [wCurPartyLevel], a
 	ld hl, wPartyCount
 	ld a, [hl]
 	cp PARTY_LENGTH
-	jr nc, .PartyFull
+	jp nc, .PartyFull
 	inc a
 	ld [hl], a
 
@@ -505,11 +468,24 @@ DayCare_GiveEgg: ; 169ac
 	ld [hli], a
 	ld [wCurSpecies], a
 	ld [wCurPartySpecies], a
-	ld a, -1
-	ld [hl], a
+
+	; Red Gyarados' Eggs should be plain
+	cp MAGIKARP
+	jr nz, .not_red_magikarp
+	ld a, [wEggMonForm]
+	and FORM_MASK
+	cp GYARADOS_RED_FORM
+	jr c, .not_red_magikarp
+	ld a, [wEggMonForm]
+	and $ff - FORM_MASK
+	or PLAIN_FORM
+	ld [wEggMonForm], a
+.not_red_magikarp
+
+	ld [hl], -1
 
 	ld hl, wPartyMonNicknames
-	ld bc, PKMN_NAME_LENGTH
+	ld bc, MON_NAME_LENGTH
 	call DayCare_GetCurrentPartyMember
 	ld hl, wEggNick
 	rst CopyBytes
@@ -527,6 +503,8 @@ DayCare_GiveEgg: ; 169ac
 	ld bc, wEggMonEnd - wEggMon
 	rst CopyBytes
 
+	ld a, [wEggMonForm]
+	ld [wCurForm], a
 	call GetBaseData
 	ld a, [wPartyCount]
 	dec a
@@ -558,7 +536,6 @@ DayCare_GiveEgg: ; 169ac
 .PartyFull:
 	scf
 	ret
-; 16a31
 
 DayCare_GetCurrentPartyMember:
 	ld a, [wPartyCount]
@@ -696,12 +673,7 @@ InheritDV:
 .found_dv
 	push de ; Egg DVs inherited to
 	; current HL is Parent, DE is Egg, if a is odd, swap
-	jr nc, .swap_done
-	push de
-	ld d, h
-	ld e, l
-	pop hl
-.swap_done
+	call c, SwapHLDE
 	; inherit x from HL, y from DE in %xxxxyyyy
 	; This means that half is "inherited" from Egg, half from Parent
 	ld a, [hl]
@@ -721,7 +693,7 @@ InheritDV:
 	or 1
 	ret
 
-DayCare_InitBreeding: ; 16a3b
+DayCare_InitBreeding:
 	ld a, [wDaycareLady]
 	bit 0, a
 	ret z
@@ -742,13 +714,13 @@ DayCare_InitBreeding: ; 16a3b
 	xor a
 	ld hl, wEggMon
 	ld bc, wEggMonEnd - wEggMon
-	call ByteFill
+	rst ByteFill
 	ld hl, wEggNick
-	ld bc, PKMN_NAME_LENGTH
-	call ByteFill
+	ld bc, MON_NAME_LENGTH
+	rst ByteFill
 	ld hl, wEggOT
 	ld bc, NAME_LENGTH
-	call ByteFill
+	rst ByteFill
 	ld a, [wBreedMon1Species]
 	ld [wCurPartySpecies], a
 	ld a, [wBreedMon1Gender]
@@ -757,22 +729,27 @@ DayCare_InitBreeding: ; 16a3b
 	ld [wMonType], a
 	ld a, [wBreedMon1Species]
 	cp DITTO
-	ld a, $1
+	ld a, 1
 	jr z, .LoadWhichBreedmonIsTheMother
 	ld a, [wBreedMon2Species]
 	cp DITTO
-	ld a, 0 ; not xor a; preserve carry flag
+	ld a, 0
 	jr z, .LoadWhichBreedmonIsTheMother
 	farcall GetGender
-	ld a, 0 ; not xor a; preserve carry flag
+	ld a, 0
 	jr z, .LoadWhichBreedmonIsTheMother
 	inc a
 
 .LoadWhichBreedmonIsTheMother:
+	; load wCurForm for base data check later
 	ld [wBreedMotherOrNonDitto], a
 	and a
+	ld a, [wBreedMon1Form]
+	ld [wCurForm], a
 	ld a, [wBreedMon1Species]
 	jr z, .GotMother
+	ld a, [wBreedMon2Form]
+	ld [wCurForm], a
 	ld a, [wBreedMon2Species]
 
 .GotMother:
@@ -784,21 +761,28 @@ DayCare_InitBreeding: ; 16a3b
 
 	ld a, [wCurPartySpecies]
 	cp NIDORAN_F
-	jr z, .NidoranFamilyMother
-	cp NIDORINA
-	jr z, .NidoranFamilyMother
-	cp NIDOQUEEN
 	jr nz, .GotEggSpecies
-.NidoranFamilyMother:
+
+	; random Nidoran offspring
 	call Random
 	cp 1 + 50 percent
-	ld a, NIDORAN_F
-	jr c, .GotEggSpecies
-	ld a, NIDORAN_M
+	; a = carry ? NIDORAN_F : NIDORAN_M
+	sbc a
+	and NIDORAN_F - NIDORAN_M
+	add NIDORAN_M
 .GotEggSpecies:
 	ld [wCurPartySpecies], a
 	ld [wCurSpecies], a
 	ld [wEggMonSpecies], a
+
+	; Form inheritance: from the mother or non-Ditto. If both
+	; parents share species, pick at random.
+	; Must assign [wCurForm] before GetBaseData.
+	ld hl, wBreedMon1Form
+	call .inherit_mother_unless_samespecies
+	ld a, [hl]
+	and FORM_MASK
+	ld [wCurForm], a
 
 	call GetBaseData
 
@@ -906,7 +890,8 @@ DayCare_InitBreeding: ; 16a3b
 	jr z, .got_ability
 
 .no_ha_boost
-	; 80% to get mother's ability
+	; 60% to get mother's ability
+	; (after coincidences: 79% to inherit ability 1 or 2, 62% to inherit HA)
 	ld a, [wBreedMotherOrNonDitto]
 	and a
 	ld a, [wBreedMon1Ability]
@@ -915,16 +900,18 @@ DayCare_InitBreeding: ; 16a3b
 .got_mother_ability
 	ld b, a
 
+	; 2/5 = 40% random ability
 	ld a, 5
 	call RandomRange
-	and a
-	jr z, .random_ability
+	cp 2
+	jr c, .random_ability
 
 	ld a, b
 	and ABILITY_MASK
 	jr .got_ability
 
 .random_ability
+	; 2/40 = 5% HA; 19/40 = 47.5% either other ability
 	ld a, 40
 	call RandomRange
 	cp 2
@@ -1015,32 +1002,31 @@ DayCare_InitBreeding: ; 16a3b
 	or [hl]
 	ld [hl], a
 .not_shiny
+
 	; Gender
+	ld a, [wEggMonSpecies]
+	ld c, a
+	ld a, [wCurForm]
+	ld b, a
+	call GetGenderRatio
+	; if rnd(0..7) < c: female, else male
 	ld a, 8
 	call RandomRange
-	ld b, a
-	ld a, [wEggMonSpecies]
-	dec a
-	push bc
-	ld hl, BASEMON_GENDER
-	ld bc, BASEMON_STRUCT_LENGTH
-	rst AddNTimes
-	ld a, BANK(BaseData)
-	call GetFarByte
-	swap a
-	and $f
-	pop bc
-	ld c, a
-	ld a, b
-	; if rnd(0..7) < c: female, else male
 	cp c
-	ld a, FEMALE
-	jr c, .got_gender
-	xor a ; ld a, MALE
-.got_gender
+	; a = carry (rnd(0..7) < c) ? FEMALE : MALE (0)
+	sbc a
+	and FEMALE
 	ld hl, wEggMonGender
 	or [hl]
 	ld [hl], a
+
+	; Form (same byte as gender) was already determined
+	ld a, [wCurForm]
+	or [hl]
+	ld [hl], a
+
+	; Mark as an egg (same byte as form)
+	set MON_IS_EGG_F, [hl]
 
 	; Ball inheritance: from the mother or non-Ditto. If both
 	; parents share species, pick at random.
@@ -1048,19 +1034,6 @@ DayCare_InitBreeding: ; 16a3b
 	call .inherit_mother_unless_samespecies
 	ld a, [hl]
 	ld [wEggMonCaughtBall], a
-
-	; Form works the same as Ball
-	ld hl, wBreedMon1Form
-	call .inherit_mother_unless_samespecies
-	ld a, [hl]
-	and FORM_MASK
-	ld hl, wEggMonForm
-	or [hl]
-	ld [hl], a
-
-	; Mark as an egg
-	ld hl, wEggMonIsEgg
-	set MON_IS_EGG_F, [hl]
 
 	; PP, egg cycles, level
 	ld hl, wStringBuffer1

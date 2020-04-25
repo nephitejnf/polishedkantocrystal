@@ -1,4 +1,3 @@
-; SlowpokePokedexEntry: ; 0x1b85d3
 	db "Dopey@" ; species name
 	dw 311, 790 ; height, width
 

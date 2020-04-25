@@ -12,8 +12,8 @@ Pokémon Polished Crystal would never have been finished without the help of man
 ## Code
 
 * FIQ for multiple feature code contributions (specifically: abilities, natures affecting stats, better AI, various item and move effects, and other battle engine features; and porting TPP's caught data stats screen).
-* luckytyphlosion for performance optimizations leading to a better performing game engine, and a 60FPS overworld.
-* The TPP Anniversary Crystal 251 dev team for making their code publically usable (specifically: the Move Relearner, Stats Judge, automatic box swtching, Gen VI money loss, and caught data stats page code).
+* luckytyphlosion for performance optimizations to the game engine, and a 60FPS overworld.
+* The TPP Anniversary Crystal 251 dev team for making their code publically usable (specifically: the Move Relearner, automatic box switching, Gen VI money loss, and caught data stats page code).
 * Sanqui for the music player with piano roll visualization.
 * ax6 for porting the xorshift+ PRNG from Prism.
 * MeroMero for the in-battle color inversion code, Smeargle color code, and some move animations.
@@ -23,6 +23,7 @@ Pokémon Polished Crystal would never have been finished without the help of man
 * pfero for the improved GetAnimatedFrontpic routine and the BGMap0 fill-tile bug.
 * Armada651 for the playable Celadon Game Corner lucky slot machine.
 * tonyism for the in-battle shiny icon code.
+* Tachytaenius for the ability to change the Ball a Pokémon is in.
 
 
 ## Music
@@ -42,13 +43,13 @@ Pokémon Polished Crystal would never have been finished without the help of man
 * Blue Emerald, solo993, Chamber, Lake, Neslug, and Pikachu25 for many sprites and icons.
 * metalflygon08 for the many Pokémon and trainer sprites.
 * JaceDeane for the Goldenrod Museum paintings, many Pokémon and trainer sprites, Prof. Ivy's overworld sprite, and some tiles.
-* bloodless for sprites of Buck, Maylene, Skyla, Veteran♂, Pikachu, Diglett, and Dugtrio.
+* bloodless for sprites of Buck, Maylene, Skyla, Veteran♂, some variant Pikachu, Diglett, and Dugtrio.
 * Kuroko Aizawa for sprites of Prof. Ivy, Looker, Cheryl, Officer♀, Aroma Lady, Artist.
 * SCMidna for animations of Alolan Diglett and Dugtrio, Munchlax, Unown ! and ?, and Surfing Pikachu, and the stat trainers' overworld sprites.
 * Acrozz for many HGSS Pokémon palettes, and sprites and animations of Magikarp forms.
 * Freeline for animations of Honchkrow and Munchlax, and the Rocket Executives' and stat trainers' overworld sprites.
 * Megaman-Omega for some of Prism's overworld sprites.
-* SoupPotato (aka SourApple) for some move animations and Ace Duo's sprite.
+* SoupPotato (aka SourApple) for some move animations, sprites of Red Gyarados and Ace Duo, and Berry tree tiles.
 * slempa for some move animations.
 * spritershawn for sprites of Red, Blue, and Green.
 * isamuakai01 for sprites of Steven and Cynthia.

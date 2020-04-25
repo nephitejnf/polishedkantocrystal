@@ -80,7 +80,7 @@ InitializeHiddenGrotto::
 	ld a, d
 .Done:
 ; return content type
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 INCLUDE "data/events/hidden_grottoes/probabilities.asm"
@@ -97,7 +97,7 @@ GetHiddenGrottoTableEntry:
 .ok
 	ld a, [hli]
 	cp -1
-	ld a, $0 ; not xor a; preserve carry flag
+	ld a, 0
 	ret z
 	ld a, [hl]
 	ret
@@ -109,7 +109,7 @@ TryResetHiddenGrottoes:
 	xor a
 	ld hl, wHiddenGrottoContents
 	ld bc, NUM_HIDDEN_GROTTOES * 2
-	call ByteFill
+	rst ByteFill
 	ld hl, wDailyFlags4
 	set 5, [hl] ; ENGINE_ALL_HIDDEN_GROTTOES
 	ret
@@ -136,7 +136,7 @@ GetHiddenGrottoContents::
 	call GetHiddenGrottoContentPointer
 	inc hl
 	ld a, [hl]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 GetCurHiddenGrottoLevel::

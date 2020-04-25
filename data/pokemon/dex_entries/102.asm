@@ -1,4 +1,3 @@
-; ExeggcutePokedexEntry: ; 0x1b8f84
 	db "Egg@" ; species name
 	dw 104, 60 ; height, width
 

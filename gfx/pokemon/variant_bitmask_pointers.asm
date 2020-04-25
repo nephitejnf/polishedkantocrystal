@@ -34,6 +34,7 @@ PikachuBitmasksPointers:
 	dw PikachuSurfBitmasks
 	dw PikachuPikaBitmasks
 	dw PikachuChuchuBitmasks
+	dw PikachuSparkBitmasks
 
 PichuBitmasksPointers:
 	dw PichuPlainBitmasks
@@ -61,6 +62,8 @@ MagikarpBitmasksPointers:
 	dw MagikarpBubblesBitmasks
 	dw MagikarpForeheadBitmasks
 	dw MagikarpMaskBitmasks
+	dw MagikarpSaucyBitmasks
+	dw MagikarpRaindropBitmasks
 
 GyaradosBitmasksPointers:
 rept NUM_MAGIKARP
@@ -71,3 +74,87 @@ endr
 MewtwoBitmasksPointers:
 	dw MewtwoPlainBitmasks
 	dw MewtwoArmoredBitmasks
+
+RattataBitmasksPointers:
+	dw RattataPlainBitmasks
+	dw RattataAlolanBitmasks
+
+RaticateBitmasksPointers:
+	dw RaticatePlainBitmasks
+	dw RaticateAlolanBitmasks
+
+SandshrewBitmasksPointers:
+	dw SandshrewPlainBitmasks
+	dw SandshrewAlolanBitmasks
+
+SandslashBitmasksPointers:
+	dw SandslashPlainBitmasks
+	dw SandslashAlolanBitmasks
+
+VulpixBitmasksPointers:
+	dw VulpixPlainBitmasks
+	dw VulpixAlolanBitmasks
+
+NinetalesBitmasksPointers:
+	dw NinetalesPlainBitmasks
+	dw NinetalesAlolanBitmasks
+
+DiglettBitmasksPointers:
+	dw DiglettPlainBitmasks
+	dw DiglettAlolanBitmasks
+
+DugtrioBitmasksPointers:
+	dw DugtrioPlainBitmasks
+	dw DugtrioAlolanBitmasks
+
+MeowthBitmasksPointers:
+	dw MeowthPlainBitmasks
+	dw MeowthAlolanBitmasks
+
+PersianBitmasksPointers:
+	dw PersianPlainBitmasks
+	dw PersianAlolanBitmasks
+
+GeodudeBitmasksPointers:
+	dw GeodudePlainBitmasks
+	dw GeodudeAlolanBitmasks
+
+GravelerBitmasksPointers:
+	dw GravelerPlainBitmasks
+	dw GravelerAlolanBitmasks
+
+GolemBitmasksPointers:
+	dw GolemPlainBitmasks
+	dw GolemAlolanBitmasks
+
+GrimerBitmasksPointers:
+	dw GrimerPlainBitmasks
+	dw GrimerAlolanBitmasks
+
+MukBitmasksPointers:
+	dw MukPlainBitmasks
+	dw MukAlolanBitmasks
+
+RaichuBitmasksPointers:
+	dw RaichuPlainBitmasks
+	dw RaichuAlolanBitmasks
+
+ExeggutorBitmasksPointers:
+	dw ExeggutorPlainBitmasks
+	dw ExeggutorAlolanBitmasks
+
+MarowakBitmasksPointers:
+	dw MarowakPlainBitmasks
+	dw MarowakAlolanBitmasks
+
+PonytaBitmasksPointers:
+	dw PonytaPlainBitmasks
+	dw PonytaGalarianBitmasks
+
+RapidashBitmasksPointers:
+	dw RapidashPlainBitmasks
+	dw RapidashGalarianBitmasks
+
+WeezingBitmasksPointers:
+	dw WeezingPlainBitmasks
+	dw WeezingGalarianBitmasks

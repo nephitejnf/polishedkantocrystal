@@ -1,4 +1,3 @@
-; VulpixPokedexEntry: ; 0x18259b
 	db "Fox@" ; species name
 	dw 200, 220 ; height, width
 

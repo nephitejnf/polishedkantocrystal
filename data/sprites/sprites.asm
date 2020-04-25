@@ -179,14 +179,15 @@ SpriteHeaders:
 	overworld_sprite BigLaprasSpriteGFX, STANDING_SPRITE, PAL_OW_BLUE
 	overworld_sprite BigOnixSpriteGFX, STANDING_SPRITE, PAL_OW_BROWN
 	overworld_sprite BigGyaradosSpriteGFX, BIG_GYARADOS_SPRITE, PAL_OW_RED
+	overworld_sprite PidgeottoSideSpriteGFX, STANDING_SPRITE, PAL_OW_BROWN
 	overworld_sprite RattataBackSpriteGFX, STANDING_SPRITE, PAL_OW_PURPLE
 	overworld_sprite SlowpoketailSpriteGFX, STANDING_SPRITE, PAL_OW_RED
 	overworld_sprite WeirdTreeSpriteGFX, STANDING_SPRITE, PAL_OW_GREEN
 	overworld_sprite BallCutFruitSpriteGFX, STANDING_SPRITE, PAL_OW_TREE
 	overworld_sprite BoulderRockFossilSpriteGFX, STANDING_SPRITE, PAL_OW_ROCK
 	overworld_sprite BookPaperPokedexSpriteGFX, STANDING_SPRITE, PAL_OW_BROWN
-	overworld_sprite SnesSpriteGFX, STANDING_SPRITE, PAL_OW_RED
-	overworld_sprite N64SpriteGFX, STANDING_SPRITE, PAL_OW_BROWN
+	overworld_sprite SnesSpriteGFX, STANDING_SPRITE, PAL_OW_BROWN
+	overworld_sprite N64SpriteGFX, STANDING_SPRITE, PAL_OW_SILVER
 	overworld_sprite GameCubeSpriteGFX, STANDING_SPRITE, PAL_OW_PURPLE
 	overworld_sprite WiiSpriteGFX, STANDING_SPRITE, PAL_OW_BLUE
 	overworld_sprite SilverTrophySpriteGFX, STANDING_SPRITE, PAL_OW_SILVER

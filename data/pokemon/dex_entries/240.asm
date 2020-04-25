@@ -1,4 +1,3 @@
-; MagbyPokedexEntry: ; 0x1d140e
 	db "Live Coal@" ; species name
 	dw 204, 470 ; height, width
 

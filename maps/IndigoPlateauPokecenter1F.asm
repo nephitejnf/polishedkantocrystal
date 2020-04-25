@@ -24,7 +24,7 @@ IndigoPlateauPokecenter1F_MapScriptHeader:
 	pc_nurse_event  9, 7
 	mart_clerk_event  1,  9, MARTTYPE_STANDARD, MART_INDIGO_PLATEAU
 	object_event  6,  9, SPRITE_GRAMPS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, PERSONTYPE_SCRIPT, 0, IndigoPlateauTeleportGuyScript, EVENT_TELEPORT_GUY
-	object_event  5,  9, SPRITE_ABRA, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, PAL_NPC_BROWN, PERSONTYPE_POKEMON, ABRA, IndigoPlateauAbraText, EVENT_TELEPORT_GUY
+	pokemon_event  5,  9, ABRA, -1, -1, PAL_NPC_BROWN, IndigoPlateauAbraText, EVENT_TELEPORT_GUY
 	object_event  5, 12, SPRITE_ACE_TRAINER_M, SPRITEMOVEDATA_WANDER, 1, 1, -1, -1, PAL_NPC_BLUE, PERSONTYPE_COMMAND, jumptextfaceplayer, IndigoPlateauCooltrainermText, -1
 
 	const_def 1 ; object constants
@@ -70,13 +70,13 @@ PlateauRivalBattleTrigger2:
 	ifequal THURSDAY, .MaybeLyraFight
 	ifequal FRIDAY, .MaybeRivalFight
 	ifequal SATURDAY, .MaybeLyraFight
-	jump .Done
+	end
 
 .MaybeRivalFight:
 	checkevent EVENT_BEAT_RIVAL_IN_MT_MOON
-	iffalse .Done
+	iffalse DoNothingScript
 	checkflag ENGINE_INDIGO_PLATEAU_RIVAL_FIGHT
-	iftrue .Done
+	iftrue DoNothingScript
 	appear INDIGOPLATEAUPOKECENTER1F_SILVER
 	turnobject PLAYER, DOWN
 	showemote EMOTE_SHOCK, PLAYER, 15
@@ -131,9 +131,9 @@ PlateauRivalBattleTrigger2:
 
 .MaybeLyraFight:
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iffalse .Done
+	iffalse DoNothingScript
 	checkflag ENGINE_INDIGO_PLATEAU_LYRA_FIGHT
-	iftrue .Done
+	iftrue DoNothingScript
 .LyraFight:
 	appear INDIGOPLATEAUPOKECENTER1F_LYRA
 	turnobject PLAYER, DOWN
@@ -191,7 +191,6 @@ PlateauRivalBattleTrigger2:
 	playmapmusic
 	setflag ENGINE_INDIGO_PLATEAU_LYRA_FIGHT
 	clearevent EVENT_FINAL_BATTLE_WITH_LYRA
-.Done:
 	end
 
 PlateauRivalText1:
@@ -370,7 +369,7 @@ IndigoPlateauYellowScript:
 	playsound SFX_CAUGHT_MON
 	waitsfx
 	buttonsound
-	givepoke CHARMANDER, 10, SITRUS_BERRY
+	givepoke CHARMANDER, NO_FORM, 10, SITRUS_BERRY
 	jump .Finish
 
 .Bulbasaur:
@@ -379,7 +378,7 @@ IndigoPlateauYellowScript:
 	playsound SFX_CAUGHT_MON
 	waitsfx
 	buttonsound
-	givepoke BULBASAUR, 10, SITRUS_BERRY
+	givepoke BULBASAUR, NO_FORM, 10, SITRUS_BERRY
 	jump .Finish
 
 .Squirtle:
@@ -388,7 +387,7 @@ IndigoPlateauYellowScript:
 	playsound SFX_CAUGHT_MON
 	waitsfx
 	buttonsound
-	givepoke SQUIRTLE, 10, SITRUS_BERRY
+	givepoke SQUIRTLE, NO_FORM, 10, SITRUS_BERRY
 .Finish:
 	writetext .GoodbyeText
 	waitbutton

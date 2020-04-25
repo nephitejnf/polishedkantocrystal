@@ -1,4 +1,3 @@
-; SmearglePokedexEntry: ; 0x1d11e0
 	db "Painter@" ; species name
 	dw 311, 1280 ; height, width
 

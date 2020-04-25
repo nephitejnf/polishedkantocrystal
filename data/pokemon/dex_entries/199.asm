@@ -1,4 +1,3 @@
-; SlowkingPokedexEntry: ; 0x1d0292
 	db "Royal@" ; species name
 	dw 607, 1750 ; height, width
 

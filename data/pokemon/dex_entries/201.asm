@@ -1,4 +1,3 @@
-; UnownPokedexEntry: ; 0x1d0373
 	db "Symbol@" ; species name
 	dw 108, 110 ; height, width
 

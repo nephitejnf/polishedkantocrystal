@@ -1,4 +1,3 @@
-; VenomothPokedexEntry: ; 0x182abf
 	db "Poison Moth@" ; species name
 	dw 411, 280 ; height, width
 

@@ -1,4 +1,4 @@
-GetPokeBallWobble: ; f971 (3:7971)
+GetPokeBallWobble:
 ; Returns whether a Poke Ball will wobble in the catch animation.
 ; Whether a Pokemon is caught is determined beforehand.
 	ld a, BANK(wBuffer2)
@@ -41,7 +41,7 @@ GetPokeBallWobble: ; f971 (3:7971)
 	call Random
 	cp b
 	ld c, 2 ; escaped
-	jr nc, .done
+	ret nc
 
 .ok
 	; Check how many wobbles we've done so far. If this would've been our 4th,
@@ -52,13 +52,12 @@ GetPokeBallWobble: ; f971 (3:7971)
 .critical_shake
 	ld [wBuffer2], a
 	cp 4
-	jr c, .done
-	inc c ; captured
+	ret c
 
-.done
+	inc c ; captured
 	ret
 
-.WobbleProbabilities: ; f9ba
+.WobbleProbabilities:
 ; With a catch rate of a, each wobble is calculated
 ; as happening if a random number 0-255 <= b.
 ; b is 256/(255/a)^0.1875, so use a lookup table.

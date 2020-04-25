@@ -131,6 +131,7 @@ These changes have been made since the current 2.2.0 release. If you build the p
 * Add: Three battle styles: set, switch, and predict.
 * Add: Battle Scene → Battle Effects.
 * Add: Final Lyra battle.
+* Add: Use a Ball on an already-caught Pokémon to change its Ball.
 * Add: Kurt makes Balls right away.
 * Add: Bug-Catching Contest prizes from HGSS.
 * Add: Hidden Grottoes.
@@ -150,6 +151,7 @@ These changes have been made since the current 2.2.0 release. If you build the p
 * Add: Imperial or metric units.
 * Add: 12-hour or 24-hour clock.
 * Add: Item icons in the Bag.
+* Add: Thrown Balls use individual icons.
 * Add: Pokédex shows shiny palettes after getting the Shiny Charm.
 * Add: New Game+ preserves your money, Battle Points, and PC Pokémon.
 * Add: Phone call trainers ask automatically for your number.
@@ -164,6 +166,7 @@ These changes have been made since the current 2.2.0 release. If you build the p
 * Add: Dark battle intro at night.
 * Add: Trainer battles can be forfeited.
 * Add: Show genders in party menu.
+* Add: Show weather icons during battle like Gen 5+.
 * Add: Vending machines have a 1/32 chance of giving an extra item.
 * Add: Cross whirlpools, don't remove them (like HGSS).
 * Add: Rename RageCandyBar to Cake of Rage.

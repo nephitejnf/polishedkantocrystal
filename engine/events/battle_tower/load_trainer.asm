@@ -1,14 +1,14 @@
-Function_LoadOpponentTrainer: ; 1f8000
-	ld a, [rSVBK]
+Function_LoadOpponentTrainer:
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBT_OTTrainer)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	; Fill BT_OTTrainer with zeros
 	xor a
 	ld hl, wBT_OTTrainer
 	ld bc, wBT_OTTrainerEnd - wBT_OTTrainer
-	call ByteFill
+	rst ByteFill
 
 	ld a, BANK(sBTTrainers)
 	call GetSRAMBank
@@ -22,11 +22,11 @@ Function_LoadOpponentTrainer: ; 1f8000
 	inc a
 	jr z, .load_tycoon
 
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	ld b, a
 .resample ; loop to find a random trainer
 	call Random
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	add b
 	ld b, a ; b contains the nr of the trainer
 	and %01111111
@@ -75,7 +75,7 @@ endc
 	call CloseSRAM
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 INCLUDE "data/battle_tower/classes.asm"
@@ -86,7 +86,7 @@ PopulateBattleTowerTeam:
 	xor a
 	ld hl, wOTPartyMons
 	ld bc, wOTPartyMonsEnd - wOTPartyMons
-	call ByteFill
+	rst ByteFill
 
 	; Set party size
 	ld a, BATTLETOWER_NROFPKMNS
@@ -200,7 +200,7 @@ PopulateBattleTowerTeam:
 	push hl
 	ld bc, 6
 	ld a, 252
-	call ByteFill
+	rst ByteFill
 	pop hl
 
 	pop de
@@ -232,7 +232,7 @@ PopulateBattleTowerTeam:
 	ld d, h
 	ld e, l
 	ld hl, wStringBuffer1
-	ld bc, PKMN_NAME_LENGTH
+	ld bc, MON_NAME_LENGTH
 	rst CopyBytes
 	pop de
 	ld a, d
@@ -297,6 +297,7 @@ BT_SetLevel:
 	ld a, [wPartyCount]
 	ld hl, wPartyMon1
 	call .set_level
+	set 7, d ; flag that we're dealing with opponent
 	ld a, [wOTPartyCount]
 	ld hl, wOTPartyMon1
 .set_level
@@ -314,15 +315,18 @@ BT_SetLevel:
 	ld a, [hl]
 	ld [wCurSpecies], a
 	ld [wCurPartySpecies], a
-	push hl
+	ld bc, wPartyMon1Form - wPartyMon1Species
+	add hl, bc
+	ld a, [hl]
+	ld [wCurForm], a
 	call GetBaseData
-	pop hl
 
-	ld bc, wPartyMon1Level - wPartyMon1Species
+	ld bc, wPartyMon1Level - wPartyMon1Form
 	add hl, bc
 	pop de
 	push de
 	ld a, d
+	and $7f
 	ld [hl], a
 	ld [wCurPartyLevel], a ; for stat calculation
 
@@ -333,22 +337,38 @@ BT_SetLevel:
 	farcall CalcExpAtLevel
 	pop hl
 	push hl
-	ld a, [hProduct + 1]
+	ldh a, [hProduct + 1]
 	ld [hli], a
-	ld a, [hProduct + 2]
+	ldh a, [hProduct + 2]
 	ld [hli], a
-	ld a, [hProduct + 3]
+	ldh a, [hProduct + 3]
 	ld [hl], a
 	pop hl
+	pop de
+	push de
+	bit 7, d
+	ld a, 0
+	jr nz, .hyper_training_done
+	ld a, b
+	push hl
+	ld a, e
+	ld [wCurPartyMon], a
+	farcall GetHyperTraining
+	pop hl
 
+.hyper_training_done
 	; Calculate stats
+	push af
 	ld bc, wPartyMon1MaxHP - wPartyMon1Exp
 	add hl, bc
 	push hl
 	ld bc, wPartyMon1EVs - wPartyMon1MaxHP
 	add hl, bc
 	pop de
-	ld b, TRUE
+	pop af
+
+	inc a
+	ld b, a
 	push de
 	predef CalcPkmnStats
 	pop hl

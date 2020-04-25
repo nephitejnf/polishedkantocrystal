@@ -1,4 +1,3 @@
-; PidgeyPokedexEntry: ; 0x181cfa
 	db "Tiny Bird@" ; species name
 	dw 100, 40 ; height, width
 

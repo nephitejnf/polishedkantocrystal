@@ -1,17 +1,18 @@
-GetVariant: ; 51040
+GetVariant:
 	ld a, [wCurPartySpecies]
 	cp PIKACHU
 	jr z, .GetPikachuVariant
-	cp MEWTWO
-	jp z, .GetMewtwoVariant
 
 ; Return CurForm based on Form at hl
 	ld a, [hl]
 	and FORM_MASK
 	jr nz, .ok
+
 	ld a, [wCurPartySpecies]
 	cp ARBOK
 	jr nz, .not_kanto_arbok
+; NPC trainers should appear to have Kantonian Arbok without explicitly
+; giving them all a personality, so form 0 becomes 1 (Johto) or 2 (Kanto)
 	push bc
 	push de
 	call RegionCheck
@@ -24,7 +25,8 @@ GetVariant: ; 51040
 	ld a, ARBOK_KANTO_FORM
 	jr .ok
 .not_kanto_arbok
-	ld a, 1 ; safeguard: form 0 becomes variant 1
+	ld a, PLAIN_FORM ; safeguard: form 0 becomes variant 1
+
 .ok
 	ld [wCurForm], a
 	ret
@@ -67,73 +69,54 @@ rept NUM_MOVES
 endr
 
 .plain
-	ld a, PIKACHU_PLAIN_FORM
+	ld a, PLAIN_FORM
 .use_form
 	ld [wCurForm], a
 	ret
 
-.GetMewtwoVariant:
-; Return Mewtwo form (1-2) in wCurForm
-; hl-9 is ...MonItem
-; hl is ...MonForm
-
-	push bc
-	ld bc, MON_ITEM - MON_FORM
-	add hl, bc
-	pop bc
-
-	ld a, [hl]
-	cp ARMOR_SUIT
-	ld a, MEWTWO_ARMORED_FORM
-	jr z, .armored_mewtwo
-	dec a ; MEWTWO_PLAIN_FORM
-.armored_mewtwo
-	ld [wCurForm], a
-	ret
-
-GetFrontpic: ; 51077
+GetFrontpic:
 	ld a, [wCurPartySpecies]
 	ld [wCurSpecies], a
 	and a
 	ret z
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	call _GetFrontpic
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	jp CloseSRAM
 
-FrontpicPredef: ; 5108b
+FrontpicPredef:
 	ld a, [wCurPartySpecies]
 	ld [wCurSpecies], a
 	and a
 	ret z
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	call _GetFrontpic
-	ld a, BANK(VTiles3)
-	ld [rVBK], a
+	ld a, BANK(vTiles3)
+	ldh [rVBK], a
 	call GetAnimatedFrontpic
 	xor a
-	ld [rVBK], a
+	ldh [rVBK], a
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	jp CloseSRAM
 
-_GetFrontpic: ; 510a5
+_GetFrontpic:
 	ld a, BANK(sScratch)
 	call GetSRAMBank
 	push de
-	call GetBaseData
+	call GetBaseData ; [wCurSpecies] and [wCurForm] are already set
 	ld a, [wBasePicSize]
 	and $f
 	ld b, a
 	push bc
 	call GetFrontpicPointer
 	ld a, BANK(wDecompressScratch)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld a, b
 	ld de, wDecompressScratch
 	call FarDecompress
@@ -152,18 +135,23 @@ _GetFrontpic: ; 510a5
 	push hl
 	ld de, sScratch + 1 tiles
 	ld c, 7 * 7
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	ld b, a
 	call Get2bpp
 	pop hl
 	ret
 
-GetFrontpicPointer: ; 510d7
+GetFrontpicPointer:
 	ld a, [wCurPartySpecies]
 	call GetRelevantPicPointers
 	ld a, [wCurPartySpecies]
 	jr nc, .notvariant
+
+	; form 0 and 1 are one and the same
 	ld a, [wCurForm]
+	and a
+	jr nz, .notvariant
+	inc a
 .notvariant
 	dec a
 	ld bc, 6
@@ -177,13 +165,13 @@ GetFrontpicPointer: ; 510d7
 	pop bc
 	ret
 
-GetAnimatedFrontpic: ; 51103
+GetAnimatedFrontpic:
 	ld a, $1
-	ld [rVBK], a
+	ldh [rVBK], a
 	push hl
 	ld de, sScratch + 1 tiles
 	ld c, 7 * 7
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	ld b, a
 	call Get2bpp
 	pop hl
@@ -216,7 +204,7 @@ GetAnimatedFrontpic: ; 51103
 	pop bc
 	pop hl
 	ld de, wDecompressScratch
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	ld b, a
 ; Improved routine by pfero
 ; https://gitgud.io/pfero/axyllagame/commit/486f4ed432ca49e5d1305b6402cc5540fe9d3aaa
@@ -231,15 +219,15 @@ GetAnimatedFrontpic: ; 51103
 	call Get2bpp
 	; Then move up a bit and load the rest
 	ld de, wDecompressScratch + (127 - 7 * 7) tiles
-	ld hl, VTiles4
-	ld a, [hROMBank]
+	ld hl, vTiles4
+	ldh a, [hROMBank]
 	ld b, a
 	ld a, [sScratch]
 	ld c, a
 .no_overflow
 	jp Get2bpp
 
-LoadFrontpicTiles: ; 5114f
+LoadFrontpicTiles:
 	ld hl, wDecompressScratch
 ; bc = c * $10
 	swap c
@@ -270,7 +258,7 @@ LoadFrontpicTiles: ; 5114f
 	jr nz, .loop
 	ret
 
-GetBackpic: ; 5116c
+GetBackpic:
 	ld a, [wCurPartySpecies]
 	and a
 	ret z
@@ -279,10 +267,10 @@ GetBackpic: ; 5116c
 	ld b, a
 	ld a, [wCurForm]
 	ld c, a
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $6
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	push de
 	ld a, b
 	push bc
@@ -311,14 +299,14 @@ GetBackpic: ; 5116c
 	call FixBackpicAlignment
 	pop hl
 	ld de, wDecompressScratch
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	ld b, a
 	call Get2bpp
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
-GetTrainerPic: ; 5120d
+GetTrainerPic:
 	ld a, [wTrainerClass]
 	and a
 	ret z
@@ -326,16 +314,16 @@ GetTrainerPic: ; 5120d
 	ret nc
 	call ApplyTilemapInVBlank
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld hl, TrainerPicPointers
 	ld a, [wTrainerClass]
 	dec a
 	ld bc, 3
 	rst AddNTimes
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $6
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	push de
 	ld a, BANK(TrainerPicPointers)
 	call GetFarByte
@@ -350,29 +338,29 @@ _Decompress7x7Pic:
 	pop hl
 	ld de, wDecompressScratch
 	ld c, 7 * 7
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	ld b, a
 	call Get2bpp
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	call ApplyTilemapInVBlank
 	ld a, $1
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 GetPaintingPic:
 	ld a, [wTrainerClass]
 	call ApplyTilemapInVBlank
 	xor a
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ld hl, PaintingPicPointers
 	ld a, [wTrainerClass]
 	ld bc, 3
 	rst AddNTimes
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, $6
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	push de
 	ld a, BANK(PaintingPicPointers)
 	call GetFarByte
@@ -383,31 +371,7 @@ GetPaintingPic:
 	pop af
 	jr _Decompress7x7Pic
 
-DecompressPredef: ; 5125d
-; Decompress lz data from b:hl to wDecompressScratch, then copy it to hROMBank:de.
-
-	ld a, [rSVBK]
-	push af
-	ld a, 6
-	ld [rSVBK], a
-
-	push de
-	push bc
-	ld a, b
-	ld de, wDecompressScratch
-	call FarDecompress
-	pop bc
-	ld de, wDecompressScratch
-	pop hl
-	ld a, [hROMBank]
-	ld b, a
-	call Get2bpp
-
-	pop af
-	ld [rSVBK], a
-	ret
-
-FixBackpicAlignment: ; 5127c
+FixBackpicAlignment:
 	push de
 	push bc
 	ld a, [wBoxAlignment]
@@ -442,7 +406,7 @@ FixBackpicAlignment: ; 5127c
 	pop de
 	ret
 
-PadFrontpic: ; 512ab
+PadFrontpic:
 	ld a, b
 	sub 5
 	jr z, .five
@@ -492,7 +456,7 @@ PadFrontpic: ; 512ab
 	jr nz, .Fill
 	ret
 
-LoadFrontpic: ; 512f2
+LoadFrontpic:
 	ld a, [wBoxAlignment]
 	and a
 	jr nz, .x_flip

@@ -1,4 +1,3 @@
-; KrabbyPokedexEntry: ; 0x1b8ddd
 	db "River Crab@" ; species name
 	dw 104, 140 ; height, width
 

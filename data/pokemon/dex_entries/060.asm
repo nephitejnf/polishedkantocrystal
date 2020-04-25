@@ -1,4 +1,3 @@
-; PoliwagPokedexEntry: ; 0x182f91
 	db "Tadpole@" ; species name
 	dw 200, 270 ; height, width
 

@@ -24,7 +24,7 @@ KurtsHouse_MapScriptHeader:
 	object_event  5,  3, SPRITE_SCHOOLGIRL, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, PERSONTYPE_SCRIPT, 0, KurtsGranddaughter1, EVENT_KURTS_HOUSE_GRANDDAUGHTER_1
 	object_event 14,  3, SPRITE_KURT, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, PERSONTYPE_SCRIPT, 0, KurtScript_0x18e3bd, EVENT_KURTS_HOUSE_KURT_2
 	object_event 11,  4, SPRITE_SCHOOLGIRL, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, PERSONTYPE_SCRIPT, 0, KurtsGranddaughter2, EVENT_KURTS_HOUSE_GRANDDAUGHTER_2
-	object_event  6,  3, SPRITE_SLOWPOKE, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, 0, PERSONTYPE_POKEMON, SLOWPOKE, KurtsHouseSlowpokeText, EVENT_KURTS_HOUSE_SLOWPOKE
+	pokemon_event  6,  3, SLOWPOKE, -1, -1, PAL_NPC_RED, KurtsHouseSlowpokeText, EVENT_KURTS_HOUSE_SLOWPOKE
 
 	const_def 1 ; object constants
 	const KURTSHOUSE_KURT1
@@ -128,11 +128,11 @@ KurtScript_0x18e178:
 	xor a
 	ld hl, wApricorns
 	or [hl]
-rept NUM_APRICORNS +- 1
+rept NUM_APRICORNS - 1
 	inc hl
 	or [hl]
 endr
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .AskApricorn:

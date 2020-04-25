@@ -1,19 +1,19 @@
-Special_CelebiShrineEvent: ; 4989a
+Special_CelebiShrineEvent:
 	call DelayFrame
 	ld a, [wVramState]
 	push af
 	xor a
 	ld [wVramState], a
 
-	farcall ClearSpriteAnims
-	ld de, SpecialCelebiLeafGFX
-	ld hl, VTiles1
-	lb bc, BANK(SpecialCelebiLeafGFX), 4
+	call ClearSpriteAnims
+	ld de, CutGrassGFX
+	ld hl, vTiles1
+	lb bc, BANK(CutGrassGFX), 4
 	call Request2bpp
-	ld de, SpecialCelebiGFX
-	ld hl, VTiles0 tile $84
-	lb bc, BANK(SpecialCelebiGFX), $10
-	call Request2bpp
+	ld hl, SpecialCelebiGFX
+	ld de, vTiles0 tile $84
+	lb bc, BANK(SpecialCelebiGFX), 4 * 4
+	call DecompressRequest2bpp
 	xor a
 	ld [wJumptableIndex], a
 
@@ -28,8 +28,7 @@ Special_CelebiShrineEvent: ; 4989a
 	ld [hl], SPRITE_ANIM_SEQ_CELEBI
 	ld hl, SPRITEANIMSTRUCT_0F
 	add hl, bc
-	ld a, $80
-	ld [hl], a
+	ld [hl], $80
 	ld a, 160 ; frame count
 	ld [wcf64], a
 	ld d, $0
@@ -42,7 +41,7 @@ Special_CelebiShrineEvent: ; 4989a
 	inc d
 	push de
 	ld a, $90
-	ld [wCurrSpriteOAMAddr], a
+	ld [wCurSpriteOAMAddr], a
 	farcall DoNextFrameForAllSprites
 	call CelebiEvent_CountDown
 	ld c, 2
@@ -55,7 +54,7 @@ Special_CelebiShrineEvent: ; 4989a
 	pop af
 	ld [wVramState], a
 
-	ld hl, wSprites + 2
+	ld hl, wVirtualOAM + 2
 	xor a
 	ld c, $4
 .OAMloop:
@@ -66,19 +65,17 @@ Special_CelebiShrineEvent: ; 4989a
 	inc a
 	dec c
 	jr nz, .OAMloop
-	ld hl, wSprites + 4 * 4
+	ld hl, wVirtualOAM + 4 * 4
 	ld bc, 36 * 4
 	xor a
-	call ByteFill
+	rst ByteFill
 
 	ld a, BATTLETYPE_LEGENDARY
 	ld [wBattleType], a
 
 	ret
 
-; 498f9
-
-CelebiEvent_CountDown: ; 49935
+CelebiEvent_CountDown:
 	ld hl, wcf64
 	ld a, [hl]
 	and a
@@ -91,18 +88,10 @@ CelebiEvent_CountDown: ; 49935
 	set 7, [hl]
 	ret
 
-; 49944
+SpecialCelebiGFX:
+INCBIN "gfx/overworld/celebi.2bpp.lz"
 
-SpecialCelebiLeafGFX: ; 49962
-INCBIN "gfx/overworld/celebi/leaf.2bpp"
-
-SpecialCelebiGFX: ; 499a2
-INCBIN "gfx/overworld/celebi/1.2bpp"
-INCBIN "gfx/overworld/celebi/2.2bpp"
-INCBIN "gfx/overworld/celebi/3.2bpp"
-INCBIN "gfx/overworld/celebi/4.2bpp"
-
-UpdateCelebiPosition: ; 49aa2 (12:5aa2)
+UpdateCelebiPosition:
 	ld hl, SPRITEANIMSTRUCT_XOFFSET
 	add hl, bc
 	ld a, [hl]
@@ -119,9 +108,8 @@ UpdateCelebiPosition: ; 49aa2 (12:5aa2)
 	add hl, bc
 	ld a, [hl]
 	ld d, a
-	cp $3a
+	cp $3a + 1
 	jr c, .skip
-	jr z, .skip
 	sub $3
 	ld [hl], a
 .skip
@@ -162,17 +150,14 @@ UpdateCelebiPosition: ; 49aa2 (12:5aa2)
 .float_down
 	ld hl, SPRITEANIMSTRUCT_YCOORD
 	add hl, bc
-	ld a, [hl]
-	sub $2
-	ld [hl], a
+	dec [hl]
+	dec [hl]
 	jr .ReinitSpriteAnimFrame
 
 .float_up
 	ld hl, SPRITEANIMSTRUCT_YCOORD
 	add hl, bc
-	ld a, [hl]
-	add $1
-	ld [hl], a
+	inc [hl]
 .ReinitSpriteAnimFrame:
 	pop af
 	ld hl, SPRITEANIMSTRUCT_XCOORD
@@ -192,36 +177,30 @@ UpdateCelebiPosition: ; 49aa2 (12:5aa2)
 	add hl, bc
 	ld a, SPRITE_ANIM_FRAMESET_CELEBI_LEFT
 	jp ReinitSpriteAnimFrame
-	ret
 
-.FreezeCelebiPosition: ; 49b30 (12:5b30)
+.FreezeCelebiPosition:
 	pop af
 	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
 	add hl, bc
 	ld a, SPRITE_ANIM_FRAMESET_CELEBI_LEFT
 	jp ReinitSpriteAnimFrame
 
-GetCelebiSpriteTile: ; 49bae
+GetCelebiSpriteTile:
 	push hl
 	push bc
-	push de
 	ld a, d
-	ld d, $3
-	ld e, d
-	cp $0
+	and a
 	jr z, .Frame1
-	cp d
+	cp 3
 	jr z, .Frame2
-	call .AddE
-	cp d
+	cp 6
 	jr z, .Frame3
-	call .AddE
-	cp d
+	cp 9
 	jr z, .Frame4
-	call .AddE
-	cp d
+	cp 12
 	jr c, .done
-	jr .restart
+	ld d, $ff
+	jr .done
 
 .Frame1:
 	ld a, $84
@@ -242,42 +221,21 @@ GetCelebiSpriteTile: ; 49bae
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], a
-	jr .done
-
-.restart
-	pop de
-	ld d, $ff
-	push de
-
 .done
-	pop de
 	pop bc
 	pop hl
 	ret
 
-; 49bed
-
-.AddE: ; 49bed
-	push af
-	ld a, d
-	add e
-	ld d, a
-	pop af
-	ret
-
-; 49bf3
-
-CheckCaughtCelebi: ; 49bf9
+CheckCaughtCelebi:
 	ld a, [wBattleResult]
 	bit 6, a
 	jr z, .false
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .false
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
-; 49c0c

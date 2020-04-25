@@ -70,10 +70,14 @@ FarChangeStat:
 
 .check_lowering
 	bit STAT_LOWER_F, b
-	jr nz, .ability_done
-	ld a, BATTLE_VARS_SUBSTATUS4_OPP
-	call GetBattleVar
-	bit SUBSTATUS_MIST, a
+	jr z, .ability_done
+	ldh a, [hBattleTurn]
+	and a
+	ld a, [wEnemyGuards]
+	jr z, .got_guard
+	ld a, [wPlayerGuards]
+.got_guard
+	and GUARD_MIST
 	jr z, .check_ability
 	bit STAT_SILENT_F, b
 	ret nz
@@ -108,10 +112,12 @@ FarChangeStat:
 	farcall CheckAlreadyExecuted
 	ret nz
 	farcall ShowPotentialAbilityActivation
-	farcall AnimateFailedMove
+	farcall DisableAnimations
 	farcall ShowEnemyAbilityActivation
+	farcall AnimateFailedMove
 	ld hl, DoesntAffectText
-	jp StdBattleTextBox
+	call StdBattleTextBox
+	farjp EnableAnimations
 
 .ability_done
 	bit STAT_TARGET_F, b
@@ -249,7 +255,7 @@ UseStatItemText:
 	ret
 
 GetStatName:
-	ld hl, .names
+	ld hl, StatNames
 	ld c, "@"
 .CheckName:
 	dec b
@@ -266,16 +272,7 @@ GetStatName:
 	rst CopyBytes
 	ret
 
-.names
-	db "Attack@"
-	db "Defense@"
-	db "Speed@"
-	db "Spcl.Atk@"
-	db "Spcl.Def@"
-	db "Accuracy@"
-	db "Evasion@"
-	db "stats@"
-
+INCLUDE "data/battle/stat_names.asm"
 
 DoLowerStat:
 	or 1
@@ -286,7 +283,7 @@ DoChangeStat:
 	push af
 	xor a
 	ld [wFailedMessage], a
-	ld a, [hBattleTurn]
+	ldh a, [hBattleTurn]
 	and a
 	ld hl, wPlayerStatLevels
 	jr z, .got_stat_levels
@@ -360,7 +357,7 @@ PlayStatChangeAnim:
 	push bc
 if !DEF(MONOCHROME)
 	ld hl, StatPals
-	ld de, wUnknOBPals palette PAL_BATTLE_OB_GRAY + 2
+	ld de, wOBPals1 palette PAL_BATTLE_OB_GRAY + 2
 	ld a, [wLoweredStat]
 	and $f
 	add a
@@ -369,8 +366,7 @@ if !DEF(MONOCHROME)
 	ld b, 0
 	add hl, bc
 	ld bc, 4
-	ld a, BANK(wUnknOBPals)
-	call FarCopyWRAM
+	call FarCopyColorWRAM
 	ld b, 2
 	call SafeCopyTilemapAtOnce
 endc
@@ -388,13 +384,10 @@ endc
 	farcall FarPlayBattleAnimation
 	pop af
 	ld [wNumHits], a
-	ld b, CGB_BATTLE_COLORS
+	ld a, CGB_BATTLE_COLORS
 	call GetCGBLayout
 	call SetPalettes
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 StatPals: ; similar to X items
 ; attack - red

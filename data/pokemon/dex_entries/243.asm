@@ -1,4 +1,3 @@
-; RaikouPokedexEntry: ; 0x1d156b
 	db "Thunder@" ; species name
 	dw 603, 3920 ; height, width
 

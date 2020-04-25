@@ -1,4 +1,3 @@
-; NidoranMPokedexEntry: ; 0x182392
 	db "Poison Pin@" ; species name
 	dw 108, 200 ; height, width
 

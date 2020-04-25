@@ -1,4 +1,3 @@
-; DragonairPokedexEntry: ; 0x1cc7dc
 	db "Dragon@" ; species name
 	dw 1301, 360 ; height, width
 

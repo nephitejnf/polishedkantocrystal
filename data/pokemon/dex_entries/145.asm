@@ -1,4 +1,3 @@
-; ZapdosPokedexEntry: ; 0x1cc697
 	db "Electric@" ; species name
 	dw 503, 1160 ; height, width
 

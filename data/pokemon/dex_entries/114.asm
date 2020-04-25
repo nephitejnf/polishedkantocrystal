@@ -1,4 +1,3 @@
-; TangelaPokedexEntry: ; 0x1b948c
 	db "Vine@" ; species name
 	dw 303, 770 ; height, width
 

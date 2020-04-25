@@ -1,4 +1,3 @@
-; SuicunePokedexEntry: ; 0x1d1642
 	db "Aurora@" ; species name
 	dw 607, 4120 ; height, width
 

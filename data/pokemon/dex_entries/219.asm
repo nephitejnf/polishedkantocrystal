@@ -1,4 +1,3 @@
-; MagcargoPokedexEntry: ; 0x1d0b21
 	db "Lava@" ; species name
 	dw 207, 1210 ; height, width
 

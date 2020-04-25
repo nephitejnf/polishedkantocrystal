@@ -1,4 +1,3 @@
-; ScytherPokedexEntry: ; 0x1b9851
 	db "Mantis@" ; species name
 	dw 411, 1230 ; height, width
 

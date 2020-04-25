@@ -1,4 +1,3 @@
-; UrsaringPokedexEntry: ; 0x1d0a41
 	db "Hibernator@" ; species name
 	dw 511, 2770 ; height, width
 

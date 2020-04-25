@@ -1,4 +1,3 @@
-; SandshrewPokedexEntry: ; 0x182184
 	db "Mouse@" ; species name
 	dw 200, 260 ; height, width
 

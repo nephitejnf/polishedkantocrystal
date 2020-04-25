@@ -1,7 +1,10 @@
-DisplayUsedMoveText: ; 105db0
-; battle command 03
+DisplayUsedMoveText:
+	ld a, BATTLE_VARS_SUBSTATUS2
+	call GetBattleVar
+	bit SUBSTATUS_MAGIC_BOUNCE, a
+	ret nz
 
-	ld a, [hBattleTurn]
+	ldh a, [hBattleTurn]
 	and a
 	jr nz, .start
 
@@ -16,13 +19,23 @@ DisplayUsedMoveText: ; 105db0
 	call GetBattleVar
 	ld [wd265], a
 
-	push hl
-	farcall CheckUserIsCharging
-	pop hl
-	jr nz, .charging
+	; Skip last move update if move was called (1=called, 2=Power Herb)
+	ldh a, [hBattleTurn]
+	and a
+	ld a, [wPlayerCharging]
+	jr z, .got_charging
+	ld a, [wEnemyCharging]
+.got_charging
+	cp 1
+	jr z, .charging
 
 	; update last move
+	push hl
+	ld a, BATTLE_VARS_LAST_COUNTER_MOVE
+	call GetBattleVarAddr
 	ld a, [wd265]
+	ld [hl], a
+	pop hl
 	ld [hl], a
 
 .charging
@@ -35,10 +48,8 @@ DisplayUsedMoveText: ; 105db0
 .ok
 	call StdBattleTextBox
 	jp ApplyTilemapInVBlank
-; 105db9
 
-
-UpdateUsedMoves: ; 105ed0
+UpdateUsedMoves:
 ; append move a to wPlayerUsedMoves unless it has already been used
 
 	push bc
@@ -92,4 +103,3 @@ UpdateUsedMoves: ; 105ed0
 ; list updated
 	pop bc
 	ret
-; 105ef6

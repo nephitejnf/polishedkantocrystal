@@ -25,11 +25,6 @@ KrissHouse2F_MapScriptHeader:
 KrissHouse2FInitializeRoom:
 	special ToggleDecorationsVisibility
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_8
-	checkevent EVENT_INITIALIZED_EVENTS
-	iftrue .SkipInizialization
-	jumpstd initializeevents
-
-.SkipInizialization:
 	return
 
 KrissHouse2FSetSpawn:
@@ -69,6 +64,8 @@ if DEF(DEBUG)
 	; pokedex
 	setflag ENGINE_POKEDEX
 ;	setflag ENGINE_UNOWN_DEX
+	; judge machine
+	setflag ENGINE_JUDGE_MACHINE
 	; all key items
 x = 0
 rept NUM_KEY_ITEMS
@@ -84,7 +81,13 @@ rept NUM_TMS + NUM_HMS
 x = x + 1
 endr
 	; useful items
-	giveitem MASTER_BALL, 99
+x = POKE_BALL
+rept CHERISH_BALL - POKE_BALL + 1
+if x != PARK_BALL && x != SAFARI_BALL
+	giveitem x, 99
+endc
+x = x + 1
+endr
 	giveitem MAX_POTION, 99
 	giveitem FULL_RESTORE, 99
 	giveitem MAX_REVIVE, 99
@@ -120,6 +123,8 @@ endr
 	giveitem BOTTLE_CAP, 99
 	giveitem MULCH, 99
 	giveitem MINT, 99
+	giveitem ODD_SOUVENIR, 10
+	giveitem ARMOR_SUIT, 1
 	; all decorations
 x = EVENT_DECO_BED_1
 rept EVENT_DECO_BIG_LAPRAS_DOLL - EVENT_DECO_BED_1 + 1
@@ -211,7 +216,7 @@ endr
 	setflag ENGINE_CREDITS_SKIP
 	setflag ENGINE_HAVE_SHINY_CHARM
 	; good party
-	givepoke MEWTWO, 100, BRIGHTPOWDER
+	givepoke MEWTWO, NO_FORM, 100, BRIGHTPOWDER
 	loadvar wPartyMon1EVs+0, 252
 	loadvar wPartyMon1EVs+1, 252
 	loadvar wPartyMon1EVs+2, 252
@@ -222,19 +227,19 @@ endr
 	loadvar wPartyMon1DVs+1, $ff
 	loadvar wPartyMon1DVs+2, $ff
 	loadvar wPartyMon1Personality, ABILITY_2 | MODEST
-	loadvar wPartyMon1Stats+0, 999 / $100
-	loadvar wPartyMon1Stats+1, 999 % $100
-	loadvar wPartyMon1Stats+2, 999 / $100
-	loadvar wPartyMon1Stats+3, 999 % $100
-	loadvar wPartyMon1Stats+4, 999 / $100
-	loadvar wPartyMon1Stats+5, 999 % $100
-	loadvar wPartyMon1Stats+6, 999 / $100
-	loadvar wPartyMon1Stats+7, 999 % $100
-	loadvar wPartyMon1Stats+8, 999 / $100
-	loadvar wPartyMon1Stats+9, 999 % $100
+	loadvar wPartyMon1Stats+0, HIGH(999)
+	loadvar wPartyMon1Stats+1, LOW(999)
+	loadvar wPartyMon1Stats+2, HIGH(999)
+	loadvar wPartyMon1Stats+3, LOW(999)
+	loadvar wPartyMon1Stats+4, HIGH(999)
+	loadvar wPartyMon1Stats+5, LOW(999)
+	loadvar wPartyMon1Stats+6, HIGH(999)
+	loadvar wPartyMon1Stats+7, LOW(999)
+	loadvar wPartyMon1Stats+8, HIGH(999)
+	loadvar wPartyMon1Stats+9, LOW(999)
 	; hm slaves
-	givepoke MEW, 100, LEFTOVERS
-	givepoke MEW, 100, LEFTOVERS
+	givepoke MEW, NO_FORM, 100, LEFTOVERS
+	givepoke MEW, NO_FORM, 100, LEFTOVERS
 	loadvar wPartyMon2Moves+0, FLY
 	loadvar wPartyMon2Moves+1, SURF
 	loadvar wPartyMon2Moves+2, STRENGTH
@@ -251,13 +256,36 @@ endr
 	loadvar wPartyMon3PP+1, 15
 	loadvar wPartyMon3PP+2, 15
 	loadvar wPartyMon3PP+3, 15
+	; variant form test
+;	givepoke RATTATA,   ALOLAN_FORM, 50
+;	givepoke RATICATE,  ALOLAN_FORM, 50
+;	givepoke SANDSHREW, ALOLAN_FORM, 50
+;	givepoke SANDSLASH, ALOLAN_FORM, 50
+;	givepoke VULPIX,    ALOLAN_FORM, 50
+;	givepoke NINETALES, ALOLAN_FORM, 50
+;	givepoke DIGLETT,   ALOLAN_FORM, 50
+;	givepoke DUGTRIO,   ALOLAN_FORM, 50
+;	givepoke MEOWTH,    ALOLAN_FORM, 50
+;	givepoke PERSIAN,   ALOLAN_FORM, 50
+;	givepoke GEODUDE,   ALOLAN_FORM, 50
+;	givepoke GRAVELER,  ALOLAN_FORM, 50
+;	givepoke GOLEM,     ALOLAN_FORM, 50
+;	givepoke GRIMER,    ALOLAN_FORM, 50
+;	givepoke MUK,       ALOLAN_FORM, 50
+;	givepoke RAICHU,    ALOLAN_FORM, 50
+;	givepoke EXEGGUTOR, ALOLAN_FORM, 50
+;	givepoke MAROWAK,   ALOLAN_FORM, 50
+;	givepoke PONYTA,    GALARIAN_FORM, 50
+;	givepoke RAPIDASH,  GALARIAN_FORM, 50
+	givepoke WEEZING,   GALARIAN_FORM, 50
 	; fill pokedex
-	callasm FillPokedex
+;	callasm FillPokedex
 	; intro events
 	addcellnum PHONE_MOM
 	setmapscene KRISS_HOUSE_1F, $1
 	setevent EVENT_KRISS_HOUSE_MOM_1
 	clearevent EVENT_KRISS_HOUSE_MOM_2
+	setmapscene VERMILION_CITY, $1
 ;	; prof.elm events
 ;	addcellnum PHONE_ELM
 ;	setevent EVENT_GOT_CYNDAQUIL_FROM_ELM
@@ -288,9 +316,8 @@ FillPokedex:
 .Fill:
 	ld a, %11111111
 	ld bc, 31 ; 001-248
-	call ByteFill
-	ld a, %00111111
-	ld [hl], a ; 249-254
+	rst ByteFill
+	ld [hl], %00111111 ; 249-254
 	ret
 
 else

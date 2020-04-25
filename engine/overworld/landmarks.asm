@@ -1,4 +1,4 @@
-GetLandmarkCoords: ; 0x1ca896
+GetLandmarkCoords:
 ; Return coordinates (d, e) of landmark e.
 	push hl
 	ld l, e
@@ -12,10 +12,8 @@ GetLandmarkCoords: ; 0x1ca896
 	ld d, [hl]
 	pop hl
 	ret
-; 0x1ca8a5
 
-
-GetLandmarkName:: ; 0x1ca8a5
+GetLandmarkName::
 ; Copy the name of landmark e to wStringBuffer1.
 	push hl
 	push de
@@ -40,11 +38,6 @@ GetLandmarkName:: ; 0x1ca8a5
 	dec c
 	jr nz, .copy
 
-	pop bc
-	pop de
-	pop hl
-	ret
-; 0x1ca8c3
-
+	jp PopBCDEHL
 
 INCLUDE "data/maps/landmarks.asm"

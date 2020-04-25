@@ -1,4 +1,3 @@
-; TentacruelPokedexEntry: ; 0x1b8337
 	db "Jellyfish@" ; species name
 	dw 503, 1210 ; height, width
 

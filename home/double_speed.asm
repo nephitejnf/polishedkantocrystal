@@ -5,24 +5,24 @@
 ; and double speed at any time, but LCD output
 ; collapses during the switch.
 
+;NormalSpeed::
+;	ld hl, rKEY1
+;	bit 7, [hl]
+;	jr nz, SwitchSpeed
+;	ret
+
 DoubleSpeed::
 	ld hl, rKEY1
 	bit 7, [hl]
-	jr z, SwitchSpeed
-	ret
+	ret nz
+	; fallthrough
 
-NormalSpeed::
-	ld hl, rKEY1
-	bit 7, [hl]
-	ret z
-
-SwitchSpeed:: ; 2ffd
+SwitchSpeed::
 	set 0, [hl]
 	xor a
-	ld [rIF], a
-	ld [rIE], a
+	ldh [rIF], a
+	ldh [rIE], a
 	ld a, $30
-	ld [rJOYP], a
+	ldh [rJOYP], a
 	stop ; rgbasm adds a nop after this instruction by default
 	ret
-; 300b

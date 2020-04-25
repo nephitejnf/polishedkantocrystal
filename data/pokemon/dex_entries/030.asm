@@ -1,4 +1,3 @@
-; NidorinaPokedexEntry: ; 0x1822b6
 	db "Poison Pin@" ; species name
 	dw 207, 440 ; height, width
 

@@ -1,23 +1,23 @@
 FarCall_de::
 ; Call a:de.
 ; Preserves other registers.
-; TODO: Get rid of this, it's only used in one place
-	ld [hBuffer], a
-	ld a, [hROMBank]
+; TODO: Get rid of this, it's only used in two places
+	ldh [hTempBank], a
+	ldh a, [hROMBank]
 	push af
-	ld a, [hBuffer]
+	ldh a, [hTempBank]
 	rst Bankswitch
 	call _de_
 	jr ReturnFarCall
 
 AnonBankPush::
-	ld [hFarCallSavedA], a
+	ldh [hFarCallSavedA], a
 	ld a, h
-	ld [hPredefTemp + 1], a
+	ldh [hPredefTemp + 1], a
 	ld a, l
-	ld [hPredefTemp], a
+	ldh [hPredefTemp], a
 	pop hl
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	push af
 	ld a, [hli]
 	jr DoFarCall_BankInA
@@ -26,27 +26,27 @@ FarCall_hl::
 ; Call a:hl.
 ; Preserves other registers.
 
-	ld [hBuffer], a
-	ld a, [hROMBank]
+	ldh [hTempBank], a
+	ldh a, [hROMBank]
 	push af
 	jr DoFarCall
 
 FarPointerCall::
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	push af
 	ld a, [hli]
-	ld [hBuffer], a
+	ldh [hTempBank], a
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	jr DoFarCall
 
 CallOpponentTurn::
-	ld [hFarCallSavedA], a
+	ldh [hFarCallSavedA], a
 	ld a, h
-	ld [hPredefTemp + 1], a
+	ldh [hPredefTemp + 1], a
 	ld a, l
-	ld [hPredefTemp], a
+	ldh [hPredefTemp], a
 
 	pop hl
 	call SwitchTurn
@@ -59,27 +59,27 @@ CallOpponentTurn::
 StackCallInBankB:
 	ld a, b
 StackCallInBankA:
-	ld [hBuffer], a
+	ldh [hTempBank], a
 	ld a, h
-	ld [hPredefTemp + 1], a
+	ldh [hPredefTemp + 1], a
 	ld a, l
-	ld [hPredefTemp], a
+	ldh [hPredefTemp], a
 	pop hl
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	push af
 	jr DoFarCall
 
 RstFarCall::
 ; Call the following dba pointer on the stack.
 ; Preserves a, bc, de, hl
-	ld [hFarCallSavedA], a
+	ldh [hFarCallSavedA], a
 	ld a, h
-	ld [hPredefTemp + 1], a
+	ldh [hPredefTemp + 1], a
 	ld a, l
-	ld [hPredefTemp], a
+	ldh [hPredefTemp], a
 	pop hl
 	ld a, [hli]
-	ld [hBuffer], a
+	ldh [hTempBank], a
 	add a
 	jr c, .farjp
 	inc hl
@@ -88,25 +88,25 @@ RstFarCall::
 	dec hl
 	dec hl
 .farjp
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	push af
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 DoFarCall:
-	ld a, [hBuffer]
+	ldh a, [hTempBank]
 DoFarCall_BankInA:
 	and $7f
 	rst Bankswitch
 	call RetrieveHLAndCallFunction
 
 ReturnFarCall::
-	ld [hFarCallSavedA], a
+	ldh [hFarCallSavedA], a
 	; We want to retain the contents of f.
 	; To accomplish this, mess with the stack a bit...
 	push af
 	push hl
-	ld hl, sp + 2 ; a flags
+	ld hl, sp+$2 ; a flags
 	ld a, [hli]
 	inc l ; faster than inc hl (stack is always c000-c100...)
 	ld [hl], a ; write to flags
@@ -114,7 +114,7 @@ ReturnFarCall::
 	pop af
 	pop af
 	rst Bankswitch
-	ld a, [hFarCallSavedA]
+	ldh a, [hFarCallSavedA]
 	ret
 
 RunFunctionInWRA6::
@@ -123,24 +123,24 @@ RunFunctionInWRA6::
 
 ; fallthrough
 StackCallInWRAMBankA::
-	ld [hBuffer], a
+	ldh [hTempBank], a
 	ld a, h
-	ld [hPredefTemp + 1], a
+	ldh [hPredefTemp + 1], a
 	ld a, l
-	ld [hPredefTemp], a
+	ldh [hPredefTemp], a
 
 ; fallthrough
 StackCallInWRAMBankA_continue:
 	pop hl
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
-	ld a, [hBuffer]
-	ld [rSVBK], a
+	ldh a, [hTempBank]
+	ldh [rSVBK], a
 	call RetrieveHLAndCallFunction
-	ld [hBuffer], a
+	ldh [hTempBank], a
 	pop af
-	ld [rSVBK], a
-	ld a, [hBuffer]
+	ldh [rSVBK], a
+	ldh a, [hTempBank]
 	ret
 
 RetrieveHLAndCallFunction:
@@ -149,5 +149,5 @@ RetrieveHLAndCallFunction:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [hFarCallSavedA]
+	ldh a, [hFarCallSavedA]
 	ret

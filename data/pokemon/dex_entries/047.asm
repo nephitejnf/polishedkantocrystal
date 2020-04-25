@@ -1,4 +1,3 @@
-; ParasectPokedexEntry: ; 0x1829e2
 	db "Mushroom@" ; species name
 	dw 303, 650 ; height, width
 

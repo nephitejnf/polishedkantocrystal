@@ -1,4 +1,4 @@
-Function6ec1: ; 6ec1
+Function6ec1:
 
 	ld hl, OBJECT_FLAGS1
 	add hl, bc
@@ -48,10 +48,8 @@ Function6ec1: ; 6ec1
 .bit_5
 	and a
 	ret
-; 6f07
 
-
-Function6f07: ; 6f07
+Function6f07:
 	call Function6f5f
 	ret c
 	ld hl, OBJECT_NEXT_MAP_X
@@ -69,26 +67,24 @@ Function6f07: ; 6f07
 	ld a, [hl]
 	ld d, a
 	call GetTileCollision
-	and a
+	and a ; cp LAND_TILE
 	jr z, Function6f3e
 	scf
 	ret
-; 6f2c
 
-Function6f2c: ; 6f2c
+Function6f2c:
 	call Function6f5f
 	ret c
 	ld hl, OBJECT_NEXT_TILE
 	add hl, bc
 	ld a, [hl]
 	call GetTileCollision
-	cp $1
+	dec a ; cp WATER_TILE
 	jr z, Function6f3e
 	scf
 	ret
-; 6f3e
 
-Function6f3e: ; 6f3e
+Function6f3e:
 	ld hl, OBJECT_NEXT_TILE
 	add hl, bc
 	ld a, [hl]
@@ -108,13 +104,11 @@ Function6f3e: ; 6f3e
 	ret z
 	scf
 	ret
-; 6f5b
 
 .data_6f5b
 	db 1 << DOWN, 1 << UP, 1 << RIGHT, 1 << LEFT
-; 6f5f
 
-Function6f5f: ; 6f5f
+Function6f5f:
 	ld hl, OBJECT_STANDING_TILE
 	add hl, bc
 	ld a, [hl]
@@ -133,13 +127,11 @@ Function6f5f: ; 6f5f
 	ret z
 	scf
 	ret
-; 6f7b
 
 .data_6f7b
 	db 1 << UP, 1 << DOWN, 1 << LEFT, 1 << RIGHT
-; 6f7f
 
-Function6f7f: ; 6f7f
+Function6f7f:
 	ld d, a
 	and $f0
 	cp $b0
@@ -157,14 +149,12 @@ Function6f7f: ; 6f7f
 	ld a, [hl]
 	scf
 	ret
-; 6f99
 
 .data_6f99
 	db  8, 4, 1, 2
 	db 10, 6, 9, 5
-; 6fa1
 
-Function6fa1: ; 6fa1
+Function6fa1:
 	ld hl, OBJECT_DIRECTION_WALKING
 	add hl, bc
 	ld a, [hl]
@@ -201,11 +191,11 @@ Function6fa1: ; 6fa1
 	call GetCoordTile
 	call GetTileCollision
 	pop de
-	and a
+	and a ; cp LAND_TILE
 	jr nz, .asm_6fd7
 	call GetCoordTile
 	call GetTileCollision
-	and a
+	and a ; cp LAND_TILE
 	jr nz, .asm_6fd7
 	xor a
 	ret
@@ -213,11 +203,8 @@ Function6fa1: ; 6fa1
 .asm_6fd7
 	scf
 	ret
-; 6fd9
 
-
-
-CheckFacingObject:: ; 6fd9
+CheckFacingObject::
 
 	call GetFacingTileCoord
 
@@ -241,7 +228,7 @@ CheckFacingObject:: ; 6fd9
 
 .asm_6ff1
 	xor a
-	ld [hMapObjectIndexBuffer], a
+	ldh [hMapObjectIndexBuffer], a
 	call IsNPCAtCoord
 	ret nc
 	ld hl, OBJECT_DIRECTION_WALKING
@@ -255,21 +242,19 @@ CheckFacingObject:: ; 6fd9
 .standing
 	scf
 	ret
-; 7009
 
-
-WillPersonBumpIntoSomeoneElse: ; 7009
+WillPersonBumpIntoSomeoneElse:
 	ld hl, OBJECT_NEXT_MAP_X
 	add hl, bc
 	ld d, [hl]
 	ld hl, OBJECT_NEXT_MAP_Y
 	add hl, bc
 	ld e, [hl]
-IsNPCAtCoord: ; 7041
+IsNPCAtCoord:
 	ld bc, wObjectStructs
 	xor a
 .loop
-	ld [hObjectStructIndexBuffer], a
+	ldh [hObjectStructIndexBuffer], a
 	call DoesObjectHaveASprite
 	jr z, .next
 
@@ -300,9 +285,9 @@ IsNPCAtCoord: ; 7041
 	jr nz, .ok
 
 .ok2
-	ld a, [hMapObjectIndexBuffer]
+	ldh a, [hMapObjectIndexBuffer]
 	ld l, a
-	ld a, [hObjectStructIndexBuffer]
+	ldh a, [hObjectStructIndexBuffer]
 	cp l
 	jr nz, .setcarry
 
@@ -317,9 +302,9 @@ IsNPCAtCoord: ; 7041
 	ld a, [hl]
 	cp e
 	jr nz, .next
-	ld a, [hMapObjectIndexBuffer]
+	ldh a, [hMapObjectIndexBuffer]
 	ld l, a
-	ld a, [hObjectStructIndexBuffer]
+	ldh a, [hObjectStructIndexBuffer]
 	cp l
 	jr nz, .setcarry
 
@@ -328,7 +313,7 @@ IsNPCAtCoord: ; 7041
 	add hl, bc
 	ld b, h
 	ld c, l
-	ld a, [hObjectStructIndexBuffer]
+	ldh a, [hObjectStructIndexBuffer]
 	inc a
 	cp NUM_OBJECT_STRUCTS
 	jr nz, .loop
@@ -338,9 +323,8 @@ IsNPCAtCoord: ; 7041
 .setcarry
 	scf
 	ret
-; 70a4
 
-HasPersonReachedMovementLimit: ; 70a4
+HasPersonReachedMovementLimit:
 	ld hl, OBJECT_RADIUS
 	add hl, bc
 	ld a, [hl]
@@ -398,9 +382,8 @@ HasPersonReachedMovementLimit: ; 70a4
 .yes
 	scf
 	ret
-; 70ed
 
-IsPersonMovingOffEdgeOfScreen: ; 70ed
+IsPersonMovingOffEdgeOfScreen:
 	ld hl, OBJECT_NEXT_MAP_X
 	add hl, bc
 	ld a, [wXCoord]
@@ -429,9 +412,8 @@ IsPersonMovingOffEdgeOfScreen: ; 70ed
 .yes
 	scf
 	ret
-; 7113
 
-Function7171: ; 7171
+Function7171:
 	ld hl, OBJECT_NEXT_MAP_X
 	add hl, bc
 	ld a, d
@@ -452,4 +434,3 @@ Function7171: ; 7171
 .nope
 	and a
 	ret
-; 718d

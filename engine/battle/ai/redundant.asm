@@ -1,4 +1,4 @@
-AI_Redundant: ; 2c41a
+AI_Redundant:
 ; Check if move effect c will fail because it's already been used.
 ; Return z if the move is a good choice.
 ; Return nz if the move is a bad choice.
@@ -8,12 +8,9 @@ AI_Redundant: ; 2c41a
 	call IsInArray
 	jp nc, .NotRedundant
 	inc hl
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
+	jp IndirectHL
 
-.Moves: ; 2c42c
+.Moves:
 	dbw EFFECT_DREAM_EATER,   .DreamEater
 	dbw EFFECT_HEAL,          .Heal
 	dbw EFFECT_LIGHT_SCREEN,  .LightScreen
@@ -43,14 +40,15 @@ AI_Redundant: ; 2c41a
 	dbw EFFECT_FUTURE_SIGHT,  .FutureSight
 	dbw EFFECT_BATON_PASS,    .BatonPass
 	dbw EFFECT_ROOST,         .Roost
+	dbw EFFECT_TRICK_ROOM,    .TrickRoom
 	db -1
 
 .Confuse:
 	ld a, [wPlayerSubStatus3]
 	bit SUBSTATUS_CONFUSED, a
 	ret nz
-	ld a, [wPlayerScreens]
-	bit SCREENS_SAFEGUARD, a
+	ld a, [wPlayerGuards]
+	and GUARD_SAFEGUARD
 	ret
 
 .Disable:
@@ -59,8 +57,8 @@ AI_Redundant: ; 2c41a
 	ret
 
 .Encore:
-	ld a, [wPlayerSubStatus2]
-	bit SUBSTATUS_ENCORED, a
+	ld a, [wPlayerEncoreCount]
+	and a
 	ret
 
 .FocusEnergy:
@@ -85,7 +83,7 @@ AI_Redundant: ; 2c41a
 
 .LightScreen:
 	ld a, [wEnemyScreens]
-	bit SCREENS_LIGHT_SCREEN, a
+	and SCREENS_LIGHT_SCREEN
 	ret
 
 .MeanLook:
@@ -100,12 +98,12 @@ AI_Redundant: ; 2c41a
 
 .Reflect:
 	ld a, [wEnemyScreens]
-	bit SCREENS_REFLECT, a
+	and SCREENS_REFLECT
 	ret
 
 .Safeguard:
-	ld a, [wEnemyScreens]
-	bit SCREENS_SAFEGUARD, a
+	ld a, [wEnemyGuards]
+	and GUARD_SAFEGUARD
 	ret
 
 .Substitute:
@@ -129,24 +127,24 @@ AI_Redundant: ; 2c41a
 	jr .InvertZero
 
 .Spikes:
-	ld a, [wPlayerScreens]
-	and SCREENS_SPIKES
-	cp SCREENS_SPIKES
+	ld a, [wPlayerHazards]
+	and HAZARDS_SPIKES
+	cp HAZARDS_SPIKES
 	jr .InvertZero
 
 .ToxicSpikes:
-	ld a, [wPlayerScreens]
-	and SCREENS_TOXIC_SPIKES
-	cp (SCREENS_TOXIC_SPIKES / 3) * 2
+	ld a, [wPlayerHazards]
+	and HAZARDS_TOXIC_SPIKES
+	cp (HAZARDS_TOXIC_SPIKES / 3) * 2
 	jr .InvertZero
 
 .Sandstorm:
-	ld a, [wWeather]
+	ld a, [wBattleWeather]
 	cp WEATHER_SANDSTORM
 	jr .InvertZero
 
 .Hail:
-	ld a, [wWeather]
+	ld a, [wBattleWeather]
 	cp WEATHER_HAIL
 	jr .InvertZero
 
@@ -159,12 +157,12 @@ AI_Redundant: ; 2c41a
 	ret
 
 .RainDance:
-	ld a, [wWeather]
+	ld a, [wBattleWeather]
 	cp WEATHER_RAIN
 	jr .InvertZero
 
 .SunnyDay:
-	ld a, [wWeather]
+	ld a, [wBattleWeather]
 	cp WEATHER_SUN
 	jr .InvertZero
 
@@ -180,6 +178,14 @@ AI_Redundant: ; 2c41a
 .NotRedundant:
 	xor a
 	ret
+
+.TrickRoom:
+	; normally this kind of logic is relegated to smart AI, but since this move
+	; never fails, we need to avoid the AI spamming it because it doesn't
+	; understand how it works...
+	farcall AICompareSpeed
+	jr c, .Redundant
+	jr .NotRedundant
 
 .Heal:
 .HealingLight:

@@ -1,4 +1,3 @@
-; ButterfreePokedexEntry: ; 0x181b45
 	db "Butterfly@" ; species name
 	dw 307, 710 ; height, width
 

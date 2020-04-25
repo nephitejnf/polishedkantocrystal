@@ -1,4 +1,3 @@
-; HoundoomPokedexEntry: ; 0x1d0f66
 	db "Dark@" ; species name
 	dw 407, 770 ; height, width
 

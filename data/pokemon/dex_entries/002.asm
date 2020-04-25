@@ -1,4 +1,3 @@
-; IvysaurPokedexEntry: ; 0x181702
 	db "Seed@" ; species name
 	dw 303, 290 ; height, width
 

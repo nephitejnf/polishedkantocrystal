@@ -1,4 +1,3 @@
-; CyndaquilPokedexEntry: ; 0x1ccabd
 	db "Fire Mouse@" ; species name
 	dw 108, 170 ; height, width
 

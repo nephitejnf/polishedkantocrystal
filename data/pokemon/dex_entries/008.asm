@@ -1,4 +1,3 @@
-; WartortlePokedexEntry: ; 0x181993
 	db "Turtle@" ; species name
 	dw 303, 500 ; height, width
 

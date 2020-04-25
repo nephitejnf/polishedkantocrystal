@@ -63,7 +63,7 @@ ReceptionistScript_0x9e3e2:
 	opentext
 	writetext Text_BattleTowerWelcomesYou
 	buttonsound
-	special Special_BattleTower_CheckNewSaveFile ; if new save file: bit 1, [sBattleTowerNewSaveFile]
+	special Special_BattleTower_CheckNewSaveFile ; if new save file: bit 1, [sBattleTowerSaveFileFlags]
 	ifnotequal $0, Script_Menu_ChallengeExplanationCancel
 	jump Script_BattleTowerIntroductionYesNo
 
@@ -89,7 +89,7 @@ Script_ChoseChallenge:
 	special Special_TryQuickSave
 	iffalse Script_Menu_ChallengeExplanationCancel
 	setscene $1
-	special Special_BattleTower_MarkNewSaveFile ; set 1, [sBattleTowerNewSaveFile]
+	special Special_BattleTower_MarkNewSaveFile ; set 1, [sBattleTowerSaveFileFlags]
 	special Special_BattleTower_BeginChallenge
 	writetext Text_RightThisWayToYourBattleRoom
 	waitbutton
@@ -123,6 +123,9 @@ Script_GivePlayerHisPrize:
 	writevarcode VAR_BATTLEPOINTS
 .Finish:
 	writetext Text_PlayerGotReward
+	waitsfx
+	specialsound
+	waitbutton
 	writebyte BATTLETOWER_RECEIVED_REWARD
 	special Special_BattleTower_SetChallengeState
 	endtext
@@ -254,10 +257,8 @@ Text_CongratulationsYouveBeatenAllTheTrainers:
 
 Text_PlayerGotReward:
 	text "<PLAYER> earned"
-	line "3 Battle Points!@"
-	sound_item
-	text_waitbutton
-	db "@"
+	line "3 Battle Points!"
+	done
 
 Text_WeHopeToServeYouAgain:
 	text "We hope to serve"
@@ -331,7 +332,7 @@ Text_ConfirmBattleRoomLevel:
 
 	para "Battle Room at"
 	line "<LV>@"
-	deciram wScriptVar, 1, 2
+	deciram hScriptVar, 1, 2
 	text "0. Is that OK?"
 	done
 

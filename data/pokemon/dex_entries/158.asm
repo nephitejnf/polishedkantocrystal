@@ -1,4 +1,3 @@
-; TotodilePokedexEntry: ; 0x1ccc14
 	db "Big Jaw@" ; species name
 	dw 200, 210 ; height, width
 

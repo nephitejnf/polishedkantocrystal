@@ -1,4 +1,3 @@
-; MagnemitePokedexEntry: ; 0x1b869d
 	db "Magnet@" ; species name
 	dw 100, 130 ; height, width
 

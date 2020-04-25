@@ -1,4 +1,3 @@
-; WigglytuffPokedexEntry: ; 0x1826e9
 	db "Balloon@" ; species name
 	dw 303, 260 ; height, width
 

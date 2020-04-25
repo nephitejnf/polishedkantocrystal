@@ -6,9 +6,7 @@ x = (299 * \1 + 587 * \2 + 114 * \3) / 1000
 else
 	dw palred (\1) + palgreen (\2) + palblue (\3)
 endc
-	shift
-	shift
-	shift
+	shift 3
 endr
 ENDM
 
@@ -19,5 +17,5 @@ palblue  EQUS "(1 << 10) *"
 palettes EQUS "* 8"
 palette  EQUS "+ 8 *"
 
-tiles EQUS "* $10"
-tile  EQUS "+ $10 *"
+tiles EQUS "* LEN_2BPP_TILE"
+tile  EQUS "+ LEN_2BPP_TILE *"

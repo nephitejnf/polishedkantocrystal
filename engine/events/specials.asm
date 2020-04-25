@@ -1,4 +1,4 @@
-Special:: ; c01b
+Special::
 ; Run script special de.
 	ld hl, SpecialsPointers
 	add hl, de
@@ -11,72 +11,63 @@ Special:: ; c01b
 	ld l, a
 	ld a, b
 	jp FarCall_hl
-; c029
 
 INCLUDE "data/special_pointers.asm"
 
-SpecialNone: ; c224
-	ret
-; c225
-
-Special_SetPlayerPalette: ; c225
-	ld a, [wScriptVar]
+Special_SetPlayerPalette:
+	ldh a, [hScriptVar]
 	ld d, a
 	farjp SetPlayerPalette
-; c230
 
 Special_SetCopycatPalette:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld d, a
 	farjp SetCopycatPalette
 
-Special_GameCornerPrizeMonCheckDex: ; c230
-	ld a, [wScriptVar]
+Special_GameCornerPrizeMonCheckDex:
+	ldh a, [hScriptVar]
 	dec a
 	call CheckCaughtMon
 	ret nz
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	dec a
 	call SetSeenAndCaughtMon
 	call FadeToMenu
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld [wd265], a
 	farcall NewPokedexEntry
 	jp ExitAllMenus
-; c252
 
-SpecialSeenMon: ; c252
-	ld a, [wScriptVar]
+SpecialSeenMon:
+	ldh a, [hScriptVar]
 	dec a
 	jp SetSeenMon
-; c25a
 
-Special_FindThatSpecies: ; c276
-	ld a, [wScriptVar]
+Special_FindThatSpecies:
+	ldh a, [hScriptVar]
 	ld b, a
 	farcall _FindThatSpecies
 	jr z, FoundNone
 	jr FoundOne
 
-Special_FindThatSpeciesYourTrainerID: ; c284
-	ld a, [wScriptVar]
+Special_FindThatSpeciesYourTrainerID:
+	ldh a, [hScriptVar]
 	ld b, a
 	farcall _FindThatSpeciesYourTrainerID
 	jr z, FoundNone
 	; fallthrough
 
-FoundOne: ; c292
+FoundOne:
 	ld a, TRUE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
-FoundNone: ; c298
+FoundNone:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; c29d
 
-SpecialNameRival: ; 0xc29d
+SpecialNameRival:
 	ld b, $2 ; rival
 	ld de, wRivalName
 	farcall _NamingScreen
@@ -84,9 +75,8 @@ SpecialNameRival: ; 0xc29d
 	ld hl, wRivalName
 	ld de, .DefaultRivalName
 	jp InitName
-; 0xc2b2
 
-.DefaultRivalName: ; 0xc2b2
+.DefaultRivalName:
 	db "Silver@"
 
 SpecialTrendyPhrase:
@@ -97,40 +87,35 @@ SpecialTrendyPhrase:
 	ld hl, wTrendyPhrase
 	ld de, .DefaultTrendyPhrase
 	jp InitName
-; 0xc2b2
 
 .DefaultTrendyPhrase:
 	db "Nothing@"
 
-SpecialNameRater: ; c2b9
+SpecialNameRater:
 	farjp NameRater
-; c2c0
 
-Special_TownMap: ; c2c0
+Special_TownMap:
 	call FadeToMenu
 	farcall _TownMap
 	jp ExitAllMenus
-; c2cd
 
-Special_DisplayLinkRecord: ; c2da
+Special_DisplayLinkRecord:
 	call FadeToMenu
 	farcall DisplayLinkRecord
 	jp ExitAllMenus
-; c2e7
 
-Special_KrissHousePC: ; c2e7
+Special_KrissHousePC:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	farcall _KrissHousePC
 	ld a, c
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; c2f6
 
-BugContestJudging: ; c34a
+BugContestJudging:
 	farcall _BugContestJudging
 	ld a, b
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	dec a
 	jr z, .firstplace
 	dec a
@@ -156,48 +141,42 @@ BugContestJudging: ; c34a
 .finish
 	ld [wBugContestOfficerPrize], a
 	ret
-; c355
 
-MapRadio: ; c355
-	ld a, [wScriptVar]
+MapRadio:
+	ldh a, [hScriptVar]
 	ld e, a
 	farjp PlayRadio
-; c360
 
-Special_UnownPuzzle: ; c360
+Special_UnownPuzzle:
 	call FadeToMenu
 	farcall UnownPuzzle
 	ld a, [wSolvedUnownPuzzle]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	jp ExitAllMenus
-; c373
 
-Special_SlotMachine: ; c373
+Special_SlotMachine:
 	call Special_CheckCoins
 	ret c
 	ld a, BANK(_SlotMachine)
 	ld hl, _SlotMachine
 	jr Special_StartGameCornerGame
-; c380
 
-Special_CardFlip: ; c380
+Special_CardFlip:
 	call Special_CheckCoins
 	ret c
 	ld a, BANK(_CardFlip)
 	ld hl, _CardFlip
 	; fallthrough
-; c38d
 
-;Special_DummyNonfunctionalGameCornerGame: ; c38d
+;Special_DummyNonfunctionalGameCornerGame:
 ;	call Special_CheckCoins
 ;	ret c
 ;	ld a, BANK(_DummyGame)
 ;	ld hl, _DummyGame
 ;	call Special_StartGameCornerGame
 ;	ret
-;; c39a
 
-Special_StartGameCornerGame: ; c39a
+Special_StartGameCornerGame:
 	call FarQueueScript
 	call FadeToMenu
 	ld hl, wQueuedScriptBank
@@ -209,9 +188,8 @@ Special_StartGameCornerGame: ; c39a
 	pop af
 	call FarCall_hl
 	jp ExitAllMenus
-; c3ae
 
-Special_CheckCoins: ; c3ae
+Special_CheckCoins:
 	ld hl, wCoins
 	ld a, [hli]
 	or [hl]
@@ -234,38 +212,33 @@ Special_CheckCoins: ; c3ae
 	call PrintText
 	scf
 	ret
-; c3d1
 
-.NoCoinsText: ; 0xc3d1
+.NoCoinsText:
 	; You have no coins.
 	text_jump UnknownText_0x1bd3d7
-	db "@"
-; 0xc3d6
+	text_end
 
-.NoCoinCaseText: ; 0xc3d6
+.NoCoinCaseText:
 	; You don't have a COIN CASE.
 	text_jump UnknownText_0x1bd3eb
-	db "@"
-; 0xc3db
+	text_end
 
-ScriptReturnCarry: ; c3e2
+ScriptReturnCarry:
 	jr c, .carry
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 .carry
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
-; c3ef
 
-Special_ActivateFishingSwarm: ; c3fc
-	ld a, [wScriptVar]
+Special_ActivateFishingSwarm:
+	ldh a, [hScriptVar]
 	ld [wFishingSwarmFlag], a
 	ret
-; c403
 
-StoreSwarmMapIndices:: ; c403
+StoreSwarmMapIndices::
 	ld a, c
 	and a
 	jr nz, .yanma
@@ -282,31 +255,27 @@ StoreSwarmMapIndices:: ; c403
 	ld a, e
 	ld [wYanmaMapNumber], a
 	ret
-; c419
 
-SpecialCheckPokerus: ; c419
+SpecialCheckPokerus:
 ; Check if a monster in your party has Pokerus
 	farcall CheckPokerus
 	jp ScriptReturnCarry
-; c422
 
-Special_ResetLuckyNumberShowFlag: ; c422
+Special_ResetLuckyNumberShowFlag:
 	farcall RestartLuckyNumberCountdown
 	ld hl, wLuckyNumberShowFlag
 	res 0, [hl]
 	farjp LoadOrRegenerateLuckyIDNumber
-; c434
 
-Special_CheckLuckyNumberShowFlag: ; c434
+Special_CheckLuckyNumberShowFlag:
 	farcall CheckLuckyNumberShowFlag
 	jp ScriptReturnCarry
-; c43d
 
-SpecialSnorlaxAwake: ; 0xc43d
+SpecialSnorlaxAwake:
 ; Check if the Poké Flute channel is playing.
 
 ; outputs:
-; wScriptVar is 1 if the conditions are met, otherwise 0.
+; hScriptVar is 1 if the conditions are met, otherwise 0.
 
 ; check background music
 	ld a, [wMapMusic]
@@ -317,38 +286,34 @@ SpecialSnorlaxAwake: ; 0xc43d
 .nope
 	xor a
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
-PlayCurMonCry: ; c472
+PlayCurMonCry:
 	ld a, [wCurPartySpecies]
 	jp PlayCry
-; c478
 
-Special_FadeOutMusic: ; c48f
-	ld a, MUSIC_NONE % $100
+Special_FadeOutMusic:
+	xor a ; MUSIC_NONE
 	ld [wMusicFadeIDLo], a
-	ld a, MUSIC_NONE / $100
 	ld [wMusicFadeIDHi], a
 	ld a, $2
 	ld [wMusicFade], a
 	ret
-; c49f
 
-Diploma: ; c49f
+Diploma:
 	call FadeToMenu
 	farcall _Diploma
 	jp ExitAllMenus
-; c4ac
 
 Special_GetOvercastIndex::
 	call GetOvercastIndex
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 CheckIfTrendyPhraseIsLucky:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld hl, wTrendyPhrase
 	ld bc, .KeyPhrase
 	ld d, 6
@@ -362,7 +327,7 @@ CheckIfTrendyPhraseIsLucky:
 	dec d
 	jr nz, .loop
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .KeyPhrase:
@@ -535,13 +500,13 @@ BillBoxSwitchCheck:
 	ld a, c
 	jr nz, .billboxloop
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .foundspace
 	pop af
 	dec a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld [wEngineBuffer1], a
 	ret
 
@@ -555,7 +520,11 @@ BillBoxSwitch:
 	; change boxes (overwrites wMisc)
 	ld a, [wEngineBuffer1]
 	ld e, a
-	farcall ChangeBoxSaveGameNoConfirm
+	farcall ChangeBoxSaveGame
+	; a = carry (didn't save) ? FALSE : TRUE
+	sbc a
+	inc a
+	ldh [hScriptVar], a
 	; restore wMisc from wDecompressScratch
 	ld hl, wDecompressScratch
 	ld de, wMisc

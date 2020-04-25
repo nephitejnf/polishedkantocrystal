@@ -1,4 +1,3 @@
-; MukPokedexEntry: ; 0x1b89fc
 	db "Sludge@" ; species name
 	dw 311, 660 ; height, width
 

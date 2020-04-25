@@ -3,7 +3,6 @@
 
 INCLUDE "constants.asm"
 
-
 MP_METER0 EQU $20
 MP_METER8 EQU $28
 MP_DUTY0 EQU $29
@@ -11,14 +10,11 @@ MP_DUTY0 EQU $29
 
 SECTION "Music Player Graphics", ROMX
 
-PianoGFX:
-INCBIN "gfx/music_player/piano.2bpp"
-MusicTestGFX: ; must come after PianoGFX
-INCBIN "gfx/music_player/music_test.2bpp"
+MusicPlayerGFX:
+INCBIN "gfx/music_player/music_player.2bpp.lz"
+
 NotesGFX:
-INCBIN "gfx/music_player/note_lines.2bpp"
-WaveformsGFX:
-INCBIN "gfx/music_player/waveforms.2bpp"
+INCBIN "gfx/music_player/note_lines.2bpp.lz"
 
 
 SECTION "Music Player", ROMX
@@ -115,29 +111,29 @@ MusicPlayer::
 ; Load palette
 	ld hl, rIE
 	set LCD_STAT, [hl]
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
-	ld a, BANK(wBGPals)
-	ld [rSVBK], a
+	ld a, BANK(wBGPals2)
+	ldh [rSVBK], a
 
 	ld hl, MusicPlayerPals
-	ld de, wBGPals
+	ld de, wBGPals2
 	ld bc, 4 palettes
 	rst CopyBytes
 
 	ld hl, MusicPlayerNotePals
-	ld de, wOBPals
+	ld de, wOBPals2
 	ld bc, 1 palettes
 	rst CopyBytes
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 ; Apply palettes
 	xor a
 	hlcoord 0, 0, wAttrMap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	call ByteFill
+	rst ByteFill
 	hlcoord 3, 17, wAttrMap
 	ld [hl], $3
 	hlcoord 8, 17, wAttrMap
@@ -149,41 +145,23 @@ MusicPlayer::
 
 	farcall ApplyAttrMapVBank0
 	ld a, $1
-	ld [hCGBPalUpdate], a
+	ldh [hCGBPalUpdate], a
 
 	; refresh top two portions
 	xor a
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	call DelayFrame
 
 ; Load graphics
-	ld de, PianoGFX ; 
-	lb bc, BANK(PianoGFX), 32 + 13 ; PianoGFX + MusicTestGFX
-	ld hl, VTiles2
-	call Request2bpp
+	ld hl, MusicPlayerGFX
+	ld de, vTiles2
+	lb bc, BANK(MusicPlayerGFX), $43
+	call DecompressRequest2bpp
 
-	ld de, NotesGFX
+	ld hl, NotesGFX
+	ld de, vTiles0
 	lb bc, BANK(NotesGFX), $80
-	ld hl, VTiles0
-	call Request2bpp
-
-; Prerender all waveforms
-;	xor a
-;.waveform_loop:
-;	push af
-;	call RenderWaveform
-;	pop af
-;	inc a
-;	cp NUM_WAVEFORMS
-;	jr nz, .waveform_loop
-
-; Rendered waveforms would have difficulty filling their integrals with
-; the dark hue. TPP Crystal dealt with this by doubling their width.
-; Here we just use a static image.
-	ld de, WaveformsGFX
-	lb bc, BANK(WaveformsGFX), NUM_WAVEFORMS * 2
-	ld hl, VTiles2 tile $40
-	call Request2bpp
+	call DecompressRequest2bpp
 
 	call DelayFrame
 
@@ -197,21 +175,21 @@ MusicPlayer::
 	ld hl, wMusicPlayerWRAM
 	ld bc, wMusicPlayerWRAMEnd - wMusicPlayerWRAM
 	xor a
-	call ByteFill
+	rst ByteFill
 
 ; Clear wMPNotes
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wMPNotes)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	xor a
 	ld hl, wMPNotes
 	ld bc, 4 * 256
-	call ByteFill
+	rst ByteFill
 
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 ; fallthrough
 
 RenderMusicPlayer:
@@ -222,11 +200,11 @@ RenderMusicPlayer:
 
 	ld bc, 4 * 3
 	ld hl, NoteOAM
-	ld de, wSprites
+	ld de, wVirtualOAM
 	rst CopyBytes
 	call DelayFrame
 	xor a
-	ld [hOAMUpdate], a ; we will manually do it in LCD interrupt
+	ldh [hOAMUpdate], a ; we will manually do it in LCD interrupt
 
 	ld hl, wChannelSelectorSwitches
 	ld a, NUM_MUSIC_CHANS - 1
@@ -243,8 +221,8 @@ RenderMusicPlayer:
 
 	call DelayFrame
 
-	ld a, [rSVBK]
-	ld [hMPBuffer], a
+	ldh a, [rSVBK]
+	ldh [hMPBuffer], a
 
 	ld a, [wSongSelection]
 	; let's see if a song is currently selected
@@ -265,7 +243,7 @@ _RedrawMusicPlayer:
 
 MusicPlayerLoop:
 	ld a, BANK(wMPNotes)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 
 	call MPUpdateUIAndGetJoypad
 	ld hl, hJoyDown
@@ -281,7 +259,7 @@ MusicPlayerLoop:
 
 	; prioritize refreshing the note display
 	ld a, 2
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	jr MusicPlayerLoop
 
 .left:
@@ -326,7 +304,7 @@ MusicPlayerLoop:
 	ld a, [wSongSelection]
 	ld e, a
 	ld d, 0
-	farcall PlayMusic2
+	call PlayMusic2
 	ld hl, wChLastNotes
 	xor a
 	ld [hli], a
@@ -342,10 +320,10 @@ MusicPlayerLoop:
 .b:
 ; exit music player
 	xor a
-	ld [hMPState], a
-	ld [hVBlank], a
-	ld a, [hMPBuffer]
-	ld [rSVBK], a
+	ldh [hMPState], a
+	ldh [hVBlank], a
+	ldh a, [hMPBuffer]
+	ldh [rSVBK], a
 	call ClearSprites
 	ld hl, rLCDC
 	res 2, [hl] ; 8x8 sprites
@@ -356,9 +334,9 @@ MusicPlayerLoop:
 .start:
 ; open song selector
 	xor a
-	ld [hMPState], a
-	ld a, [hMPBuffer]
-	ld [rSVBK], a
+	ldh [hMPState], a
+	ldh a, [hMPBuffer]
+	ldh [rSVBK], a
 	call SongSelector
 	jp RenderMusicPlayer
 
@@ -366,8 +344,7 @@ MusicPlayerLoop:
 	xor a
 	ld [wChannelSelector], a
 	hlcoord 3, MP_HUD_TOP
-	ld a, "◀"
-	ld [hl], a
+	ld [hl], "◀"
 ; fallthrough
 
 SongEditor:
@@ -384,7 +361,7 @@ SongEditor:
 
 	; prioritize refreshing the note display
 	ld a, 2
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	jr SongEditor
 
 .left:
@@ -439,7 +416,7 @@ SongEditor:
 ; for pitch: increase pitch transposition
 	ld a, [wChannelSelector]
 	ld hl, .up_jumptable
-	rst JumpTable
+	call JumpTable
 	jp SongEditor
 
 .up_jumptable
@@ -448,7 +425,7 @@ SongEditor:
 	dw .up_wave  ; MP_EDIT_WAVE
 	dw .up_noise ; MP_EDIT_NOISE
 	dw .up_pitch ; MP_EDIT_PITCH
-	dw .return   ; MP_EDIT_TEMPO
+	dw DoNothing ; MP_EDIT_TEMPO
 
 .down:
 ; for ch1/ch2: previous duty cycle
@@ -457,7 +434,7 @@ SongEditor:
 ; for pitch: decrease pitch transposition
 	ld a, [wChannelSelector]
 	ld hl, .down_jumptable
-	rst JumpTable
+	call JumpTable
 	jp SongEditor
 
 .down_jumptable:
@@ -466,7 +443,7 @@ SongEditor:
 	dw .down_wave  ; MP_EDIT_WAVE
 	dw .down_noise ; MP_EDIT_NOISE
 	dw .down_pitch ; MP_EDIT_PITCH
-	dw .return     ; MP_EDIT_TEMPO
+	dw DoNothing   ; MP_EDIT_TEMPO
 
 .start:
 ; toggle piano roll info overlay
@@ -511,7 +488,6 @@ SongEditor:
 	ld a, [hl]
 	lb bc, %11000000, %01000000
 	and b
-	and a
 	ld a, [hl]
 	jr nz, .no_ch1_2_underflow
 	add c
@@ -569,7 +545,6 @@ SongEditor:
 	ld a, NUM_NOISE_SETS - 1
 .change_noise:
 	ld [wMusicNoiseSampleSet], a
-.return:
 	ret
 
 .up_pitch:
@@ -593,7 +568,7 @@ SongEditor:
 	call DrawPitchTransposition
 	; refresh top two portions
 	xor a
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	jp DelayFrame
 
 AdjustTempo:
@@ -605,7 +580,7 @@ AdjustTempo:
 	call DrawChannelSelector
 	; refresh top two portions
 	xor a
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	call DelayFrame
 
 .loop:
@@ -622,7 +597,7 @@ AdjustTempo:
 
 	; prioritize refreshing the note display
 	ld a, 2
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	jr .loop
 
 .up:
@@ -670,7 +645,7 @@ AdjustTempo:
 	call DrawTempoAdjustment
 	; refresh top two portions
 	xor a
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	call DelayFrame
 	jp .loop
 
@@ -679,7 +654,7 @@ AdjustTempo:
 	ld a, [wSongSelection]
 	ld e, a
 	ld d, 0
-	farcall PlayMusic2
+	call PlayMusic2
 	jr .exit
 
 .b:
@@ -693,7 +668,7 @@ AdjustTempo:
 	call DrawTempoAdjustment
 	; refresh top two portions
 	xor a
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	call DelayFrame
 	jp SongEditor
 
@@ -710,28 +685,28 @@ DrawPianoRollOverlay:
 	; if this takes too long, don't let the user see blank fields blink in
 	; disable copying the map during vblank
 	ld a, 2
-	ld [hVBlank], a
+	ldh [hVBlank], a
 
 	ld a, " "
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * PIANO_ROLL_HEIGHT
-	call ByteFill
+	rst ByteFill
 
 	call DrawSongInfo
 	call DrawChannelSelector
 
 	ld a, 5
-	ld [hVBlank], a
+	ldh [hVBlank], a
 
 	; refresh top two portions
 	xor a
-	ld [hBGMapHalf], a
+	ldh [hBGMapHalf], a
 	jp DelayFrame
 
 DrawPitchTransposition:
 	hlcoord 15, 1
 	ld de, _EmptyPitchOrTempo
-	call PlaceString
+	rst PlaceString
 	ld a, [wChannelSelector]
 	cp MP_EDIT_PITCH
 	ld a, [wPitchTransposition]
@@ -748,7 +723,7 @@ DrawPitchTransposition:
 DrawTempoAdjustment:
 	hlcoord 15, 2
 	ld de, _EmptyPitchOrTempo
-	call PlaceString
+	rst PlaceString
 	ld a, [wChannelSelector]
 	cp MP_EDIT_TEMPO
 	ld a, [wTempoAdjustment]
@@ -920,7 +895,7 @@ _DrawCh1_2_3:
 	ld d, h
 	pop hl
 	push hl
-	call PlaceString
+	rst PlaceString
 	call GetOctaveAddr
 	ld d, [hl]
 	ld a, "8"
@@ -962,14 +937,14 @@ _DrawCh1_2_3:
 	push hl
 	call CheckChannelOn
 	pop hl
-	ld a, 0 ; not xor a; preserve carry flag
+	ld a, 0
 	jr c, .blank_volume
 	push hl
 	call GetPitchAddr
 	ld a, [hl]
 	and a
 	pop hl
-	ld a, 0 ; not xor a; preserve carry flag
+	ld a, 0
 	jr z, .blank_volume
 	push hl
 	call GetIntensityAddr
@@ -990,7 +965,7 @@ _DrawCh1_2_3:
 	ld a, [wChannel3Intensity]
 	and $f
 	sla a
-	add $40
+	add $2d
 	ld [hli], a
 	inc a
 	ld [hl], a
@@ -999,88 +974,6 @@ _DrawCh1_2_3:
 	pop hl
 	pop af
 	ret
-
-;RenderWaveform:
-;	ld [wRenderedWaveform], a
-;	ld l, a
-;	ld h, 0
-;	; hl << 4
-;	; each wavepattern is $f bytes long
-;	; so seeking is done in $10s
-;rept 4
-;	add hl, hl
-;endr
-;	ld de, WaveSamples
-;	add hl, de
-;	; load wavepattern into wWaveformTmp
-;	ld de, wWaveformTmp
-;	ld bc, 16
-;	ld a, BANK(WaveSamples)
-;	call FarCopyBytes ; copy bc bytes from a:hl to de
-;
-;	ld hl, TempMPWaveform
-;	ld bc, 2 tiles
-;	xor a
-;	call ByteFill
-;
-;	ld hl, TempMPWaveform
-;	ld de, wWaveformTmp
-;	ld b, 1
-;
-;.loop:
-;	ld a, [de]
-;	push de
-;
-;	swap a
-;	and %1110
-;	xor %1110
-;	ld c, a
-;	add l
-;	ld l, a
-;	jr nc, .nc
-;	inc h
-;.nc
-;	ld a, b
-;	and $7
-;	ld d, a
-;	; c = row
-;	; b = (d) = column
-;	ld a, $1
-;.rotate_a
-;	rrc a
-;	dec d
-;	jr nz, .rotate_a
-;	or [hl]
-;	ld [hli], a
-;	ld [hl], a
-;
-;	pop de
-;	inc de
-;	inc b
-;	ld a, b
-;	cp TILE_WIDTH * 2 + 1
-;	jr z, .done
-;	cp TILE_WIDTH + 1
-;	jr nc, .tile2
-;	ld hl, TempMPWaveform
-;	jr .loop
-;.tile2
-;	ld hl, TempMPWaveform + 1 tiles
-;	jr .loop
-;
-;.done
-;	ld hl, VTiles2 tile $40
-;	ld a, [wRenderedWaveform]
-;	swap a
-;	sla a
-;	ld l, a
-;	jr nc, .got_hl
-;	inc h
-;.got_hl
-;	lb bc, 0, 2
-;	ld de, TempMPWaveform
-;	call Request2bpp
-;	ret
 
 DrawNotes:
 	xor a ; ld a, CHAN1
@@ -1096,17 +989,17 @@ DrawNotes:
 	call DrawNote
 	call CheckForVolumeBarReset
 
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wMPNotes)
-	ld [rSVBK], a
-	ld a, [hMPState]
+	ldh [rSVBK], a
+	ldh a, [hMPState]
 	inc a
-	ld [hMPState], a
+	ldh [hMPState], a
 	cp PIANO_ROLL_HEIGHT_PX + 1 + 1
 	jr c, .skip
 	ld a, 1
-	ld [hMPState], a
+	ldh [hMPState], a
 .skip
 	dec a
 	push af
@@ -1115,7 +1008,7 @@ DrawNotes:
 	add PIANO_ROLL_HEIGHT_PX
 	call nc, .CopyNotes
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ret
 
 .CopyNotes:
@@ -1174,7 +1067,7 @@ CheckChannelOn:
 	ld a, [wTmpCh]
 	cp 2
 	jr nz, .notch3 ; NR32 does something different
-	ld a, [rNR32]
+	ldh a, [rNR32]
 	and $60
 	jr z, _NoteEnded ; 0% volume
 	jr .still_going
@@ -1260,13 +1153,13 @@ DrawLongerNote:
 	cp $9
 	jr nc, .fading_up
 	call CheckEndedNote
-	jr c, _WriteBlankNote
-	jr DrawNewNote
+	jr nc, DrawNewNote
+	jr _WriteBlankNote
 
 .fading_up
 	call CheckNoteDuration
-	jr c, _WriteBlankNote
-	jr DrawNewNote
+	jr nc, DrawNewNote
+	; fallthrough
 
 _WriteBlankNote:
 	xor a
@@ -1303,8 +1196,7 @@ CheckForVolumeBarReset:
 	ld e, a
 	ld d, 0
 	add hl, de
-	ld a, 1
-	ld [hl], a
+	ld [hl], 1
 	ld hl, wChLastNotes
 	add hl, de
 	xor a
@@ -1444,7 +1336,7 @@ AddNoteToOld:
 	add a
 	ld c, a
 	ld b, 0
-	ld hl, wSprites + 3 * 4
+	ld hl, wVirtualOAM + 3 * 4
 	add hl, bc
 	push hl
 	pop de
@@ -1534,7 +1426,7 @@ DrawSongInfo:
 .info:
 	call GetSongTitle
 	hlcoord 0, 3
-	call PlaceString
+	rst PlaceString
 	inc de
 
 	push de
@@ -1544,21 +1436,21 @@ DrawSongInfo:
 	call DrawSongID
 	pop de
 	inc hl
-	call PlaceString
+	rst PlaceString
 	pop de
 	inc de
 
 	push de
 	call GetSongArtist
 	hlcoord 0, 7
-	call PlaceString
+	rst PlaceString
 	pop de
 	inc de
 
 	push de
 	call GetSongArtist2
 	hlcoord 0, 10
-	call PlaceString
+	rst PlaceString
 	pop de
 	ret
 
@@ -1597,7 +1489,7 @@ GetSongArtist:
 	push hl
 	ld de, .Composer
 	hlcoord 0, 6
-	call PlaceString
+	rst PlaceString
 	pop de
 	ret
 
@@ -1614,7 +1506,7 @@ GetSongArtist2:
 	jr z, .finish
 	ld de, .Arranger
 	hlcoord 0, 9
-	call PlaceString
+	rst PlaceString
 .finish
 	pop de
 	ret
@@ -1626,7 +1518,7 @@ SongSelector:
 	hlcoord 0, 0
 	ld a, " "
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	call ByteFill
+	rst ByteFill
 	ld hl, rLCDC
 	res 1, [hl] ; hide sprites
 	call ClearSprites
@@ -1672,7 +1564,7 @@ SongSelector:
 .got_song
 	ld e, a
 	ld d, 0
-	farcall PlayMusic2
+	call PlayMusic2
 	jr .finish
 
 .up
@@ -1783,7 +1675,7 @@ MPLPlaceString:
 	ld a, " "
 	ld hl, wStringBuffer2
 	ld bc, 3
-	call ByteFill
+	rst ByteFill
 	ld hl, wStringBuffer2
 	push de
 	ld de, wSelectorCur
@@ -1794,7 +1686,7 @@ MPLPlaceString:
 	inc hl
 	push hl
 	push de
-	call PlaceString
+	rst PlaceString
 	ld h, b
 	ld l, c
 	ld [hl], "@"
@@ -1837,7 +1729,7 @@ MPLPlaceString:
 	pop hl
 	push de
 	ld de, wStringBuffer2
-	call PlaceString
+	rst PlaceString
 	pop de
 	ret
 
@@ -1864,7 +1756,6 @@ NoteOAM:
 	db 0, 0, $20, BEHIND_BG
 	db 0, 0, $40, BEHIND_BG
 	db 0, 0, $60, BEHIND_BG
-
 
 INCLUDE "data/music_player/notes.asm"
 INCLUDE "data/music_player/song_info.asm"

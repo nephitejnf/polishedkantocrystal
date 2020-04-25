@@ -6,22 +6,42 @@
 
 ; This prevents the display and audio output from lagging.
 
-
 VBlank::
-	push af
-	push bc
-	push de
 	push hl
-
-	ld a, [hBuffer]
+	push de
+	push bc
 	push af
 
-	ld a, [hROMBank]
-	ld [hROMBankBackup], a
+	ldh a, [hTempBank]
+	push af
 
-	ld a, [hVBlank]
+	ldh a, [hROMBank]
+	ldh [hROMBankBackup], a
+
+	ldh a, [hVBlank]
 	cp 7
 	jr z, .skipToGameTime
+
+	; don't chain vblank crashes
+	ldh a, [hCrashCode]
+	cp FIRST_VBLANK_ERR
+	jr nc, .skip_crash
+
+	ld hl, sp+$0
+	ld a, h
+	cp HIGH(wStackBottom)
+	jr c, .SPTooLow
+	jr nz, .SPTooHigh
+
+	ld hl, sp+$b
+	ld a, [hl]
+	inc a
+	cp $81
+	ld a, ERR_EXECUTING_RAM
+	jr nc, .crash
+
+.skip_crash
+	ldh a, [hVBlank]
 	and 7
 	add a
 	ld e, a
@@ -37,41 +57,51 @@ VBlank::
 .doGameTime
 	call GameTimer
 
-	ld hl, wVBlankOccurred
+	ld hl, hVBlankOccurred
 	ld a, [hl]
 	and a
-	ld [hl], 0
+	ld [hl], FALSE
 	jr nz, .noVBlankLeak
 	ld a, $ff
-	ld [hDelayFrameLY], a
+	ldh [hDelayFrameLY], a
 .noVBlankLeak
 
 	pop af
-	ld [hBuffer], a
+	ldh [hTempBank], a
 
-	ld a, [hROMBankBackup]
+	ldh a, [hROMBankBackup]
 	rst Bankswitch
 
-	pop hl
-	pop de
-	pop bc
 	pop af
+	pop bc
+	pop de
+	pop hl
 	reti
+
+.SPTooLow
+	; keep in mind that lower sp = higher stack frame
+	ld a, ERR_STACK_OVERFLOW
+	jr .crash
+
+.SPTooHigh
+	ld a, ERR_STACK_UNDERFLOW
+.crash
+	di
+	jp Crash
 
 .skipToGameTime
 	call AnimateTileset
 	jr .doGameTime
 
 .VBlanks:
-	dw VBlank0
-	dw VBlank1
-	dw VBlank2
-	dw VBlank3
-	dw VBlank4
-	dw VBlank5
-	dw VBlank6
-	dw VBlank7
-
+	dw VBlank0   ; 0
+	dw VBlank1   ; 1
+	dw VBlank2   ; 2
+	dw VBlank1   ; 3
+	dw DoNothing ; 4
+	dw VBlank5   ; 5
+	dw VBlank6   ; 6
+	dw VBlank7   ; 7
 
 VBlank0::
 ; normal operation
@@ -87,14 +117,14 @@ VBlank0::
 ; joypad
 ; sound
 
-	ld a, [hSCX]
-	ld [rSCX], a
-	ld a, [hSCY]
-	ld [rSCY], a
-	ld a, [hWY]
-	ld [rWY], a
-	ld a, [hWX]
-	ld [rWX], a
+	ldh a, [hSCX]
+	ldh [rSCX], a
+	ldh a, [hSCY]
+	ldh [rSCY], a
+	ldh a, [hWY]
+	ldh [rWY], a
+	ldh a, [hWX]
+	ldh [rWX], a
 
 	; There's only time to call one of these in one vblank.
 	; Calls are in order of priority.
@@ -114,7 +144,6 @@ VBlank0::
 	call AnimateTileset
 
 .done
-
 	call PushOAM
 	; vblank-sensitive operations are done
 
@@ -134,18 +163,16 @@ VBlank0::
 .noDelay2
 	call Joypad
 
-	ld a, [hSeconds]
-	ld [hSecondsBackup], a
+	ldh a, [hSeconds]
+	ldh [hSecondsBackup], a
 	; fallthrough
 
+VBlank2::
 VBlankUpdateSound::
 ; sound only
 	ld a, BANK(_UpdateSound)
 	rst Bankswitch
 	jp _UpdateSound
-
-VBlank2::
-	jr VBlankUpdateSound
 
 VBlank6::
 ; palettes
@@ -162,20 +189,7 @@ VBlank6::
 	call Serve2bppRequest
 	call Serve1bppRequest
 	call DMATransfer
-	jr VBlankUpdateSound
 
-VBlank4::
-; bg map
-; tiles
-; oam
-; joypad
-; serial
-; sound
-	call UpdateBGMap
-	call Serve2bppRequest
-	call PushOAM
-	call Joypad
-	call AskSerial
 	jr VBlankUpdateSound
 
 VBlank1::
@@ -185,72 +199,94 @@ VBlank1::
 ; tiles
 ; oam
 ; sound / lcd stat
-	ld a, [hSCX]
-	ld [rSCX], a
-	ld a, [hSCY]
-	ld [rSCY], a
+	ldh a, [hSCX]
+	ldh [rSCX], a
+	ldh a, [hSCY]
+	ldh [rSCY], a
 
 	call UpdateCGBPals
-	jr c, VBlank1EntryPoint
+	jr c, .done
 
 	call UpdateBGMap
 	call Serve2bppRequest
 	call LYOverrideStackCopy
 
-	jr VBlank1EntryPoint
-
-VBlank3::
-; scx, scy
-; palettes
-; bg map
-; tiles
-; oam
-; sound / lcd stat
-	ld a, [hSCX]
-	ld [rSCX], a
-	ld a, [hSCY]
-	ld [rSCY], a
-
-	call UpdateCGBPals
-	jr c, VBlank1EntryPoint
-
-	call UpdateBGMap
-	call Serve2bppRequest
-	call LYOverrideStackCopy
-
-VBlank1EntryPoint:
+.done
 	call PushOAM
 
 	; get requested ints
-	ld a, [rIE]
+	ldh a, [rIE]
 	push af
-	ld a, [rIF]
+	ldh a, [rIF]
 	push af
+
 	xor a
-	ld [rIF], a
+	ldh [rIF], a
 	ld a, 1 << LCD_STAT
-	ld [rIE], a
-	ld [rIF], a
+	ldh [rIE], a
+	ldh [rIF], a
 
 	ei
 	call VBlankUpdateSound
 	di
 
 	; get requested ints
-	ld a, [rIF]
+	ldh a, [rIF]
 	ld b, a
+
 	; discard requested ints
 	pop af
 	or b
 	ld b, a
 	xor a
-	ld [rIF], a
+	ldh [rIF], a
+
 	; enable ints besides joypad
 	pop af
-	ld [rIE], a
+	ldh [rIE], a
+
 	; rerequest ints
 	ld a, b
-	ld [rIF], a
+	ldh [rIF], a
+	ret
+
+VBlank5::
+; scx
+; palettes
+; bg map
+; tiles
+; joypad
+; sound
+	ldh a, [hSCX]
+	ldh [rSCX], a
+
+	call UpdateCGBPals
+	jr c, .done
+
+	call UpdateBGMap
+	call Serve2bppRequest
+
+.done
+	call Joypad
+
+	xor a
+	ldh [rIF], a
+	ldh a, [rIE]
+	push af
+	ld a, 1 << LCD_STAT
+	ldh [rIE], a
+	ldh [rIF], a
+
+	ei
+	call VBlankUpdateSound
+	di
+
+	xor a
+	ldh [rIF], a
+
+	; enable usual interrupts
+	pop af
+	ldh [rIE], a
 	ret
 
 VBlank7::
@@ -260,41 +296,3 @@ VBlank7::
 	ld a, BANK(VBlankSafeCopyTilemapAtOnce)
 	rst Bankswitch
 	jp VBlankSafeCopyTilemapAtOnce
-
-VBlank5::
-; scx
-; palettes
-; bg map
-; tiles
-; joypad
-; sound
-	ld a, [hSCX]
-	ld [rSCX], a
-
-	call UpdateCGBPals
-	jr c, .done
-
-	call UpdateBGMap
-	call Serve2bppRequest
-.done
-	call Joypad
-
-	xor a
-	ld [rIF], a
-	ld a, [rIE]
-	push af
-	ld a, 1 << LCD_STAT ; lcd stat
-	ld [rIE], a
-	; request lcd stat
-	ld [rIF], a
-
-	ei
-	call VBlankUpdateSound
-	di
-
-	xor a
-	ld [rIF], a
-	; enable ints besides joypad
-	pop af
-	ld [rIE], a
-	ret

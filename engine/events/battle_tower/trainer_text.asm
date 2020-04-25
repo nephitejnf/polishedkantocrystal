@@ -1,12 +1,12 @@
-BattleTowerText:: ; 11c000
+BattleTowerText::
 ; Print text c for trainer [wBT_OTTrainerClass]
 ; 1: Intro text
 ; 2: Player lost
 ; 3: Player won
-	ld a, [rSVBK]
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBT_OTTrainerClass)
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	ld hl, wBT_OTTrainerClass
 	ld a, [hl]
 
@@ -23,7 +23,7 @@ BattleTowerText:: ; 11c000
 	jr nz, .female
 
 	; generate a random number between 0 and 24
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	and $1f
 	cp 25
 	jr c, .okay0
@@ -41,7 +41,7 @@ BattleTowerText:: ; 11c000
 
 .female
 	; generate a random number between 0 and 14
-	ld a, [hRandomAdd]
+	ldh a, [hRandomAdd]
 	and $f
 	cp 15
 	jr c, .okay1
@@ -81,20 +81,17 @@ BattleTowerText:: ; 11c000
 	ld h, a
 	bccoord 1, 14
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	jp PlaceWholeStringInBoxAtOnce
-; 11c05d
-
 
 INCLUDE "data/trainers/genders.asm"
 
-
-BTMaleTrainerTexts: ; 11f332
+BTMaleTrainerTexts:
 	dw .Greetings
 	dw .PlayerLost
 	dw .PlayerWon
 
-.Greetings: ; 11f338
+.Greetings:
 	dw BTGreetingM1
 	dw BTGreetingM2
 	dw BTGreetingM3
@@ -121,7 +118,7 @@ BTMaleTrainerTexts: ; 11f332
 	dw BTGreetingM24
 	dw BTGreetingM25
 
-.PlayerLost: ; 11f36a
+.PlayerLost:
 	dw BTLossM1
 	dw BTLossM2
 	dw BTLossM3
@@ -148,7 +145,7 @@ BTMaleTrainerTexts: ; 11f332
 	dw BTLossM24
 	dw BTLossM25
 
-.PlayerWon: ; 11f39c
+.PlayerWon:
 	dw BTWinM1
 	dw BTWinM2
 	dw BTWinM3
@@ -175,13 +172,12 @@ BTMaleTrainerTexts: ; 11f332
 	dw BTWinM24
 	dw BTWinM25
 
-
 BTFemaleTrainerTexts:
 	dw .Greetings
 	dw .PlayerLost
 	dw .PlayerWon
 
-.Greetings: ; 11f3d4
+.Greetings:
 	dw BTGreetingF1
 	dw BTGreetingF2
 	dw BTGreetingF3
@@ -198,7 +194,7 @@ BTFemaleTrainerTexts:
 	dw BTGreetingF14
 	dw BTGreetingF15
 
-.PlayerLost: ; 11f3f2
+.PlayerLost:
 	dw BTLossF1
 	dw BTLossF2
 	dw BTLossF3
@@ -215,7 +211,7 @@ BTFemaleTrainerTexts:
 	dw BTLossF14
 	dw BTLossF15
 
-.PlayerWon: ; 11f410
+.PlayerWon:
 	dw BTWinF1
 	dw BTWinF2
 	dw BTWinF3
@@ -232,7 +228,6 @@ BTFemaleTrainerTexts:
 	dw BTWinF14
 	dw BTWinF15
 
-
 BTTycoonTexts:
 	dw .Greetings
 	dw .PlayerLost
@@ -247,502 +242,494 @@ BTTycoonTexts:
 .PlayerWon:
 	dw BTWinTycoon
 
-
-BTGreetingM1: ; 0x11f42e
+BTGreetingM1:
 	text_jump BattleTowerText_0x1ec000
-	db "@"
+	text_end
 
-BTLossM1: ; 0x11f433
+BTLossM1:
 	text_jump BattleTowerText_0x1ec03b
-	db "@"
+	text_end
 
-BTWinM1: ; 0x11f438
+BTWinM1:
 	text_jump UnknownText_0x1ec060
-	db "@"
+	text_end
 
-BTGreetingM2: ; 0x11f43d
+BTGreetingM2:
 	text_jump BattleTowerText_0x1ec080
-	db "@"
+	text_end
 
-BTLossM2: ; 0x11f442
+BTLossM2:
 	text_jump UnknownText_0x1ec0a3
-	db "@"
+	text_end
 
-BTWinM2: ; 0x11f447
+BTWinM2:
 	text_jump UnknownText_0x1ec0c4
-	db "@"
+	text_end
 
-BTGreetingM3: ; 0x11f44c
+BTGreetingM3:
 	text_jump UnknownText_0x1ec0e1
-	db "@"
+	text_end
 
-BTLossM3: ; 0x11f451
+BTLossM3:
 	text_jump UnknownText_0x1ec108
-	db "@"
+	text_end
 
-BTWinM3: ; 0x11f456
+BTWinM3:
 	text_jump UnknownText_0x1ec12a
-	db "@"
+	text_end
 
-BTGreetingM4: ; 0x11f45b
+BTGreetingM4:
 	text_jump UnknownText_0x1ec14d
-	db "@"
+	text_end
 
-BTLossM4: ; 0x11f460
+BTLossM4:
 	text_jump UnknownText_0x1ec16f
-	db "@"
+	text_end
 
-BTWinM4: ; 0x11f465
+BTWinM4:
 	text_jump UnknownText_0x1ec190
-	db "@"
+	text_end
 
-BTGreetingM5: ; 0x11f46a
+BTGreetingM5:
 	text_jump UnknownText_0x1ec1ae
-	db "@"
+	text_end
 
-BTLossM5: ; 0x11f46f
+BTLossM5:
 	text_jump UnknownText_0x1ec1d0
-	db "@"
+	text_end
 
-BTWinM5: ; 0x11f474
+BTWinM5:
 	text_jump UnknownText_0x1ec1f4
-	db "@"
+	text_end
 
-BTGreetingM6: ; 0x11f479
+BTGreetingM6:
 	text_jump UnknownText_0x1ec216
-	db "@"
+	text_end
 
-BTLossM6: ; 0x11f47e
+BTLossM6:
 	text_jump UnknownText_0x1ec238
-	db "@"
+	text_end
 
-BTWinM6: ; 0x11f483
+BTWinM6:
 	text_jump UnknownText_0x1ec259
-	db "@"
+	text_end
 
-BTGreetingM7: ; 0x11f488
+BTGreetingM7:
 	text_jump UnknownText_0x1ec27b
-	db "@"
+	text_end
 
-BTLossM7: ; 0x11f48d
+BTLossM7:
 	text_jump UnknownText_0x1ec2a0
-	db "@"
+	text_end
 
-BTWinM7: ; 0x11f492
+BTWinM7:
 	text_jump UnknownText_0x1ec2c0
-	db "@"
+	text_end
 
-BTGreetingM8: ; 0x11f497
+BTGreetingM8:
 	text_jump UnknownText_0x1ec2d9
-	db "@"
+	text_end
 
-BTLossM8: ; 0x11f49c
+BTLossM8:
 	text_jump UnknownText_0x1ec2fe
-	db "@"
+	text_end
 
-BTWinM8: ; 0x11f4a1
+BTWinM8:
 	text_jump UnknownText_0x1ec320
-	db "@"
+	text_end
 
-BTGreetingM9: ; 0x11f4a6
+BTGreetingM9:
 	text_jump UnknownText_0x1ec33f
-	db "@"
+	text_end
 
-BTLossM9: ; 0x11f4ab
+BTLossM9:
 	text_jump UnknownText_0x1ec36c
-	db "@"
+	text_end
 
-BTWinM9: ; 0x11f4b0
+BTWinM9:
 	text_jump UnknownText_0x1ec389
-	db "@"
+	text_end
 
-BTGreetingM10: ; 0x11f4b5
+BTGreetingM10:
 	text_jump UnknownText_0x1ec3ad
-	db "@"
+	text_end
 
-BTLossM10: ; 0x11f4ba
+BTLossM10:
 	text_jump UnknownText_0x1ec3c5
-	db "@"
+	text_end
 
-BTWinM10: ; 0x11f4bf
+BTWinM10:
 	text_jump UnknownText_0x1ec3e5
-	db "@"
+	text_end
 
-BTGreetingM11: ; 0x11f4c4
+BTGreetingM11:
 	text_jump UnknownText_0x1ec402
-	db "@"
+	text_end
 
-BTLossM11: ; 0x11f4c9
+BTLossM11:
 	text_jump UnknownText_0x1ec411
-	db "@"
+	text_end
 
-BTWinM11: ; 0x11f4ce
+BTWinM11:
 	text_jump UnknownText_0x1ec41f
-	db "@"
+	text_end
 
-BTGreetingM12: ; 0x11f4d3
+BTGreetingM12:
 	text_jump UnknownText_0x1ec42e
-	db "@"
+	text_end
 
-BTLossM12: ; 0x11f4d8
+BTLossM12:
 	text_jump UnknownText_0x1ec461
-	db "@"
+	text_end
 
-BTWinM12: ; 0x11f4dd
+BTWinM12:
 	text_jump UnknownText_0x1ec4a0
-	db "@"
+	text_end
 
-BTGreetingM13: ; 0x11f4e2
+BTGreetingM13:
 	text_jump UnknownText_0x1ec4d6
-	db "@"
+	text_end
 
-BTLossM13: ; 0x11f4e7
+BTLossM13:
 	text_jump UnknownText_0x1ec4f5
-	db "@"
+	text_end
 
-BTWinM13: ; 0x11f4ec
+BTWinM13:
 	text_jump UnknownText_0x1ec512
-	db "@"
+	text_end
 
-BTGreetingM14: ; 0x11f4f1
+BTGreetingM14:
 	text_jump UnknownText_0x1ec532
-	db "@"
+	text_end
 
-BTLossM14: ; 0x11f4f6
+BTLossM14:
 	text_jump UnknownText_0x1ec54b
-	db "@"
+	text_end
 
-BTWinM14: ; 0x11f4fb
+BTWinM14:
 	text_jump UnknownText_0x1ec565
-	db "@"
+	text_end
 
-BTGreetingM15: ; 0x11f500
+BTGreetingM15:
 	text_jump UnknownText_0x1ec580
-	db "@"
+	text_end
 
-BTLossM15: ; 0x11f505
+BTLossM15:
 	text_jump UnknownText_0x1ec59d
-	db "@"
+	text_end
 
-BTWinM15: ; 0x11f50a
+BTWinM15:
 	text_jump UnknownText_0x1ec5b5
-	db "@"
+	text_end
 
-BTGreetingM16: ; 0x11f50f
+BTGreetingM16:
 	text_jump UnknownText_0x1ec5d3
-	db "@"
+	text_end
 
-BTLossM16: ; 0x11f514
+BTLossM16:
 	text_jump UnknownText_0x1ec5ee
-	db "@"
+	text_end
 
-BTWinM16: ; 0x11f519
+BTWinM16:
 	text_jump UnknownText_0x1ec60d
-	db "@"
+	text_end
 
-BTGreetingM17: ; 0x11f51e
+BTGreetingM17:
 	text_jump UnknownText_0x1ec631
-	db "@"
+	text_end
 
-BTLossM17: ; 0x11f523
+BTLossM17:
 	text_jump UnknownText_0x1ec651
-	db "@"
+	text_end
 
-BTWinM17: ; 0x11f528
+BTWinM17:
 	text_jump UnknownText_0x1ec68f
-	db "@"
+	text_end
 
-BTGreetingM18: ; 0x11f52d
+BTGreetingM18:
 	text_jump UnknownText_0x1ec6b1
-	db "@"
+	text_end
 
-BTLossM18: ; 0x11f532
+BTLossM18:
 	text_jump UnknownText_0x1ec6d0
-	db "@"
+	text_end
 
-BTWinM18: ; 0x11f537
+BTWinM18:
 	text_jump UnknownText_0x1ec708
-	db "@"
+	text_end
 
-BTGreetingM19: ; 0x11f53c
+BTGreetingM19:
 	text_jump UnknownText_0x1ec720
-	db "@"
+	text_end
 
-BTLossM19: ; 0x11f541
+BTLossM19:
 	text_jump UnknownText_0x1ec73e
-	db "@"
+	text_end
 
-BTWinM19: ; 0x11f546
+BTWinM19:
 	text_jump UnknownText_0x1ec75b
-	db "@"
+	text_end
 
-BTGreetingM20: ; 0x11f54b
+BTGreetingM20:
 	text_jump UnknownText_0x1ec77f
-	db "@"
+	text_end
 
-BTLossM20: ; 0x11f550
+BTLossM20:
 	text_jump UnknownText_0x1ec798
-	db "@"
+	text_end
 
-BTWinM20: ; 0x11f555
+BTWinM20:
 	text_jump UnknownText_0x1ec7bb
-	db "@"
+	text_end
 
-BTGreetingM21: ; 0x11f55a
+BTGreetingM21:
 	text_jump UnknownText_0x1ec7d8
-	db "@"
+	text_end
 
-BTLossM21: ; 0x11f55f
+BTLossM21:
 	text_jump UnknownText_0x1ec818
-	db "@"
+	text_end
 
-BTWinM21: ; 0x11f564
+BTWinM21:
 	text_jump UnknownText_0x1ec837
-	db "@"
+	text_end
 
-BTGreetingM22: ; 0x11f569
+BTGreetingM22:
 	text_jump UnknownText_0x1ec858
-	db "@"
+	text_end
 
-BTLossM22: ; 0x11f56e
+BTLossM22:
 	text_jump UnknownText_0x1ec876
-	db "@"
+	text_end
 
-BTWinM22: ; 0x11f573
+BTWinM22:
 	text_jump UnknownText_0x1ec898
-	db "@"
+	text_end
 
-BTGreetingM23: ; 0x11f578
+BTGreetingM23:
 	text_jump UnknownText_0x1ec8b1
-	db "@"
+	text_end
 
-BTLossM23: ; 0x11f57d
+BTLossM23:
 	text_jump UnknownText_0x1ec8d5
-	db "@"
+	text_end
 
-BTWinM23: ; 0x11f582
+BTWinM23:
 	text_jump UnknownText_0x1ec8f0
-	db "@"
+	text_end
 
-BTGreetingM24: ; 0x11f587
+BTGreetingM24:
 	text_jump UnknownText_0x1ec911
-	db "@"
+	text_end
 
-BTLossM24: ; 0x11f58c
+BTLossM24:
 	text_jump UnknownText_0x1ec928
-	db "@"
+	text_end
 
-BTWinM24: ; 0x11f591
+BTWinM24:
 	text_jump UnknownText_0x1ec949
-	db "@"
+	text_end
 
-BTGreetingM25: ; 0x11f596
+BTGreetingM25:
 	text_jump UnknownText_0x1ec969
-	db "@"
+	text_end
 
-BTLossM25: ; 0x11f59b
+BTLossM25:
 	text_jump UnknownText_0x1ec986
-	db "@"
+	text_end
 
-BTWinM25: ; 0x11f5a0
+BTWinM25:
 	text_jump UnknownText_0x1ec99b
-	db "@"
+	text_end
 
-
-
-
-BTGreetingF1: ; 0x11f5a5
+BTGreetingF1:
 	text_jump UnknownText_0x1ec9bd
-	db "@"
+	text_end
 
-BTLossF1: ; 0x11f5aa
+BTLossF1:
 	text_jump UnknownText_0x1ec9d9
-	db "@"
+	text_end
 
-BTWinF1: ; 0x11f5af
+BTWinF1:
 	text_jump UnknownText_0x1ec9f7
-	db "@"
+	text_end
 
-BTGreetingF2: ; 0x11f5b4
+BTGreetingF2:
 	text_jump UnknownText_0x1eca0a
-	db "@"
+	text_end
 
-BTLossF2: ; 0x11f5b9
+BTLossF2:
 	text_jump UnknownText_0x1eca2a
-	db "@"
+	text_end
 
-BTWinF2: ; 0x11f5be
+BTWinF2:
 	text_jump UnknownText_0x1eca47
-	db "@"
+	text_end
 
-BTGreetingF3: ; 0x11f5c3
+BTGreetingF3:
 	text_jump UnknownText_0x1eca64
-	db "@"
+	text_end
 
-BTLossF3: ; 0x11f5c8
+BTLossF3:
 	text_jump UnknownText_0x1eca82
-	db "@"
+	text_end
 
-BTWinF3: ; 0x11f5cd
+BTWinF3:
 	text_jump UnknownText_0x1eca9d
-	db "@"
+	text_end
 
-BTGreetingF4: ; 0x11f5d2
+BTGreetingF4:
 	text_jump UnknownText_0x1ecabf
-	db "@"
+	text_end
 
-BTLossF4: ; 0x11f5d7
+BTLossF4:
 	text_jump UnknownText_0x1ecade
-	db "@"
+	text_end
 
-BTWinF4: ; 0x11f5dc
+BTWinF4:
 	text_jump UnknownText_0x1ecafa
-	db "@"
+	text_end
 
-BTGreetingF5: ; 0x11f5e1
+BTGreetingF5:
 	text_jump UnknownText_0x1ecb19
-	db "@"
+	text_end
 
-BTLossF5: ; 0x11f5e6
+BTLossF5:
 	text_jump UnknownText_0x1ecb37
-	db "@"
+	text_end
 
-BTWinF5: ; 0x11f5eb
+BTWinF5:
 	text_jump UnknownText_0x1ecb55
-	db "@"
+	text_end
 
-BTGreetingF6: ; 0x11f5f0
+BTGreetingF6:
 	text_jump UnknownText_0x1ecb70
-	db "@"
+	text_end
 
-BTLossF6: ; 0x11f5f5
+BTLossF6:
 	text_jump UnknownText_0x1ecb92
-	db "@"
+	text_end
 
-BTWinF6: ; 0x11f5fa
+BTWinF6:
 	text_jump UnknownText_0x1ecbb6
-	db "@"
+	text_end
 
-BTGreetingF7: ; 0x11f5ff
+BTGreetingF7:
 	text_jump UnknownText_0x1ecbd9
-	db "@"
+	text_end
 
-BTLossF7: ; 0x11f604
+BTLossF7:
 	text_jump UnknownText_0x1ecbf3
-	db "@"
+	text_end
 
-BTWinF7: ; 0x11f609
+BTWinF7:
 	text_jump UnknownText_0x1ecc15
-	db "@"
+	text_end
 
-BTGreetingF8: ; 0x11f60e
+BTGreetingF8:
 	text_jump UnknownText_0x1ecc39
-	db "@"
+	text_end
 
-BTLossF8: ; 0x11f613
+BTLossF8:
 	text_jump UnknownText_0x1ecc55
-	db "@"
+	text_end
 
-BTWinF8: ; 0x11f618
+BTWinF8:
 	text_jump UnknownText_0x1ecc75
-	db "@"
+	text_end
 
-BTGreetingF9: ; 0x11f61d
+BTGreetingF9:
 	text_jump UnknownText_0x1ecc92
-	db "@"
+	text_end
 
-BTLossF9: ; 0x11f622
+BTLossF9:
 	text_jump UnknownText_0x1ecca7
-	db "@"
+	text_end
 
-BTWinF9: ; 0x11f627
+BTWinF9:
 	text_jump UnknownText_0x1eccc1
-	db "@"
+	text_end
 
-BTGreetingF10: ; 0x11f62c
+BTGreetingF10:
 	text_jump UnknownText_0x1eccd7
-	db "@"
+	text_end
 
-BTLossF10: ; 0x11f631
+BTLossF10:
 	text_jump UnknownText_0x1eccef
-	db "@"
+	text_end
 
-BTWinF10: ; 0x11f636
+BTWinF10:
 	text_jump UnknownText_0x1ecd0e
-	db "@"
+	text_end
 
-BTGreetingF11: ; 0x11f63b
+BTGreetingF11:
 	text_jump UnknownText_0x1ecd2b
-	db "@"
+	text_end
 
-BTLossF11: ; 0x11f640
+BTLossF11:
 	text_jump UnknownText_0x1ecd4d
-	db "@"
+	text_end
 
-BTWinF11: ; 0x11f645
+BTWinF11:
 	text_jump UnknownText_0x1ecd6b
-	db "@"
+	text_end
 
-BTGreetingF12: ; 0x11f64a
+BTGreetingF12:
 	text_jump UnknownText_0x1ecd8d
-	db "@"
+	text_end
 
-BTLossF12: ; 0x11f64f
+BTLossF12:
 	text_jump UnknownText_0x1ecdaf
-	db "@"
+	text_end
 
-BTWinF12: ; 0x11f654
+BTWinF12:
 	text_jump UnknownText_0x1ecdcf
-	db "@"
+	text_end
 
-BTGreetingF13: ; 0x11f659
+BTGreetingF13:
 	text_jump UnknownText_0x1ecded
-	db "@"
+	text_end
 
-BTLossF13: ; 0x11f65e
+BTLossF13:
 	text_jump UnknownText_0x1ece0d
-	db "@"
+	text_end
 
-BTWinF13: ; 0x11f663
+BTWinF13:
 	text_jump UnknownText_0x1ece2a
-	db "@"
+	text_end
 
-BTGreetingF14: ; 0x11f668
+BTGreetingF14:
 	text_jump UnknownText_0x1ece4b
-	db "@"
+	text_end
 
-BTLossF14: ; 0x11f66d
+BTLossF14:
 	text_jump UnknownText_0x1ece70
-	db "@"
+	text_end
 
-BTWinF14: ; 0x11f672
+BTWinF14:
 	text_jump UnknownText_0x1ece8a
-	db "@"
+	text_end
 
-BTGreetingF15: ; 0x11f677
+BTGreetingF15:
 	text_jump UnknownText_0x1ecea8
-	db "@"
+	text_end
 
-BTLossF15: ; 0x11f67c
+BTLossF15:
 	text_jump UnknownText_0x1ecec9
-	db "@"
+	text_end
 
-BTWinF15: ; 0x11f681
+BTWinF15:
 	text_jump UnknownText_0x1ecee8
-	db "@"
-
-
-
+	text_end
 
 BTGreetingTycoon:
 	text_jump BattleTowerText_GreetingTycoon
-	db "@"
+	text_end
 
 BTLossTycoon:
 	text_jump BattleTowerText_LossTycoon
-	db "@"
+	text_end
 
 BTWinTycoon:
 	text_jump BattleTowerText_WinTycoon
-	db "@"
-
+	text_end

@@ -1,17 +1,16 @@
-HDMATransferTileMapToWRAMBank3:: ; 10402d
+HDMATransferTileMapToWRAMBank3::
 	call CallInSafeGFXMode
 
 .Function:
 	decoord 0, 0
 	ld hl, wScratchTileMap
 	call CutAndPasteTilemap
-	ld a, $0
-	ld [rVBK], a
+	xor a
+	ldh [rVBK], a
 	ld hl, wScratchTileMap
 	jp HDMATransferToWRAMBank3
-; 104047
 
-HDMATransferAttrMapToWRAMBank3: ; 104047
+HDMATransferAttrMapToWRAMBank3:
 	call CallInSafeGFXMode
 
 .Function:
@@ -19,12 +18,11 @@ HDMATransferAttrMapToWRAMBank3: ; 104047
 	ld hl, wScratchAttrMap
 	call CutAndPasteAttrMap
 	ld a, $1
-	ld [rVBK], a
+	ldh [rVBK], a
 	ld hl, wScratchAttrMap
 	jp HDMATransferToWRAMBank3
-; 104061
 
-ReloadMapPart:: ; 104061
+ReloadMapPart::
 	call CallInSafeGFXMode
 
 .Function:
@@ -36,33 +34,33 @@ ReloadMapPart:: ; 104061
 	call CutAndPasteTilemap
 
 	di
-	ld a, [rVBK]
+	ldh a, [rVBK]
 	push af
 	ld a, $1
-	ld [rVBK], a
+	ldh [rVBK], a
 	ld hl, wScratchAttrMap
 	call DoHBlankHDMATransfer_toBGMap
-	ld a, $0
-	ld [rVBK], a
+	xor a
+	ldh [rVBK], a
 	ld hl, wScratchTileMap
 	call DoHBlankHDMATransfer_toBGMap
 	pop af
-	ld [rVBK], a
+	ldh [rVBK], a
 	reti
 
-HDMATransferToWRAMBank3: ; 10419d (41:419d)
+HDMATransferToWRAMBank3:
 	ld a, h
-	ld [rHDMA1], a
+	ldh [rHDMA1], a
 	ld a, l
-	ld [rHDMA2], a
-	ld a, [hBGMapAddress + 1]
+	ldh [rHDMA2], a
+	ldh a, [hBGMapAddress + 1]
 	and $1f
-	ld [rHDMA3], a
-	ld a, [hBGMapAddress]
-	ld [rHDMA4], a
+	ldh [rHDMA3], a
+	ldh a, [hBGMapAddress]
+	ldh [rHDMA4], a
 
 	ld a, $23
-	ld [hDMATransfer], a
+	ldh [hDMATransfer], a
 	; fallthrough
 
 WaitDMATransfer:
@@ -70,7 +68,7 @@ WaitDMATransfer:
 .loop
 	call DelayFrame
 .handleLoop
-	ld a, [hDMATransfer]
+	ldh a, [hDMATransfer]
 	and a
 	jr nz, .loop
 	ret
@@ -78,57 +76,57 @@ WaitDMATransfer:
 CallInSafeGFXMode:
 	pop hl
 
-	ld a, [hBGMapMode]
+	ldh a, [hBGMapMode]
 	push af
-	ld a, [hMapAnims]
+	ldh a, [hMapAnims]
 	push af
 	xor a
-	ld [hBGMapMode], a
-	ld [hMapAnims], a
-	ld a, [rSVBK]
+	ldh [hBGMapMode], a
+	ldh [hMapAnims], a
+	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wScratchTileMap)
-	ld [rSVBK], a
-	ld a, [rVBK]
+	ldh [rSVBK], a
+	ldh a, [rVBK]
 	push af
 
 	call _hl_
 
 	pop af
-	ld [rVBK], a
+	ldh [rVBK], a
 	pop af
-	ld [rSVBK], a
+	ldh [rSVBK], a
 	pop af
-	ld [hMapAnims], a
+	ldh [hMapAnims], a
 	pop af
-	ld [hBGMapMode], a
+	ldh [hBGMapMode], a
 	ret
 
 DoHBlankHDMATransfer_toBGMap:
-	ld a, [hBGMapAddress + 1]
+	ldh a, [hBGMapAddress + 1]
 	ld d, a
-	ld a, [hBGMapAddress]
+	ldh a, [hBGMapAddress]
 	ld e, a
 	ld c, $23
 	ld a, h
-	ld [rHDMA1], a
+	ldh [rHDMA1], a
 	ld a, l
 	and $f0
-	ld [rHDMA2], a
+	ldh [rHDMA2], a
 	ld a, d
 	and $1f
-	ld [rHDMA3], a
+	ldh [rHDMA3], a
 	ld a, e
 	and $f0
-	ld [rHDMA4], a
+	ldh [rHDMA4], a
 	di
-	ld a, [rLY]
+	ldh a, [rLY]
 	add c ; calculate end LY
 	cp $80 ; is the end LY greater than the max LY
 	call nc, DI_DelayFrame ; if so, delay a frame to reset the LY
 	set 7, c
 .waitHBlank
-	ld a, [rSTAT]
+	ldh a, [rSTAT]
 	and $3
 	jr nz, .waitHBlank
 	ld hl, rHDMA5
@@ -144,33 +142,33 @@ DoHBlankHDMATransfer
 ; a lot of waiting around for hardware registers
 	; [rHDMA1, rHDMA2] = hl & $fff0
 	ld a, h
-	ld [rHDMA1], a
+	ldh [rHDMA1], a
 	ld a, l
 	and $f0 ; high nybble
-	ld [rHDMA2], a
+	ldh [rHDMA2], a
 	; [rHDMA3, rHDMA4] = de & $1ff0
 	ld a, d
 	and $1f ; lower 5 bits
-	ld [rHDMA3], a
+	ldh [rHDMA3], a
 	ld a, e
 	and $f0 ; high nybble
-	ld [rHDMA4], a
+	ldh [rHDMA4], a
 	; e = c | %10000000
 	dec c ; c = number of LYs needed
 	ld e, c
 	set 7, e ; hblank dma transfers
-	ld a, [rLY]
+	ldh a, [rLY]
 	add c ; calculate end LY
 	cp b ; is the end LY greater than the max LY
 	call nc, DI_DelayFrame ; if so, delay a frame to reset the LY
 
-	lb bc, %11, rSTAT & $ff
+	lb bc, %11, LOW(rSTAT)
 .noHBlankWait
-	ld a, [c]
+	ldh a, [c]
 	and b
 	jr z, .noHBlankWait
 .hBlankWaitLoop
-	ld a, [c]
+	ldh a, [c]
 	and b
 	jr nz, .hBlankWaitLoop
 	ld hl, rHDMA5
@@ -181,19 +179,19 @@ DoHBlankHDMATransfer
 	jr nz, .waitForHDMA
 	ret
 
-CutAndPasteTilemap: ; 10425f (41:425f)
+CutAndPasteTilemap:
 	ld c, " "
 	jr CutAndPasteMap
 
-CutAndPasteAttrMap: ; 104263 (41:4263)
+CutAndPasteAttrMap:
 	ld c, $0
 
-CutAndPasteMap: ; 104265 (41:4265)
+CutAndPasteMap:
 ; back up the value of c to hMapObjectIndexBuffer
-	ld a, [hMapObjectIndexBuffer]
+	ldh a, [hMapObjectIndexBuffer]
 	push af
 	ld a, c
-	ld [hMapObjectIndexBuffer], a
+	ldh [hMapObjectIndexBuffer], a
 
 ; for each row on the screen
 	ld c, SCREEN_HEIGHT
@@ -209,7 +207,7 @@ CutAndPasteMap: ; 104265 (41:4265)
 	jr nz, .loop2
 
 ; load the original value of c into hl 12 times
-	ld a, [hMapObjectIndexBuffer]
+	ldh a, [hMapObjectIndexBuffer]
 	ld b, 12
 .loop3
 	ld [hli], a
@@ -221,10 +219,10 @@ CutAndPasteMap: ; 104265 (41:4265)
 
 ; restore the original value of hMapObjectIndexBuffer
 	pop af
-	ld [hMapObjectIndexBuffer], a
+	ldh [hMapObjectIndexBuffer], a
 	ret
 
-HDMATransfer_OnlyTopFourRows: ; 104303
+HDMATransfer_OnlyTopFourRows:
 	call CallInSafeGFXMode
 
 .Function:
@@ -236,21 +234,21 @@ HDMATransfer_OnlyTopFourRows: ; 104303
 	call .Copy
 	di
 	ld a, $1
-	ld [rVBK], a
+	ldh [rVBK], a
 	ld c, $8
 	ld hl, wScratchTileMap + $80
-	debgcoord 0, 0, VBGMap1
+	debgcoord 0, 0, vBGMap1
 	call DoHBlankHDMATransfer
 	xor a
-	ld [rVBK], a
+	ldh [rVBK], a
 	ld c, $8
 	ld hl, wScratchTileMap
-	debgcoord 0, 0, VBGMap1
+	debgcoord 0, 0, vBGMap1
 	call DoHBlankHDMATransfer
 
 	reti
 
-.Copy: ; 10433a (41:433a)
+.Copy:
 	ld b, 4
 .outer_loop
 	ld c, SCREEN_WIDTH
@@ -263,19 +261,19 @@ HDMATransfer_OnlyTopFourRows: ; 104303
 	ld a, l
 	add $20 - SCREEN_WIDTH
 	ld l, a
-	ld a, h
-	adc $0
+	adc h
+	sub l
 	ld h, a
 	dec b
 	jr nz, .outer_loop
 	ret
 
 DI_DelayFrame:
-	ld a, [rLY]
+	ldh a, [rLY]
 	push bc
 	ld b, a
 .loop
-	ld a, [rLY]
+	ldh a, [rLY]
 	and a
 	jr z, .done
 	cp b

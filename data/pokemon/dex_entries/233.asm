@@ -1,4 +1,3 @@
-; Porygon2PokedexEntry: ; 0x1d110c
 	db "Virtual@" ; species name
 	dw 200, 720 ; height, width
 

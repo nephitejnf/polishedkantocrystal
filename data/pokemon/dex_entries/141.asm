@@ -1,4 +1,3 @@
-; KabutopsPokedexEntry: ; 0x1cc507
 	db "Shellfish@" ; species name
 	dw 403, 890 ; height, width
 

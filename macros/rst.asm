@@ -1,10 +1,3 @@
-FarCall    EQU $08
-Bankswitch EQU $10
-AddNTimes  EQU $18
-CopyBytes  EQU $20
-JumpTable  EQU $28
-Predef     EQU $30
-
 anonbankpush: MACRO
 	call AnonBankPush
 	db BANK(\1)
@@ -21,10 +14,14 @@ farjp: MACRO ; bank, address
 ENDM
 
 homecall: MACRO ; bank, address
-	ld a, [hROMBank]
+	ldh a, [hROMBank]
 	push af
 if _NARG == 2
+if STRIN("\2", "[h") == 1 || STRIN("\2", "[r") == 1
+	ldh a, \2
+else
 	ld a, \2
+endc
 else
 	ld a, BANK(\1)
 endc

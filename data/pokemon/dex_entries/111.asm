@@ -1,4 +1,3 @@
-; RhyhornPokedexEntry: ; 0x1b935d
 	db "Spikes@" ; species name
 	dw 303, 2540 ; height, width
 

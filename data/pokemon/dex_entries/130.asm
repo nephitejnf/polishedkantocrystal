@@ -1,4 +1,3 @@
-; GyaradosPokedexEntry: ; 0x1cc065
 	db "Atrocious@" ; species name
 	dw 2104, 5180 ; height, width
 

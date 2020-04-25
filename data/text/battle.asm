@@ -8,102 +8,90 @@ LinkBattleErrorText::
 	line "be reset."
 	prompt
 
-BattleText_PlayerPickedUpPayDayMoney: ; 0x80730
+BattleText_PlayerPickedUpPayDayMoney:
 	text "<PLAYER> picked up"
 	line "¥@"
 	deciram wPayDayMoney, 3, 6
 	text "!"
 	prompt
-; 0x80746
 
-WildPokemonAppearedText: ; 0x80746
+WildPokemonAppearedText:
 	text "A wild @"
-LegendaryAppearedText: ; 0x80793
+LegendaryAppearedText:
 	text_from_ram wEnemyMonNick
 	text ""
 	line "appeared!"
 	prompt
-; 0x8075c
 
-HookedPokemonAttackedText: ; 0x8075c
+HookedPokemonAttackedText:
 	text "The hooked"
 	line "@"
 	text_from_ram wEnemyMonNick
 	text ""
 	cont "attacked!"
 	prompt
-; 0x80778
 
-PokemonFellFromTreeText: ; 0x80778
+PokemonFellFromTreeText:
 	text_from_ram wEnemyMonNick
 	text " fell"
 	line "out of the tree!"
 	prompt
-; 0x80793
 
-WantsToBattleText:: ; 0x807a9
+WantsToBattleText::
 	text "<ENEMY>"
 	line "wants to battle!"
 	prompt
-; 0x807bd
 
 WantToBattleText::
 	text "<ENEMY>"
 	line "want to battle!"
 	prompt
 
-BattleText_WildFled: ; 0x807bd
+BattleText_WildFled:
 	text "Wild @"
 BattleText_LegendaryFled:
 	text_from_ram wEnemyMonNick
 	text ""
 	line "fled!"
 	prompt
-; 0x807cf
 
-BattleText_EnemyFled: ; 0x807cf
+BattleText_EnemyFled:
 	text "The foe @"
 	text_from_ram wEnemyMonNick
 	text ""
 	line "fled!"
 	prompt
-; 0x807e2
 
 BattleText_EnemyCantEscape:
 	text "<USER>"
 	line "can't escape!"
 	prompt
 
-HurtByPoisonText: ; 0x807e2
+HurtByPoisonText:
 	text "<USER> is"
 	line "hurt by poison!"
 	prompt
-; 0x807f8
 
-HurtByBurnText: ; 0x807f8
+HurtByBurnText:
 	text "<USER> is"
 	line "hurt by its burn!"
 	prompt
-; 0x8080e
 
-LeechSeedSapsText: ; 0x8080e
+LeechSeedSapsText:
 	text "Leech Seed saps"
 	line "<USER>!"
 	prompt
-; 0x80822
 
-HurtByCurseText: ; 0x80836
+HurtByCurseText:
 	text "<USER> is"
 	line "hurt by the curse!"
 	prompt
-; 0x8084d
 
-SandstormHitsText: ; 0x8084d
+SandstormHitsText:
 	text "<USER> is"
 	line "buffeted by"
 	cont "the sandstorm!"
 	prompt
-; 0x80864
 
 HailHitsText:
 	text "<USER> is"
@@ -111,13 +99,12 @@ HailHitsText:
 	cont "the hail!"
 	prompt
 
-PerishCountText: ; 0x80864
+PerishCountText:
 	text "<USER>'s"
 	line "Perish count is @"
 	deciram wd265, 1, 1
 	text "!"
 	prompt
-; 0x80880
 
 BattleText_UserLostSomeOfItsHP:
 	text "<USER>"
@@ -126,9 +113,8 @@ BattleText_UserLostSomeOfItsHP:
 	prompt
 
 BattleText_PickedUpItem:
-	text "@"
-	text_from_ram wStringBuffer1
-	text " picked"
+	; assumes player (enemy might overflow text-wise)
+	text "<USER> picked"
 	line "up @"
 	text_from_ram wStringBuffer2
 	text "."
@@ -279,84 +265,60 @@ BattleText_UsersFutureSightMissed:
 	para "But it failed!"
 	prompt
 
-BattleText_TargetWasHitByFutureSight: ; 0x808b6
+BattleText_TargetWasHitByFutureSight:
 	text "<TARGET>"
 	line "took the"
 	cont "Future Sight!"
 	prompt
-; 0x808d2
 
-BattleText_SafeguardFaded: ; 0x808d2
-	text "<USER>'s"
+BattleText_MistFaded:
+	text_from_ram wStringBuffer1
+	text " #mon's"
+	line "mist faded!"
+	prompt
+
+BattleText_SafeguardFaded:
+	text_from_ram wStringBuffer1
+	text " #mon's"
 	line "Safeguard faded!"
 	prompt
-; 0x808e7
 
-BattleText_PkmnLightScreenFell: ; 0x808e7
+BattleText_LightScreenFell:
 	text_from_ram wStringBuffer1
 	text " #mon's"
 	line "Light Screen fell!"
 	prompt
-; 0x80905
 
-BattleText_PkmnReflectFaded: ; 0x80905
+BattleText_ReflectFaded:
 	text_from_ram wStringBuffer1
 	text " #mon's"
 	line "Reflect faded!"
 	prompt
-; 0x8091f
 
-BattleText_RainContinuesToFall: ; 0x8091f
-	text "Rain continues to"
-	line "fall."
-	prompt
-; 0x80938
-
-BattleText_TheSunlightIsStrong: ; 0x80938
-	text "The sunlight is"
-	line "strong."
-	prompt
-; 0x80951
-
-BattleText_TheSandstormRages: ; 0x80951
-	text "The sandstorm"
-	line "rages."
-	prompt
-; 0x80967
-
-BattleText_TheHailContinuesToFall:
-	text "The hail continues"
-	line "to fall."
-	prompt
-
-BattleText_TheRainStopped: ; 0x80967
+BattleText_TheRainStopped:
 	text "The rain stopped."
 	prompt
-; 0x8097a
 
-BattleText_TheSunlightFaded: ; 0x8097a
+BattleText_TheSunlightFaded:
 	text "The sunlight"
 	line "faded."
 	prompt
-; 0x8098f
 
-BattleText_TheSandstormSubsided: ; 0x8098f
+BattleText_TheSandstormSubsided:
 	text "The sandstorm"
 	line "subsided."
 	prompt
-; 0x809a8
 
 BattleText_TheHailStopped:
 	text "The hail stopped."
 	prompt
 
-BattleText_EnemyPkmnFainted: ; 0x809a8
+BattleText_EnemyPkmnFainted:
 	text "The foe @"
 	text_from_ram wEnemyMonNick
 	text ""
 	line "fainted!"
 	prompt
-; 0x809be
 
 GotMoneyForWinningText:
 	text "<PLAYER> got ¥@"
@@ -365,22 +327,20 @@ GotMoneyForWinningText:
 	line "for winning!"
 	prompt
 
-BattleText_EnemyWasDefeated: ; 0x809da
+BattleText_EnemyWasDefeated:
 	text "<ENEMY>"
 	line "was defeated!"
 	prompt
-; 0x809eb
 
 BattleText_EnemyWereDefeated:
 	text "<ENEMY>"
 	line "were defeated!"
 	prompt
 
-TiedAgainstText: ; 0x809eb
+TiedAgainstText:
 	text "Tied against"
 	line "<ENEMY>!"
 	prompt
-; 0x809fc
 
 SentSomeToMomText:
 	text "<PLAYER> got ¥@"
@@ -398,25 +358,22 @@ SentAllToMomText:
 	text "Sent all to Mom!"
 	prompt
 
-BattleText_PkmnFainted: ; 0x80a75
+BattleText_PkmnFainted:
 	text_from_ram wBattleMonNick
 	text ""
 	line "fainted!"
 	prompt
-; 0x80a83
 
-BattleText_UseNextMon: ; 0x80a83
+BattleText_UseNextMon:
 	text "Use next #mon?"
 	done
-; 0x80a93
 
-LostAgainstText: ; 0x80ab9
+LostAgainstText:
 	text "Lost against"
 	line "<ENEMY>!"
 	prompt
-; 0x80aca
 
-BattleText_EnemyIsAboutToUseWillPlayerSwitchPkmn: ; 0x80aca
+BattleText_EnemyIsAboutToUseWillPlayerSwitchPkmn:
 	text "<ENEMY>"
 	line "is about to use"
 	cont "@"
@@ -426,7 +383,6 @@ BattleText_EnemyIsAboutToUseWillPlayerSwitchPkmn: ; 0x80aca
 	para "Will you switch"
 	line "your #mon?"
 	done
-; 0x80af8
 
 BattleText_EnemyAreAboutToUseWillPlayerSwitchPkmn:
 	text "<ENEMY>"
@@ -447,7 +403,6 @@ BattleText_EnemyIsAboutToSwitchWillPlayerSwitchPkmn:
 	para "Will you switch"
 	line "your #mon?"
 	done
-; 0x80af8
 
 BattleText_EnemyAreAboutToSwitchWillPlayerSwitchPkmn:
 	text "<ENEMY>"
@@ -458,64 +413,57 @@ BattleText_EnemyAreAboutToSwitchWillPlayerSwitchPkmn:
 	line "your #mon?"
 	done
 
-BattleText_EnemySentOut: ; 0x80af8
+BattleText_EnemySentOut:
 	text "<ENEMY>"
 	line "sent out"
 	cont "@"
 	text_from_ram wEnemyMonNick
 	text "!"
 	done
-; 0x80b0b
 
-BattleText_TheresNoWillToBattle: ; 0x80b0b
+BattleText_TheresNoWillToBattle:
 	text "There's no will to"
 	line "battle!"
 	prompt
-; 0x80b26
 
-BattleText_AnEGGCantBattle: ; 0x80b26
+BattleText_AnEGGCantBattle:
 	text "An Egg can't"
 	line "battle!"
 	prompt
-; 0x80b3b
 
-BattleText_CantEscape: ; 0x80ba0
+BattleText_CantEscape:
 	text "Can't escape!"
 	prompt
-; 0x80bae
 
-BattleText_AskForfeitTrainerBattle: ; 0x80b49
+BattleText_AskForfeitTrainerBattle:
 	text "Are you sure you"
 	line "want to forfeit?"
 	done
 
-BattleText_GotAwaySafely: ; 0x80b77
+BattleText_GotAwaySafely:
 	text "Got away safely!"
 	prompt
 
-BattleText_UserFledUsingAStringBuffer1: ; 0x80b89
+BattleText_UserFledUsingAStringBuffer1:
 	text "<USER>"
 	line "fled using a"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
 	prompt
-; 0x80ba0
 
-BattleText_UserHurtBySpikes: ; 0x80bae
+BattleText_UserHurtBySpikes:
 	text "<USER> is"
 	line "hurt by spikes!"
 	prompt
-; 0x80bc2
 
-RecoveredUsingText: ; 0x80bc2
+RecoveredUsingText:
 	text "<USER>"
 	line "recovered using a"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
 	prompt
-; 0x80bde
 
 AirBalloonPoppedText:
 	text "<TARGET>'s"
@@ -523,36 +471,32 @@ AirBalloonPoppedText:
 	cont "popped!"
 	prompt
 
-BattleText_UsersStringBuffer1Activated: ; 0x80bde
+BattleText_UsersStringBuffer1Activated:
 	text "<USER>'s"
 	line "@"
 	text_from_ram wStringBuffer1
 	text ""
 	cont "activated!"
 	prompt
-; 0x80bf3
 
-BattleText_ItemsCantBeUsedHere: ; 0x80bf3
+BattleText_ItemsCantBeUsedHere:
 	text "Items can't be"
 	line "used here."
 	prompt
-; 0x80c0d
 
-BattleText_PkmnIsAlreadyOut: ; 0x80c0d
+BattleText_PkmnIsAlreadyOut:
 	text_from_ram wBattleMonNick
 	text ""
 	line "is already out."
 	prompt
-; 0x80c22
 
-BattleText_PkmnCantBeRecalled: ; 0x80c22
+BattleText_PkmnCantBeRecalled:
 	text_from_ram wBattleMonNick
 	text ""
 	line "can't be recalled!"
 	prompt
-; 0x80c39
 
-BattleText_PkmnCantBeRecalledAbility: ; 0x80c22
+BattleText_PkmnCantBeRecalledAbility:
 	text_from_ram wEnemyMonNick
 	text "'s"
 	line "@"
@@ -561,11 +505,10 @@ BattleText_PkmnCantBeRecalledAbility: ; 0x80c22
 	cont "prevents escape!"
 	prompt
 
-BattleText_TheresNoPPLeftForThisMove: ; 0x80c39
+BattleText_TheresNoPPLeftForThisMove:
 	text "There's no PP left"
 	line "for this move!"
 	prompt
-; 0x80c5b
 
 BattleText_ItemOnlyAllowsMove: ; choice items
 	text "The @"
@@ -577,6 +520,14 @@ BattleText_ItemOnlyAllowsMove: ; choice items
 	text "!"
 	prompt
 
+BattleText_EncoreOnlyAllowsMove:
+	text "The encore"
+	line "only allows use"
+	cont "of @"
+	text_from_ram wStringBuffer1
+	text "!"
+	prompt
+
 BattleText_ItemPreventsStatusMoves: ; assault vest
 	text "The @"
 	text_from_ram wStringBuffer1
@@ -585,50 +536,44 @@ BattleText_ItemPreventsStatusMoves: ; assault vest
 	cont "of status moves!"
 	prompt
 
-BattleText_TheMoveIsDisabled: ; 0x80c5b
+BattleText_TheMoveIsDisabled:
 	text "The move is"
 	line "disabled!"
 	prompt
-; 0x80c72
 
-BattleText_PkmnHasNoMovesLeft: ; 0x80c72
+BattleText_PkmnHasNoMovesLeft:
 	text_from_ram wBattleMonNick
 	text ""
 	line "has no moves left!"
 	done
-; 0x80c8a
 
-BattleText_UserEncoreEnded: ; 0x80c8a
+BattleText_UserEncoreEnded:
 	text "<USER>'s"
 	line "encore ended!"
 	prompt
-; 0x80c9c
 
-BattleText_StringBuffer1GrewToLevel: ; 0x80c9c
+BattleText_StringBuffer1GrewToLevel:
 	text_from_ram wStringBuffer1
 	text " grew to"
 	line "level @"
 	deciram wCurPartyLevel, 1, 3
 	text "!@"
-	sound_dex_fanfare_50_79
-	db "@@"
-; 0x80cb9
+	play_sound SFX_DEX_FANFARE_50_79
+	text_end
 
-BattleText_WildPkmnIsEating: ; 0x80cba
+BattleText_WildPkmnIsEating:
 	text "Wild @"
 	text_from_ram wEnemyMonNick
 	text ""
 	line "is eating!"
 	prompt
-;; 0x80cd1
 
-BattleText_WildPkmnIsAngry: ; 0x80cd1
+BattleText_WildPkmnIsAngry:
 	text "Wild @"
 	text_from_ram wEnemyMonNick
 	text ""
 	line "is angry!"
 	prompt
-;; 0x80ce7
 
 BattleText_ThrewRock:
 	text "<PLAYER> threw a"
@@ -640,65 +585,61 @@ BattleText_ThrewBait:
 	line "some bait."
 	prompt
 
-FastAsleepText: ; 0x80ce7
+FastAsleepText:
 	text "<USER>"
 	line "is fast asleep!"
 	prompt
-; 0x80cfa
 
-WokeUpText: ; 0x80cfa
+WokeUpText:
 	text "<USER>"
 	line "woke up!"
 	prompt
-; 0x80d06
 
-FrozenSolidText: ; 0x80d06
+FrozenSolidText:
 	text "<USER>"
 	line "is frozen solid!"
 	prompt
-; 0x80d1a
 
-FlinchedText: ; 0x80d1a
+FlinchedText:
 	text "<USER>"
 	line "flinched!"
 	prompt
-; 0x80d27
 
-MustRechargeText: ; 0x80d27
+MustRechargeText:
 	text "<USER>"
 	line "must recharge!"
 	prompt
-; 0x80d39
 
-DisabledNoMoreText: ; 0x80d39
+DisabledNoMoreText:
 	text "<USER> is"
 	line "disabled no more!"
 	prompt
-; 0x80d4f
 
-IsConfusedText: ; 0x80d4f
+IsConfusedText:
 	text "<USER>"
 	line "is confused!"
 	prompt
-; 0x80d5f
 
-HurtItselfText: ; 0x80d5f
+HurtItselfText:
 	text "It hurt itself in"
 	line "its confusion!"
 	prompt
-; 0x80d81
 
-ConfusedNoMoreText: ; 0x80d81
+ConfusedNoMoreText:
 	text "<USER> is"
 	line "confused no more!"
 	prompt
-; 0x80d97
 
-BecameConfusedText: ; 0x80d97
+BecameConfusedText:
 	text "<TARGET>"
 	line "became confused!"
 	prompt
-; ItemHealedConfusion
+
+BecameConfusedDueToFatigueText:
+	text "<TARGET>"
+	line "became confused"
+	cont "due to fatigue!"
+	prompt
 
 BattleText_ItemHealedConfusion: ; ItemHealedConfusion
 	text "A @"
@@ -707,72 +648,62 @@ BattleText_ItemHealedConfusion: ; ItemHealedConfusion
 	line "<USER>"
 	cont "of its confusion."
 	prompt
-; 0x80dcc
 
-AlreadyConfusedText: ; 0x80dcc
+AlreadyConfusedText:
 	text "<TARGET> is"
 	line "already confused!"
 	prompt
-; 0x80de2
 
-BattleText_UsersHurtByStringBuffer1: ; 0x80de2
+BattleText_UsersHurtByStringBuffer1:
 	text "<USER> is"
 	line "hurt by"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
 	prompt
-; 0x80df5
 
-BattleText_UserWasReleasedFromStringBuffer1: ; 0x80df5
+BattleText_UserWasReleasedFromStringBuffer1:
 	text "<USER>"
 	line "was released from"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
 	prompt
-; 0x80e11
 
-WhirlpoolTrapText: ; 0x80e24
+WhirlpoolTrapText:
 	text "<TARGET>"
 	line "was trapped!"
 	prompt
-; 0x80e34
 
-FireSpinTrapText: ; 0x80e34
+FireSpinTrapText:
 	text "<TARGET>"
 	line "was trapped!"
 	prompt
-; 0x80e44
 
-WrappedByText: ; 0x80e44
+WrappedByText:
 	text "<TARGET>"
 	line "was wrapped by"
 	cont "<USER>!"
 	prompt
-; 0x80e59
 
-HungOnText: ; 0x80e99
+HungOnText:
 	text "<TARGET>"
 	line "hung on with"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
 	prompt
-; 0x80eb0
 
-EnduredText: ; 0x80eb0
+EnduredText:
 	text "<TARGET>"
 	line "endured the hit!"
 	prompt
-; 0x80ec4
 
-InLoveWithText: ; 0x80ec4
+InLoveWithText:
 	text "<USER>"
 	line "is in love with"
 	cont "<TARGET>!"
 	prompt
-; 0x80eda
 
 InfatuationText:
 	text "<USER>'s"
@@ -792,7 +723,6 @@ ObliviousPreventedDestinyKnot:
 	cont "infatuating it!"
 	prompt
 
-
 DestinyKnotInfatuatedUser:
 	text "<TARGET>'s"
 	line "@"
@@ -802,14 +732,13 @@ DestinyKnotInfatuatedUser:
 	para "<USER>!"
 	prompt
 
-DisabledMoveText: ; 0x80f02
+DisabledMoveText:
 	text "<USER>'s"
 	line "@"
 	text_from_ram wStringBuffer1
 	text " is"
 	cont "disabled!"
 	prompt
-; 0x80f19
 
 UsedMoveText:
 	text "<USER>"
@@ -826,142 +755,126 @@ UsedMoveInsteadText:
 	cont "instead!"
 	done
 
-LoafingAroundText: ; 0x80f19
+LoafingAroundText:
 	text_from_ram wBattleMonNick
 	text " is"
 	line "loafing around."
 	prompt
-; 0x80f31
 
-BeganToNapText: ; 0x80f31
+BeganToNapText:
 	text_from_ram wBattleMonNick
 	text " began"
 	line "to nap!"
 	prompt
-; 0x80f44
 
-WontObeyText: ; 0x80f44
+WontObeyText:
 	text_from_ram wBattleMonNick
 	text " won't"
 	line "obey!"
 	prompt
-; 0x80f54
 
-TurnedAwayText: ; 0x80f54
+TurnedAwayText:
 	text_from_ram wBattleMonNick
 	text " turned"
 	line "away!"
 	prompt
-; 0x80f66
 
-IgnoredOrdersText: ; 0x80f66
+IgnoredOrdersText:
 	text_from_ram wBattleMonNick
 	text " ignored"
 	line "orders!"
 	prompt
-; 0x80f7b
 
-IgnoredSleepingText: ; 0x80f7b
+IgnoredSleepingText:
 	text_from_ram wBattleMonNick
 	text " ignored"
 	line "orders…sleeping!"
 	prompt
-; 0x80f99
 
-NoPPLeftText: ; 0x80f99
+NoPPLeftText:
 	text "But no PP is left"
 	line "for the move!"
 	prompt
-; 0x80fba
 
-HasNoPPLeftText: ; 0x80fba
+HasNoPPLeftText:
 	text "<USER>"
 	line "has no PP left for"
 	cont "@"
 	text_from_ram wStringBuffer2
 	text "!"
 	prompt
-; 0x80fd7
 
-WentToSleepText: ; 0x80fd7
+WentToSleepText:
 	text "<USER>"
 	line "went to sleep!"
 	done
-; 0x80fe9
 
-RestedText: ; 0x80fe9
+RestedText:
 	text "<USER>"
 	line "fell asleep and"
 	cont "became healthy!"
 	done
-; 0x8100c
 
-RegainedHealthText: ; 0x8100c
+RegainedHealthText:
 	text "<USER>"
 	line "regained health!"
 	prompt
-; 0x81020
 
-AttackMissedText: ; 0x81020
+IsHurtText:
+	text "<USER>"
+	line "is hurt!"
+	prompt
+
+AttackMissedText:
 	text "<USER>'s"
 	line "attack missed!"
 	prompt
-; 0x81033
 
-CrashedText: ; 0x81046
+CrashedText:
 	text "<USER>"
 	line "kept going and"
 	cont "crashed!"
 	prompt
-; 0x81061
 
-UnaffectedText: ; 0x81061
+UnaffectedText:
 	text "<TARGET> is"
 	line "unaffected!"
 	prompt
-; 0x81071
 
-DoesntAffectText: ; 0x81071
+DoesntAffectText:
 	text "It doesn't affect"
 	line "<TARGET>!"
 	prompt
-; 0x81086
 
-CriticalHitText: ; 0x81086
+CriticalHitText:
 	text "A critical hit!"
 	prompt
-; 0x81097
 
-SuperEffectiveText: ; 0x810aa
+SuperEffectiveText:
 	text "It's super"
 	line "effective!"
 	prompt
-; 0x810c1
 
-NotVeryEffectiveText: ; 0x810c1
+NotVeryEffectiveText:
 	text "It's not very"
 	line "effective…"
 	prompt
-; 0x810da
 
-TookDownWithItText: ; 0x810da
+TookDownWithItText:
 	text "<TARGET>"
 	line "took <USER>"
 	cont "down with it!"
 	prompt
-; 0x810f3
 
-RageBuildingText: ; 0x810f3
+RageBuildingText:
 	text "<USER>'s"
 	line "rage is building!"
 	prompt
-; 0x81109
 
-GotAnEncoreText: ; 0x81109
+GotAnEncoreText:
 	text "<TARGET>"
 	line "got an encore!"
 	prompt
-; 0x8111b
 
 SharedPainText:
 	text "The battlers"
@@ -988,110 +901,95 @@ InvalidTypeChangeText:
 	line "that move's type!"
 	prompt
 
-SketchedText: ; 0x81143
+SketchedText:
 	text "<USER>"
 	line "sketched"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
 	prompt
-; 0x81156
 
-DestinyBondEffectText: ; 0x81156
+DestinyBondEffectText:
 	text "<USER> is"
 	line "trying to take its"
 	cont "opponent with it!"
 	prompt
-; 0x8117f
 
-BellChimedText: ; 0x811a0
+BellChimedText:
 	text "A bell chimed!"
 	line ""
 	prompt
-; 0x811b1
 
-FellAsleepText: ; 0x811b1
+FellAsleepText:
 	text "<TARGET>"
 	line "fell asleep!"
 	prompt
-; 0x811c1
 
-AlreadyAsleepText: ; 0x811c1
+AlreadyAsleepText:
 	text "<TARGET> is"
 	line "already asleep!"
 	prompt
-; 0x811d5
 
-WasPoisonedText: ; 0x811d5
+WasPoisonedText:
 	text "<TARGET>"
 	line "was poisoned!"
 	prompt
-; 0x811e6
 
-BadlyPoisonedText: ; 0x811e6
+BadlyPoisonedText:
 	text "<TARGET> is"
 	line "badly poisoned!"
 	prompt
-; 0x811fa
 
-AlreadyPoisonedText: ; 0x811fa
+AlreadyPoisonedText:
 	text "<TARGET> is"
 	line "already poisoned!"
 	prompt
-; 0x81210
 
-SuckedHealthText: ; 0x81210
+SuckedHealthText:
 	text "Sucked health from"
 	line "<TARGET>!"
 	prompt
-; 0x81227
 
-DreamEatenText: ; 0x81227
+DreamEatenText:
 	text "<TARGET>'s"
 	line "dream was eaten!"
 	prompt
-; 0x8123c
 
-WasBurnedText: ; 0x8123c
+WasBurnedText:
 	text "<TARGET>"
 	line "was burned!"
 	prompt
-; 0x8124b
 
-DefrostedOpponentText: ; 0x8124b
+DefrostedOpponentText:
 	text "<TARGET>"
 	line "was defrosted!"
 	prompt
-; 0x8125d
 
 AlreadyBurnedText:
 	text "<TARGET> is"
 	line "already burned!"
 	prompt
 
-WasFrozenText: ; 0x8125d
+WasFrozenText:
 	text "<TARGET>"
 	line "was frozen solid!"
 	prompt
-; 0x81272
 
-WontRiseAnymoreText: ; 0x81272
+WontRiseAnymoreText:
 	text "<USER>'s"
 	line "@"
 	text_from_ram wStringBuffer2
 	text " won't go"
 	cont "any higher!"
 	prompt
-; 0x8128f
 
-WontDropAnymoreText: ; 0x8128f
+WontDropAnymoreText:
 	text "<USER>'s"
 	line "@"
 	text_from_ram wStringBuffer2
 	text " won't go"
 	cont "any lower!"
 	prompt
-; 0x812ac
 
 StatRoseText:
 	text "<USER>'s"
@@ -1139,17 +1037,15 @@ StatSeverelyFellText:
 	cont "fell!"
 	prompt
 
-FledFromBattleText:: ; 0x812ac
+FledFromBattleText::
 	text "<USER>"
 	line "fled from battle!"
 	prompt
-; 0x812c1
 
-FledInFearText: ; 0x812c1
+FledInFearText:
 	text "<TARGET>"
 	line "fled in fear!"
 	prompt
-; 0x812d2
 
 Hit1TimeText:
 	text "Hit @"
@@ -1163,106 +1059,96 @@ HitNTimesText:
 	text " times!"
 	prompt
 
-ProtectedByMistText: ; 0x81321
+MistText:
+	text "<USER>'s"
+	line "shrouded in mist!"
+	prompt
+
+ProtectedByMistText:
 	text "<TARGET> is"
 	line "protected by mist."
 	prompt
-; 0x81338
 
-GettingPumpedText: ; 0x81338
+GettingPumpedText:
 	interpret_data
 	text "<USER> is"
 	line "getting pumped!"
 	prompt
-; 0x8134d
 
-RecoilText: ; 0x8134d
+RecoilText:
 	text "<USER> is"
 	line "hit with recoil!"
 	prompt
-; 0x81362
 
-MadeSubstituteText: ; 0x81362
+MadeSubstituteText:
 	text "<USER>"
 	line "made a substitute!"
 	prompt
-; 0x81378
 
-HasSubstituteText: ; 0x81378
+HasSubstituteText:
 	text "<USER>"
 	line "has a substitute!"
 	prompt
-; 0x8138d
 
-TooWeakSubText: ; 0x8138d
+TooWeakSubText:
 	text "Too weak to make"
 	line "a substitute!"
 	prompt
-; 0x813ad
 
-SubTookDamageText: ; 0x813ad
+SubTookDamageText:
 	text "The substitute"
 	line "took damage for"
 	cont "<TARGET>!"
 	prompt
-; 0x813d0
 
-SubFadedText: ; 0x813d0
+SubFadedText:
 	text "<TARGET>'s"
 	line "substitute faded!"
 	prompt
-; 0x813e6
 
-WasSeededText: ; 0x813f8
+WasSeededText:
 	text "<TARGET>"
 	line "was seeded!"
 	prompt
-; 0x81407
 
-EvadedText: ; 0x81407
+EvadedText:
 	text "<TARGET>"
 	line "evaded the attack!"
 	prompt
-; 0x8141d
 
-WasDisabledText: ; 0x8141d
+WasDisabledText:
 	text "<TARGET>'s"
 	line "@"
-	text_from_ram wStringBuffer1
+	text_from_ram wStringBuffer2
 	text " was"
 	cont "disabled!"
 	prompt
-; 0x81435
 
-CoinsScatteredText: ; 0x81435
+CoinsScatteredText:
 	text "Coins scattered"
 	line "everywhere!"
 	prompt
-; 0x81452
 
-TransformedTypeText: ; 0x81452
+TransformedTypeText:
 	text "<USER>"
 	line "became the"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "-type!"
 	prompt
-; 0x81476
 
-EliminatedStatsText: ; 0x81476
+EliminatedStatsText:
 	text "All stat changes"
 	line "were eliminated!"
 	prompt
-; 0x81499
 
-TransformedText: ; 0x81499
+TransformedText:
 	text "<USER>"
 	line "transformed into"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
 	prompt
-; 0x814b4
 
 TrickRoomText:
 	text "<USER>"
@@ -1278,72 +1164,59 @@ TrickRoomEndedText:
 	line "normal!"
 	prompt
 
-
-
-LightScreenEffectText: ; 0x814b4
+LightScreenEffectText:
 	text "<USER>'s"
 	line "Spcl.Def rose!"
 	prompt
-; 0x814c7
 
-ReflectEffectText: ; 0x814c7
+ReflectEffectText:
 	text "<USER>'s"
 	line "Defense rose!"
 	prompt
-; 0x814d9
 
-NothingHappenedText: ; 0x814d9
+NothingHappenedText:
 	text "But nothing"
 	line "happened."
 	prompt
-; 0x814f0
 
-ButItFailedText: ; 0x814f0
+ButItFailedText:
 	text "But it failed!"
 	prompt
-; 0x81500
 
-ItFailedText: ; 0x81500
+ItFailedText:
 	text "It failed!"
 	prompt
-; 0x8150c
 
-DidntAffectText: ; 0x8150c
+DidntAffectText:
 	text "It didn't affect"
 	line "<TARGET>!"
 	prompt
-; 0x81520
 
-HPIsFullText: ; 0x81534
+HPIsFullText:
 	text "<USER>'s"
 	line "HP is full!"
 	prompt
-; 0x81544
 
-DraggedOutText: ; 0x81544
+DraggedOutText:
 	text "<USER>"
 	line "was dragged out!"
 	prompt
-; 0x81558
 
-ParalyzedText: ; 0x81558
+ParalyzedText:
 	text "<TARGET> is"
 	line "paralyzed! It"
 	cont "might not attack!"
 	prompt
-; 0x8157d
 
-FullyParalyzedText: ; 0x8157d
+FullyParalyzedText:
 	text "<USER> is"
 	line "fully paralyzed!"
 	prompt
-; 0x81592
 
-AlreadyParalyzedText: ; 0x81592
+AlreadyParalyzedText:
 	text "<TARGET> is"
 	line "already paralyzed!"
 	prompt
-; 0x815a9
 
 ProtectedByText:
 	text "<TARGET> is"
@@ -1401,38 +1274,33 @@ KnockedOffItemText:
 	text "!"
 	prompt
 
-CantEscapeNowText: ; 0x815f7
+CantEscapeNowText:
 	text "<TARGET>"
 	line "can't escape now!"
 	prompt
-; 0x8160b
 
-WasDefrostedText: ; 0x8162b
+WasDefrostedText:
 	text "<USER>"
 	line "was defrosted!"
 	prompt
-; 0x8163d
 
-PutACurseText: ; 0x8163d
+PutACurseText:
 	text "<USER>"
 	line "cut its own HP and"
 
 	para "put a curse on"
 	line "<TARGET>!"
 	prompt
-; 0x81665
 
-ProtectedItselfText: ; 0x81665
+ProtectedItselfText:
 	text "<USER>"
 	line "protected itself!"
 	prompt
-; 0x8167a
 
-ProtectingItselfText: ; 0x8167a
+ProtectingItselfText:
 	text "<TARGET> is"
 	line "protecting itself!"
 	done
-; 0x81691
 
 SpikesText:
 	text "Spikes scattered"
@@ -1446,74 +1314,64 @@ ToxicSpikesText:
 	cont "<TARGET>!"
 	prompt
 
-IdentifiedText: ; 0x816b1
+IdentifiedText:
 	text "<USER>"
 	line "identified"
 	cont "<TARGET>!"
 	prompt
-; 0x816c2
 
-StartPerishText: ; 0x816c2
+StartPerishText:
 	text "Both #mon will"
 	line "faint in 3 turns!"
 	prompt
-; 0x816e4
 
-SandstormBrewedText: ; 0x816e4
+SandstormBrewedText:
 	text "A sandstorm"
 	line "brewed!"
 	prompt
-; 0x816f9
 
 HailStartedText:
 	text "It started to"
 	line "hail!"
 	prompt
 
-BracedItselfText: ; 0x816f9
+BracedItselfText:
 	text "<USER>"
 	line "braced itself!"
 	prompt
-; 0x8170b
 
-FellInLoveText: ; 0x8170b
+FellInLoveText:
 	text "<TARGET>"
 	line "fell in love!"
 	prompt
-; 0x8171c
 
-CoveredByVeilText: ; 0x8171c
+CoveredByVeilText:
 	text "<USER> is"
 	line "covered by a veil!"
 	prompt
-; 0x81733
 
-SafeguardProtectText: ; 0x81733
+SafeguardProtectText:
 	text "<TARGET>"
 	line "is protected by"
 	cont "Safeguard!"
 	prompt
-; 0x81751
 
-MagnitudeText: ; 0x81751
+MagnitudeText:
 	text "Magnitude @"
 	deciram wd265, 1, 2
 	text "!"
 	prompt
-; 0x81764
 
-ReleasedByText: ; 0x81764
+ReleasedByText:
 	text "<USER>"
 	line "was released by"
 	cont "<TARGET>!"
 	prompt
-; 0x8177a
 
-ShedLeechSeedText: ; 0x8177a
+ShedLeechSeedText:
 	text "<USER>"
 	line "shed Leech Seed!"
 	prompt
-; 0x8178e
 
 BlewSpikesText:
 	text "<USER>"
@@ -1526,24 +1384,21 @@ BlewToxicSpikesText:
 	cont "Spikes!"
 	prompt
 
-DownpourText: ; 0x817a3
+DownpourText:
 	text "It started"
 	line "to rain!"
 	prompt
-; 0x817b8
 
-SunGotBrightText: ; 0x817b8
+SunGotBrightText:
 	text "The sunlight"
 	line "turned harsh!"
 	prompt
-; 0x817d2
 
-BellyDrumText: ; 0x817d2
+BellyDrumText:
 	text "<USER>"
 	line "cut its HP and"
 	cont "maximized Attack!"
 	prompt
-; 0x817f6
 
 BellyDrumContraryText:
 	text "<USER>"
@@ -1551,17 +1406,15 @@ BellyDrumContraryText:
 	cont "minimized Attack!"
 	prompt
 
-ForesawAttackText: ; 0x81817
+ForesawAttackText:
 	text "<USER>"
 	line "foresaw an attack!"
 	prompt
-; 0x8182d
 
-IgnoredOrders2Text: ; 0x81850
+IgnoredOrders2Text:
 	text "<USER>"
 	line "ignored orders!"
 	prompt
-; 0x81863
 
 BecameHealthyText:
 	text "<USER>"
@@ -1607,7 +1460,7 @@ NotifyCloudNine:
 NotifyPressure:
 	text "<USER> is"
 	line "exerting its"
-	cont "Pressure!"
+	cont "pressure!"
 	prompt
 
 NotifyMoldBreaker:
@@ -1622,10 +1475,8 @@ NotifyUnnerve:
 	prompt
 
 NotifyNeutralizingGas:
-	text "<USER>"
-	line "suppresses"
-	cont "abilities using"
-	cont "Neutralizing Gas!"
+	text "Neutralizing gas"
+	line "filled the area!"
 	prompt
 
 FriskedItemText:
@@ -1640,7 +1491,7 @@ FriskedItemText:
 
 PickedItemText:
 	text "<USER>"
-	line "harvested"
+	line "picked up"
 	cont "@"
 	text_from_ram wStringBuffer1
 	text "!"
@@ -1654,12 +1505,6 @@ HarvestedItemText:
 	text "!"
 	prompt
 
-PoisonHealText:
-	text "<USER>'s"
-	line "Poison Heal"
-	cont "restored health!"
-	prompt
-
 FirePoweredUpText:
 	text "<USER>'s"
 	line "Fire-type moves"
@@ -1668,14 +1513,15 @@ FirePoweredUpText:
 
 AngerPointMaximizedAttackText:
 	text "<USER>"
-	line "maximized Attack"
-	cont "with Anger Point!"
+	line "maxed its Attack!"
 	prompt
 
-DampAbilityText:
-	text "<USER>'s"
-	line "Damp prevented"
-	cont "the explosion!"
+CannotUseText:
+	text "<TARGET>"
+	line "cannot use"
+	cont "@"
+	text_from_ram wStringBuffer1
+	text "!"
 	prompt
 
 ShudderedText:
@@ -1685,11 +1531,31 @@ ShudderedText:
 	line "shuddered!"
 	prompt
 
-ForewarnText: ; 0x80f02
+ForewarnText:
 	text "<TARGET>"
 	line "has @"
 	text_from_ram wStringBuffer1
 	text "!"
+	prompt
+
+BouncedBackText:
+	text "<USER>"
+	line "bounced the"
+	cont "@"
+	text_from_ram wStringBuffer1
+	text " back!"
+	prompt
+
+ItemCantBeStolenText:
+	text "<TARGET>'s"
+	line "item cannot be"
+	cont "stolen!"
+	prompt
+
+SuckedUpOozeText:
+	text "<USER>"
+	line "sucked up the"
+	cont "liquid ooze!"
 	prompt
 
 BattleText_EnemyWithdrew::

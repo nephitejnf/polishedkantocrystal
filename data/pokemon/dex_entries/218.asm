@@ -1,4 +1,3 @@
-; SlugmaPokedexEntry: ; 0x1d0ab8
 	db "Lava@" ; species name
 	dw 204, 770 ; height, width
 

@@ -47,11 +47,10 @@ GetSwitchScores:
 
 	; This makes GetAbility "restore" to the current species when done
 	ld [wCurSpecies], a
-	ld bc, wPartyMon1Ability - wPartyMon1
+	ld bc, wPartyMon1Personality - wPartyMon1
 	add hl, bc
 	ld c, a
-	ld b, [hl]
-	farcall GetAbility
+	call GetAbility
 	ld a, b
 	ld [wEnemyAbility], a
 
@@ -106,7 +105,6 @@ GetSwitchScores:
 	ld [wEnemyMonItem], a
 	ret
 
-
 CheckPlayerMoveTypeMatchups:
 	ld hl, wEnemyMonMoves
 	ld bc, wEnemyMonType
@@ -116,13 +114,21 @@ AICheckMatchupForEnemyMon:
 ; Scoring is +1 for SE, -1 for NVE, -2 for ineffective for enemy vs player, and vice versa.
 ; Lack of offensive moves count as neutral.
 ; Input is hl (enemy mon moves), bc (enemy mon types). Assumes wEnemyAbility is set
-	; Save old move data/turn
+
+	; Save whose turn it is
+	ldh a, [hBattleTurn]
+	push af
+
+	; Save move data
 	ld a, [wCurPlayerMove]
 	ld d, a
 	ld a, [wCurEnemyMove]
 	ld e, a
-	ld a, [hBattleTurn]
-	push af
+	push de
+	ld a, [wCurMoveNum]
+	ld d, a
+	ld a, [wCurEnemyMoveNum]
+	ld e, a
 	push de
 
 	; Player moves vs enemy
@@ -181,9 +187,15 @@ AICheckMatchupForEnemyMon:
 	; Reset move data
 	pop de
 	ld a, d
+	ld [wCurMoveNum], a
+	ld a, e
+	ld [wCurEnemyMoveNum], a
+	pop de
+	ld a, d
 	ld [wCurPlayerMove], a
 	ld a, e
 	ld [wCurEnemyMove], a
+
 	push bc
 	call SetPlayerTurn
 	call UpdateMoveData
@@ -193,15 +205,14 @@ AICheckMatchupForEnemyMon:
 
 	; Reset whose turn it is
 	pop af
-	ld [hBattleTurn], a
+	ldh [hBattleTurn], a
 
 	ld a, b
 	ret
 
 .check_matchups
-	ld d, NUM_MOVES
 	; e is %0000ABCD, A = has 0.5x, B = no offensive moves, C = has 1x, D = has 2x
-	ld e, %00000100
+	lb de, NUM_MOVES, %00000100
 .loop
 	ld a, [hli]
 	and a

@@ -1,4 +1,3 @@
-; RapidashPokedexEntry: ; 0x1b855e
 	db "Fire Horse@" ; species name
 	dw 507, 2090 ; height, width
 

@@ -1,4 +1,4 @@
-Pointers445f: ; 445f
+Pointers445f:
 	dw SetFacingStanding,              SetFacingStanding          ; PERSON_ACTION_00
 	dw SetFacingStandAction,           SetFacingCurrent           ; PERSON_ACTION_STAND
 	dw SetFacingStepAction,            SetFacingCurrent           ; PERSON_ACTION_STEP
@@ -17,6 +17,7 @@ Pointers445f: ; 445f
 	dw SetFacingPuddleSplash,          SetFacingStanding          ; PERSON_ACTION_PUDDLE_SPLASH
 	dw SetFacingCutTree,               SetFacingCutTree           ; PERSON_ACTION_CUT_TREE
 	dw SetFacingSkyfall,               SetFacingCurrent           ; PERSON_ACTION_SKYFALL
+	dw SetFacingFruit,                 SetFacingFruit             ; PERSON_ACTION_FRUIT
 	dw SetFacingBigGyarados,           SetFacingFreezeBigGyarados ; PERSON_ACTION_BIG_GYARADOS
 	dw SetFacingStandFlip,             SetFacingStandFlip         ; PERSON_ACTION_STAND_FLIP
 	dw SetFacingPokecomNews,           SetFacingPokecomNews       ; PERSON_ACTION_POKECOM_NEWS
@@ -24,27 +25,22 @@ Pointers445f: ; 445f
 	dw SetFacingRun,                   SetFacingCurrent           ; PERSON_ACTION_RUN
 	dw SetFacingSailboatTop,           SetFacingSailboatTop       ; PERSON_ACTION_SAILBOAT_TOP
 	dw SetFacingSailboatBottom,        SetFacingSailboatBottom    ; PERSON_ACTION_SAILBOAT_BOTTOM
-; 44a3
 
-SetFacingStanding: ; 44a3
+SetFacingStanding:
 	ld a, STANDING
 	jr SetFixedFacing
-; 44aa
 
-SetFacingCurrent: ; 44aa
+SetFacingCurrent:
 	call GetSpriteDirection
 	jr SetFixedFacing
-; 44b5
 
-SetFacingShadow: ; 457b
+SetFacingShadow:
 	ld a, FACING_SHADOW
 	jr SetFixedFacing
-; 4582
 
 SetFacingEmote: ; 4582 emote
 	ld a, FACING_EMOTE
 	jr SetFixedFacing
-; 4589
 
 SetFacingCutTree:
 	ld a, FACING_CUT_TREE
@@ -62,23 +58,21 @@ SetFacingSailboatBottom:
 	ld a, FACING_SAILBOAT_BOTTOM
 	jr SetFixedFacing
 
-SetFacingBigDoll: ; 45c5
+SetFacingBigDoll:
 	ld a, [wVariableSprites + SPRITE_BIG_DOLL - SPRITE_VARS]
 	cp SPRITE_BIG_ONIX
 	ld a, FACING_BIG_DOLL_ASYM
 	jr z, SetFixedFacing
-SetFacingBigDollSym: ; 4589
+SetFacingBigDollSym:
 	ld a, FACING_BIG_DOLL_SYM
 	jr SetFixedFacing
-; 4590
 
-SetFacingFish: ; 456e
+SetFacingFish:
 	call GetSpriteDirection
 	rrca
 	rrca
 	add FACING_FISH_DOWN
 	jr SetFixedFacing
-; 457b
 
 SetFacingArchTree:
 	call GetSpriteDirection
@@ -97,7 +91,6 @@ SetFixedFacing:
 	add hl, bc
 	ld [hl], a
 	ret
-; 44b5
 
 SetFacingStandAction:
 	ld hl, OBJECT_FACING_STEP
@@ -151,18 +144,16 @@ SetFacingSkyfall:
 	or d
 	jr SetFixedFacing
 
-SetFacingCounterclockwiseSpin: ; 4529
+SetFacingCounterclockwiseSpin:
 	call CounterclockwiseSpinAction
 	ld hl, OBJECT_FACING
 	add hl, bc
 	ld a, [hl]
 	jr SetFixedFacing
-; 4539
 
-SetFacingCounterclockwiseSpin2: ; 4539
+SetFacingCounterclockwiseSpin2:
 	call CounterclockwiseSpinAction
 	jp SetFacingStanding
-; 453f
 
 CounterclockwiseSpinAction:
 	ld hl, OBJECT_STEP_FRAME
@@ -202,7 +193,7 @@ CounterclockwiseSpinAction:
 .Directions
 	db OW_DOWN, OW_RIGHT, OW_UP, OW_LEFT
 
-SetFacingBounce: ; 4590
+SetFacingBounce:
 	ld hl, OBJECT_STEP_FRAME
 	add hl, bc
 	ld a, [hl]
@@ -212,10 +203,33 @@ SetFacingBounce: ; 4590
 	and %00001000
 	ld a, FACING_STEP_UP_0
 	jp nz, SetFixedFacing
-SetFacingFreezeBounce: ; 45a4
+SetFacingFreezeBounce:
 	xor a ; FACING_STEP_DOWN_0
 	jp SetFixedFacing
-; 45ab
+
+SetFacingFruit:
+	ld hl, OBJECT_RADIUS
+	add hl, bc
+	ld e, [hl]
+	push bc
+	ld hl, wFruitTreeFlags
+	ld d, 0
+	ld b, CHECK_FLAG
+	push de
+	call FlagAction
+	pop de
+	pop bc
+	and a ; 0 = show fruit, 1 = hide fruit
+	ld a, FACING_PICKED_FRUIT
+	jr nz, .ok
+	ld a, e
+	cp FIRST_BERRY_TREE - 1
+	; a = carry ? FACING_APRICORN : FACING_BERRY
+	assert FACING_APRICORN + 1 == FACING_BERRY
+	sbc a
+	add FACING_BERRY
+.ok
+	jp SetFixedFacing
 
 SetFacingBigGyarados:
 	ld hl, OBJECT_STEP_FRAME
@@ -231,20 +245,18 @@ SetFacingFreezeBigGyarados:
 	ld a, FACING_BIG_GYARADOS_1
 	jp SetFixedFacing
 
-SetFacingWeirdTree: ; 45ab
+SetFacingWeirdTree:
 	ld hl, OBJECT_STEP_FRAME
 	add hl, bc
+	inc [hl]
 	ld a, [hl]
-	inc a
-	ld [hl], a
 	and %00001100
 	rrca
 	rrca
 	add FACING_WEIRD_TREE_0
 	jp SetFixedFacing
-; 45be
 
-SetFacingBoulderDust: ; 45da
+SetFacingBoulderDust:
 	ld hl, OBJECT_STEP_FRAME
 	add hl, bc
 	inc [hl]
@@ -255,7 +267,6 @@ SetFacingBoulderDust: ; 45da
 	inc a ; FACING_BOULDER_DUST_2
 .ok
 	jp SetFixedFacing
-; 45ed
 
 SetFacingGrassShake:
 	ld hl, OBJECT_STEP_FRAME
@@ -268,7 +279,6 @@ SetFacingGrassShake:
 	inc a ; FACING_GRASS_2
 .ok
 	jp SetFixedFacing
-; 4600
 
 SetFacingPuddleSplash:
 	ld hl, OBJECT_STEP_FRAME

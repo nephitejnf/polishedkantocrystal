@@ -1,4 +1,3 @@
-; GrimerPokedexEntry: ; 0x1b89a2
 	db "Sludge@" ; species name
 	dw 211, 660 ; height, width
 

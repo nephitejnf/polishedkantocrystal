@@ -1,9 +1,7 @@
 SelectMenu::
 	call CheckRegisteredItem
-	jr z, .NotRegistered
-	jp UseRegisteredItem
+	jp nz, UseRegisteredItem
 
-.NotRegistered:
 	call OpenText
 	ld b, BANK(ItemMayBeRegisteredText)
 	ld hl, ItemMayBeRegisteredText
@@ -11,13 +9,11 @@ SelectMenu::
 	call WaitButton
 	jp CloseText
 
-
 ItemMayBeRegisteredText:
 	text_jump UnknownText_0x1c1cf3
-	db "@"
+	text_end
 
-
-CheckRegisteredItem:: ; 13345
+CheckRegisteredItem::
 ; Returns amount of registered items and z if none is. Populates wCurItem
 ; with a valid registered item, useful if there's only a single one.
 	ld hl, wRegisteredItems
@@ -66,9 +62,7 @@ UseRegisteredItem:
 	pop de
 	farcall CheckKeyItemMenu
 	ld a, [wItemAttributeParamBuffer]
-	ld hl, .SwitchTo
-	rst JumpTable
-	ret
+	call StackJumpTable
 
 .SwitchTo:
 	dw .CantUse
@@ -114,7 +108,7 @@ UseRegisteredItem:
 	jr nz, ._cantuse
 	scf
 	ld a, HMENURETURN_SCRIPT
-	ld [hMenuReturn], a
+	ldh [hMenuReturn], a
 	ret
 
 .CantUse:
@@ -137,25 +131,24 @@ GetRegisteredItem:
 	call BGMapAnchorTopLeft
 	call LoadStandardOpaqueFont
 	ld hl, InvertedTextPalette
-	ld de, wUnknBGPals palette PAL_BG_TEXT
+	ld de, wBGPals1 palette PAL_BG_TEXT
 	ld bc, 1 palettes
-	ld a, $5
-	call FarCopyWRAM
+	call FarCopyColorWRAM
 
 	hlcoord 0, 0, wAttrMap
 	ld a, BEHIND_BG | PAL_BG_TEXT
 	ld bc, SCREEN_WIDTH * 4
-	call ByteFill
+	rst ByteFill
 
 	hlcoord 0, 0
 	ld a, " "
 	ld bc, SCREEN_WIDTH * 4
-	call ByteFill
+	rst ByteFill
 
 	; Insert registered items
 	hlcoord 0, 0
 	ld de, .RegisteredItemText
-	call PlaceString
+	rst PlaceString
 	hlcoord 2, 0
 	ld de, wRegisteredItems
 	ld b, 4
@@ -173,7 +166,7 @@ GetRegisteredItem:
 	pop hl
 	push hl
 	ld de, wStringBuffer1
-	call PlaceString
+	rst PlaceString
 	pop hl
 	pop de
 .next
@@ -185,8 +178,8 @@ GetRegisteredItem:
 	jr nz, .loop
 
 	ld a, $70
-	ld [rWY], a
-	ld [hWY], a
+	ldh [rWY], a
+	ldh [hWY], a
 	call SetPalettes
 	call DelayFrame
 	farcall HDMATransfer_OnlyTopFourRows
@@ -230,8 +223,8 @@ GetRegisteredItem:
 .ret
 	push af
 	ld a, $90
-	ld [rWY], a
-	ld [hWY], a
+	ldh [rWY], a
+	ldh [hWY], a
 	farcall ReloadVisibleSprites
 	pop af
 	ret

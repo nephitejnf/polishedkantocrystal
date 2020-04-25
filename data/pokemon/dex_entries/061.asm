@@ -1,4 +1,3 @@
-; PoliwhirlPokedexEntry: ; 0x182ffd
 	db "Tadpole@" ; species name
 	dw 303, 440 ; height, width
 

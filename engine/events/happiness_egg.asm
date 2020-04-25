@@ -18,11 +18,11 @@ GetFirstPokemonHappiness:
 	add hl, bc
 	ld [wd265], a
 	ld a, [hl]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call GetPokemonName
 	jp CopyPokemonName_Buffer1_Buffer3
 
-CheckFirstMonIsEgg: ; 71ac
+CheckFirstMonIsEgg:
 	ld a, [wPartyMon1Species]
 	ld [wd265], a
 	ld a, [wPartyMon1IsEgg]
@@ -32,11 +32,11 @@ CheckFirstMonIsEgg: ; 71ac
 	xor a
 
 .egg
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call GetPokemonName
 	jp CopyPokemonName_Buffer1_Buffer3
 
-ChangeHappiness: ; 71c2
+ChangeHappiness:
 ; Perform happiness action c on wCurPartyMon
 
 	ld a, [wCurPartyMon]
@@ -147,7 +147,7 @@ GetExtraHappiness:
 	ld a, b
 	ret
 
-StepHappiness:: ; 725a
+StepHappiness::
 ; Raise the party's happiness by 1 point every other step cycle.
 
 	ld hl, wHappinessStepCount
@@ -182,7 +182,7 @@ StepHappiness:: ; 725a
 	jr nz, .loop
 	ret
 
-DaycareStep:: ; 7282
+DaycareStep::
 
 	ld a, [wDaycareMan]
 	bit 0, a
@@ -243,7 +243,7 @@ DaycareStep:: ; 7282
 
 .daycare_exp
 	ld a, [de]
-	cp 100
+	cp MAX_LEVEL
 	ret nc
 
 	inc [hl]
@@ -253,7 +253,7 @@ DaycareStep:: ; 7282
 	ret nz
 	dec hl
 	ld a, [hl]
-	cp 5242800 / $10000
+	cp ($500000 / $10000) - 1 ; max daycare exp
 	ret nc
 	inc [hl]
 	ret

@@ -1,4 +1,3 @@
-; FeraligatrPokedexEntry: ; 0x1cccf9
 	db "Big Jaw@" ; species name
 	dw 707, 1960 ; height, width
 

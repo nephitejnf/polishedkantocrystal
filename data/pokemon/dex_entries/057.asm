@@ -1,4 +1,3 @@
-; PrimeapePokedexEntry: ; 0x182e39
 	db "Pig Monkey@" ; species name
 	dw 303, 710 ; height, width
 

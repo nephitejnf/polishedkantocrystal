@@ -1,88 +1,85 @@
-Serial:: ; 6ef
+Serial::
 ; The serial interrupt.
 
-	push af
-	push bc
-	push de
 	push hl
+	push de
+	push bc
+	push af
 
-	ld a, [wPrinterConnectionOpen]
-
-	ld a, [hSerialConnectionStatus]
+	ldh a, [hSerialConnectionStatus]
 	inc a ; is it equal to -1?
 	jr z, .init_player_number
 
-	ld a, [rSB]
-	ld [hSerialReceive], a
+	ldh a, [rSB]
+	ldh [hSerialReceive], a
 
-	ld a, [hSerialSend]
-	ld [rSB], a
+	ldh a, [hSerialSend]
+	ldh [rSB], a
 
-	ld a, [hSerialConnectionStatus]
+	ldh a, [hSerialConnectionStatus]
 	cp USING_INTERNAL_CLOCK
 	jr z, .player2
 
 	xor a
-	ld [rSC], a
+	ldh [rSC], a
 	ld a, START_TRANSFER_EXTERNAL_CLOCK
-	ld [rSC], a
+	ldh [rSC], a
 	jr .player2
 
 .init_player_number
-	ld a, [rSB]
+	ldh a, [rSB]
 	cp USING_EXTERNAL_CLOCK
 	jr z, .player1
 	cp USING_INTERNAL_CLOCK
 	jr nz, .player2
 
 .player1
-	ld [hSerialReceive], a
-	ld [hSerialConnectionStatus], a
+	ldh [hSerialReceive], a
+	ldh [hSerialConnectionStatus], a
 	cp USING_INTERNAL_CLOCK
 	jr z, ._player2
 
 	xor a
-	ld [rSB], a
+	ldh [rSB], a
 	ld a, $3
-	ld [rDIV], a
+	ldh [rDIV], a
 
 .wait_bit_7
-	ld a, [rDIV]
+	ldh a, [rDIV]
 	bit 7, a
 	jr nz, .wait_bit_7
 
 	xor a
-	ld [rSC], a
+	ldh [rSC], a
 	ld a, START_TRANSFER_EXTERNAL_CLOCK
-	ld [rSC], a
+	ldh [rSC], a
 	jr .player2
 
 ._player2
 	xor a
-	ld [rSB], a
+	ldh [rSB], a
 
 .player2
 	ld a, $1
-	ld [hSerialReceivedNewData], a
+	ldh [hSerialReceivedNewData], a
 	ld a, SERIAL_NO_DATA_BYTE
-	ld [hSerialSend], a
+	ldh [hSerialSend], a
 
-	pop hl
-	pop de
-	pop bc
 	pop af
+	pop bc
+	pop de
+	pop hl
 	reti
-; 75f
 
 ; hl = send data
 ; de = receive data
 ; bc = length of data
-Serial_ExchangeBytes:: ; 75f
+Serial_ExchangeBytes::
 	ld a, $1
-	ld [hSerialIgnoringInitialData], a
+	ldh [hSerialIgnoringInitialData], a
 .loop
 	ld a, [hl]
-	ld [hSerialSend], a
+	ldh [hSerialSend], a
 	call Serial_ExchangeByte
 	push bc
 	ld b, a
@@ -91,7 +88,7 @@ Serial_ExchangeBytes:: ; 75f
 .wait48
 	dec a
 	jr nz, .wait48
-	ld a, [hSerialIgnoringInitialData]
+	ldh a, [hSerialIgnoringInitialData]
 	and a
 	ld a, b
 	pop bc
@@ -100,7 +97,7 @@ Serial_ExchangeBytes:: ; 75f
 	cp SERIAL_PREAMBLE_BYTE
 	jr nz, .loop
 	xor a
-	ld [hSerialIgnoringInitialData], a
+	ldh [hSerialIgnoringInitialData], a
 	jr .loop
 
 .load
@@ -111,24 +108,23 @@ Serial_ExchangeBytes:: ; 75f
 	or c
 	jr nz, .loop
 	ret
-; 78a
 
-Serial_ExchangeByte:: ; 78a
+Serial_ExchangeByte::
 	xor a
-	ld [hSerialReceivedNewData], a
-	ld a, [hSerialConnectionStatus]
+	ldh [hSerialReceivedNewData], a
+	ldh a, [hSerialConnectionStatus]
 	cp USING_INTERNAL_CLOCK
 	jr nz, .loop
 	ld a, $1
-	ld [rSC], a
+	ldh [rSC], a
 	ld a, START_TRANSFER_INTERNAL_CLOCK
-	ld [rSC], a
+	ldh [rSC], a
 
 .loop
-	ld a, [hSerialReceivedNewData]
+	ldh a, [hSerialReceivedNewData]
 	and a
 	jr nz, .ok
-	ld a, [hSerialConnectionStatus]
+	ldh a, [hSerialConnectionStatus]
 	cp $1
 	jr nz, .doNotIncrementTimeoutCounter
 	call CheckwLinkTimeoutFramesNonzero
@@ -148,9 +144,9 @@ Serial_ExchangeByte:: ; 78a
 	jp SerialDisconnected
 
 .doNotIncrementTimeoutCounter
-	ld a, [rIE]
-	and (1 << SERIAL) | (1 << TIMER) | (1 << LCD_STAT) | (1 << VBLANK)
-	cp (1 << SERIAL)
+	ldh a, [rIE]
+	and 1 << SERIAL | 1 << TIMER | 1 << LCD_STAT | 1 << VBLANK
+	cp 1 << SERIAL
 	jr nz, .loop
 	ld a, [wcf5d]
 	dec a
@@ -160,7 +156,7 @@ Serial_ExchangeByte:: ; 78a
 	dec a
 	ld [wcf5d + 1], a
 	jr nz, .loop
-	ld a, [hSerialConnectionStatus]
+	ldh a, [hSerialConnectionStatus]
 	cp USING_EXTERNAL_CLOCK
 	jr z, .ok
 
@@ -171,10 +167,10 @@ Serial_ExchangeByte:: ; 78a
 
 .ok
 	xor a
-	ld [hSerialReceivedNewData], a
-	ld a, [rIE]
-	and (1 << SERIAL) | (1 << TIMER) | (1 << LCD_STAT) | (1 << VBLANK)
-	sub (1 << SERIAL)
+	ldh [hSerialReceivedNewData], a
+	ldh a, [rIE]
+	and 1 << SERIAL | 1 << TIMER | 1 << LCD_STAT | 1 << VBLANK
+	sub 1 << SERIAL
 	jr nz, .skipReloadingTimeoutCounter2
 
 	;xor a
@@ -183,7 +179,7 @@ Serial_ExchangeByte:: ; 78a
 	ld [wcf5d + 1], a
 
 .skipReloadingTimeoutCounter2
-	ld a, [hSerialReceive]
+	ldh a, [hSerialReceive]
 	cp SERIAL_NO_DATA_BYTE
 	ret nz
 	call CheckwLinkTimeoutFramesNonzero
@@ -203,13 +199,13 @@ Serial_ExchangeByte:: ; 78a
 	jr z, SerialDisconnected
 
 .done
-	ld a, [rIE]
-	and (1 << SERIAL) | (1 << TIMER) | (1 << LCD_STAT) | (1 << VBLANK)
-	cp (1 << SERIAL)
+	ldh a, [rIE]
+	and 1 << SERIAL | 1 << TIMER | 1 << LCD_STAT | 1 << VBLANK
+	cp 1 << SERIAL
 	ld a, SERIAL_NO_DATA_BYTE
 	ret z
 	ld a, [hl]
-	ld [hSerialSend], a
+	ldh [hSerialSend], a
 	call DelayFrame
 	jp Serial_ExchangeByte
 
@@ -219,44 +215,41 @@ Serial_ExchangeByte:: ; 78a
 	dec a
 	jr nz, .delay_15_cycles_loop
 	ret
-; 82b
 
-CheckwLinkTimeoutFramesNonzero:: ; 82b
+CheckwLinkTimeoutFramesNonzero::
 	push hl
 	ld hl, wLinkTimeoutFrames
 	ld a, [hli]
 	or [hl]
 	pop hl
 	ret
-; 833
 
-SerialDisconnected:: ; 833
+SerialDisconnected::
 ; a is always 0 when this is called
 	dec a
 	ld [wLinkTimeoutFrames], a
 	ld [wLinkTimeoutFrames + 1], a
 	ret
-; 83b
 
 ; This is used to exchange the button press and selected menu item on the link menu.
 ; The data is sent thrice and read twice to increase reliability.
-Serial_ExchangeLinkMenuSelection:: ; 83b
+Serial_ExchangeLinkMenuSelection::
 	ld hl, wPlayerLinkAction
 	ld de, wOtherPlayerLinkMode
 	ld c, $2
 	ld a, $1
-	ld [hSerialIgnoringInitialData], a
+	ldh [hSerialIgnoringInitialData], a
 .loop
 	call DelayFrame
 	ld a, [hl]
-	ld [hSerialSend], a
+	ldh [hSerialSend], a
 	call Serial_ExchangeByte
 	ld b, a
 	inc hl
-	ld a, [hSerialIgnoringInitialData]
+	ldh a, [hSerialIgnoringInitialData]
 	and a
-	ld a, 0 ; not xor a; preserve carry flag
-	ld [hSerialIgnoringInitialData], a
+	ld a, 0
+	ldh [hSerialIgnoringInitialData], a
 	jr nz, .loop
 	ld a, b
 	ld [de], a
@@ -264,16 +257,14 @@ Serial_ExchangeLinkMenuSelection:: ; 83b
 	dec c
 	jr nz, .loop
 	ret
-; 862
 
-Serial_PlaceWaitingTextAndSyncAndExchangeNybble:: ; 862
+Serial_PlaceWaitingTextAndSyncAndExchangeNybble::
 	call LoadTileMapToTempTileMap
 	call PlaceWaitingText
 	call Serial_SyncAndExchangeNybble
 	jp Call_LoadTempTileMapToTileMap
-; 871
 
-PlaceWaitingText:: ; 4000
+PlaceWaitingText::
 	hlcoord 4, 10
 	lb bc, 1, 10
 
@@ -290,14 +281,14 @@ PlaceWaitingText:: ; 4000
 .proceed
 	hlcoord 5, 11
 	ld de, .Waiting
-	call PlaceString
+	rst PlaceString
 	ld c, 50
 	jp DelayFrames
 
-.Waiting: ; 4025
+.Waiting:
 	db "Waiting…!@"
 
-Serial_SyncAndExchangeNybble:: ; 87d
+Serial_SyncAndExchangeNybble::
 	ld a, $ff
 	ld [wOtherPlayerLinkAction], a
 .loop
@@ -341,9 +332,8 @@ Serial_SyncAndExchangeNybble:: ; 87d
 	ld a, [wOtherPlayerLinkAction]
 	ld [wOtherPlayerLinkMode], a
 	ret
-; 8c1
 
-LinkTransfer:: ; 8c1
+LinkTransfer::
 	push bc
 	ld a, [wLinkMode]
 	cp LINK_TRADECENTER
@@ -355,45 +345,42 @@ LinkTransfer:: ; 8c1
 	call .Receive
 	ld a, [wPlayerLinkAction]
 	add b
-	ld [hSerialSend], a
-	ld a, [hSerialConnectionStatus]
+	ldh [hSerialSend], a
+	ldh a, [hSerialConnectionStatus]
 	cp USING_INTERNAL_CLOCK
 	jr nz, .player_1
 	ld a, $1
-	ld [rSC], a
+	ldh [rSC], a
 	ld a, START_TRANSFER_INTERNAL_CLOCK
-	ld [rSC], a
+	ldh [rSC], a
 
 .player_1
 	call .Receive
 	pop bc
 	ret
-; 8f3
 
-.Receive: ; 8f3
-	ld a, [hSerialReceive]
+.Receive:
+	ldh a, [hSerialReceive]
 	ld [wOtherPlayerLinkMode], a
 	and $f0
 	cp b
 	ret nz
 	xor a
-	ld [hSerialReceive], a
+	ldh [hSerialReceive], a
 	ld a, [wOtherPlayerLinkMode]
 	and $f
 	ld [wOtherPlayerLinkAction], a
 	ret
-; 908
 
-LinkDataReceived:: ; 908
+LinkDataReceived::
 ; Let the other system know that the data has been received.
 	xor a
-	ld [hSerialSend], a
-	ld a, [hSerialConnectionStatus]
+	ldh [hSerialSend], a
+	ldh a, [hSerialConnectionStatus]
 	cp USING_INTERNAL_CLOCK
 	ret nz
 	ld a, $1
-	ld [rSC], a
+	ldh [rSC], a
 	ld a, START_TRANSFER_INTERNAL_CLOCK
-	ld [rSC], a
+	ldh [rSC], a
 	ret
-; 919

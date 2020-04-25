@@ -1,4 +1,3 @@
-; AbraPokedexEntry: ; 0x1830d5
 	db "Psi@" ; species name
 	dw 211, 430 ; height, width
 
