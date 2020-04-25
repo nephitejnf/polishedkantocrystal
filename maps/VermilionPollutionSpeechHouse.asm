@@ -25,7 +25,7 @@ VermilionPollutionSpeechHouseBreederText:
 	done
 
 VermilionPollutionSpeechHouseCooltrainerMText:
-	text "Thanks to the all"
+	text "Thanks to all"
 	line "the cruise ships"
 	cont "that come and go,"
 
